@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dokumenta', function (Blueprint $table) {
+        Schema::create('dokumentum_tipuses', function (Blueprint $table) {
             $table->id();
-            $table->foreignId(column: 'sirhely_id')->constrained('sirhely');
-            $table->string('tipus');
-            $table->date('datum');
+            $table->string('tipus_elnevezese');
+            $table->foreignId(column: 'dokumentum_id')->constrained('dokumentum');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('dokumenta');
+        Schema::dropIfExists('telepules_tipuses');
     }
 };
