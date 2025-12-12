@@ -11,12 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sirberlos', function (Blueprint $table) {
-            $table->id();
+        Schema::create('sirberlo', function (Blueprint $table) {
+            $table->id(); 
             $table->string('nev');
             $table->string('kozterulet_neve');
-            $table->foreignId(column: 'kozterulet_tipusa_id')->constrained('kozterulet_tipus');
-            $table->foreignId(column: 'iranyito_szam')->constrained('telepules');
+        
+           
+            $table->foreignId('kozterulet_tipus_id')
+                  ->nullable()
+                  ->constrained('kozterulet_tipus')
+                  ->nullOnDelete();
+        
+            
+            $table->unsignedBigInteger('ir_szam');
+            $table->foreign('ir_szam')
+                  ->references('ir_szam')
+                  ->on('telepules')
+                  ->restrictOnDelete(); 
             $table->timestamps();
         });
     }
@@ -26,6 +37,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sirberlos');
+        Schema::dropIfExists('sirberlo');
     }
 };

@@ -4,13 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Kozterulet_tipus extends Model
+class Dokumentum_tipus extends Model
 {
-    protected $table = 'kozterulet_tipus';
+    protected $table = 'dokumentum_tipus';
 
     public $incrementing = true;
     protected $keyType = 'int';
     public $timestamps = true;
-
 }
 

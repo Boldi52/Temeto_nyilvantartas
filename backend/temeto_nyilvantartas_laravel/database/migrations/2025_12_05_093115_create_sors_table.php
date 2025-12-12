@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sors', function (Blueprint $table) {
+        Schema::create('sor', function (Blueprint $table) {
             $table->id();
-            $table->foreignId(column: 'parcella_id')->constrained('parcella');
-            $table->string('nev');
+            $table->foreignId('parcella_id')->constrained('parcella')->cascadeOnDelete();
+            $table->string('nev')->nullable();
             $table->timestamps();
         });
     }
@@ -24,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sors');
+        Schema::dropIfExists('sor');
     }
 };

@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('telepules', function (Blueprint $table) {
-            $table->id();
-            $table->string('nev');
+            $table->unsignedBigInteger('ir_szam')->primary();
+            $table->string('nev');  
             $table->timestamps();
         });
     }

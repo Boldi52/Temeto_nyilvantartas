@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kozterulet_tipuses', function (Blueprint $table) {
+        Schema::create('kozterulet_tipus', function (Blueprint $table) {
             $table->id();
             $table->string('nev');
             $table->timestamps();
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kozterulet_tipuses');
+        Schema::dropIfExists('kozterulet_tipus');
     }
 };

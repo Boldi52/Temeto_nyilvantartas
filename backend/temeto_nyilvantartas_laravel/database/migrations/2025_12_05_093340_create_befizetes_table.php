@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('befizetes', function (Blueprint $table) {
             $table->id();
-            $table->integer('osszeg');
-            $table->date('hossz');
-            $table->date('datum');
-            $table->foreignId(column: 'sirberlo_id')->constrained('sirberlo');
+            $table->foreignId('sirberlo_id')->constrained('sirberlo')->cascadeOnDelete();
+            $table->decimal('osszeg', 10, 2);
+            $table->integer('hossza')->nullable();
+            $table->date('datum')->nullable();
             $table->timestamps();
         });
     }

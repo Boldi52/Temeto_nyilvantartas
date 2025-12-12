@@ -11,14 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('elhunyts', function (Blueprint $table) {
+        Schema::create('elhunyt', function (Blueprint $table) {
             $table->id();
             $table->string('nev');
-            $table->date('szuletesi_datum');
-            $table->date('halal_datum');
-            $table->string('anyja_neve');
-            $table->foreignId(column: 'sirhely_id')->constrained('sirhely');
-            $table->foreignId(column: 'halotti_anyakonyvi_kiv_id')->constrained('dokumentum');
+            $table->date('szul_datum')->nullable();
+            $table->date('halal_datuma')->nullable();
+            $table->string('anyja_neve')->nullable();
+            $table->foreignId('sirhely_id')->nullable()
+                  ->constrained('sirhely')->nullOnDelete();
+            $table->foreignId('halotti_anyakonyvi_kiv')->nullable()
+                  ->constrained('dokumentum')->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -28,6 +30,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('elhunyts');
+        Schema::dropIfExists('elhunyt');
     }
 };

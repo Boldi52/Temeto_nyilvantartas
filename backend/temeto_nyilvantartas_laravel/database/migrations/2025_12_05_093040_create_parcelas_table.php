@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('parcelas', function (Blueprint $table) {
+        Schema::create('parcella', function (Blueprint $table) {
             $table->id();
             $table->string('nev');
             $table->timestamps();
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('parcelas');
+        Schema::dropIfExists('parcella');
     }
 };

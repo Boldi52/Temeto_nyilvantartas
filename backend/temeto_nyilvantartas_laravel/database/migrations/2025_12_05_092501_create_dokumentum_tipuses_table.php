@@ -11,10 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('dokumentum_tipuses', function (Blueprint $table) {
+        Schema::create('dokumentum_tipus', function (Blueprint $table) {
             $table->id();
             $table->string('tipus_elnevezese');
-            $table->foreignId(column: 'dokumentum_id')->constrained('dokumentum');
+            $table->foreignId('dokumentum_id')->nullable()
+                  ->constrained('dokumentum')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -24,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('telepules_tipuses');
+        Schema::dropIfExists('telepules_tipus');
     }
 };

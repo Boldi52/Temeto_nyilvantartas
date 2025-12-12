@@ -11,13 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sirhelys', function (Blueprint $table) {
+        Schema::create('sirhely', function (Blueprint $table) {
             $table->id();
-            $table->integer('sor_id');
-            $table->string('sirkod');
-            $table->string('allapot');
-            $table->string('foto');
-            $table->foreignId(column: 'sirberlo_id')->constrained('sirberlo');
+            $table->foreignId('sor_id')->constrained('sor')->restrictOnDelete();
+            $table->string('sirkod')->nullable();
+            $table->string('allapot')->nullable();
+            $table->string('foto')->nullable();
+            $table->foreignId('sirberlo_id')->nullable()
+                  ->constrained('sirberlo')->nullOnDelete();
             $table->timestamps();
         });
     }
@@ -27,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sirhelies');
+        Schema::dropIfExists('sirhely');
     }
 };
