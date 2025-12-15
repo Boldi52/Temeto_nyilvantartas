@@ -12,5 +12,9 @@ class Kozterulet_tipus extends Model
     protected $keyType = 'int';
     public $timestamps = true;
 
+   public function sirberlok()
+    {
+        return $this->hasMany(Sirberlo::class, 'kozterulet_tipus_id', 'id');
+    }
 }
 

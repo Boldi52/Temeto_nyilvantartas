@@ -10,5 +10,10 @@ class Telepules extends Model
     public $incrementing = false;
     protected $keyType = 'int';
     public $timestamps = true;
+
+    public function sirberlok()
+    {
+        return $this->hasMany(Sirberlo::class, 'ir_szam', 'ir_szam');
+    }
 }
 

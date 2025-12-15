@@ -12,6 +12,10 @@ class Befizetes extends Model
     protected $keyType = 'int'; 
     
     public $timestamps = true;
+    public function dokumentum()
+    {
+        return $this->belongsTo(Dokumentum::class, 'dokumentum_id', 'id');
+    }   
 }
 
 
