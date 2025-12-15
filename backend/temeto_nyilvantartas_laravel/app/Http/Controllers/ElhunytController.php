@@ -34,10 +34,30 @@ class ElhunytController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Elhunyt $elhunyt)
+    public function show(string $name)
     {
-        //
+
+        $elhunytByName = Elhunyt::where('nev', 'LIKE', '%' . $name . '%')->get();
+
+        if ($elhunytByName->isEmpty()) {
+            return response()->json(['message' => 'Nincs találat a megadott névre.'], 404);
+        }
+
+        return response()->json($elhunytByName);
     }
+
+    public function bySirhely(SirhelyController $sirhely)
+    {
+        // ha több elhunyt is lehet egy sírhelyen, get(); ha csak egy, first()
+        $elhunytak = $sirhely->elhunytak()->select('id', 'nev', 'szul_datum', 'halal_datuma', 'anyja_neve')->get();
+
+        if ($elhunytak->isEmpty()) {
+            return response()->json(['message' => 'Nincs elhunyt ezen a sírhelyen.'], 404);
+        }
+
+        return response()->json($elhunytak);
+    }
+
 
     /**
      * Show the form for editing the specified resource.

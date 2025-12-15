@@ -12,7 +12,7 @@ class ParcelaController extends Controller
      */
     public function index()
     {
-        //
+         return Parcela::select('id', 'nev')->orderBy('nev')->get();
     }
 
     /**

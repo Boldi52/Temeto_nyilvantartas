@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Sirhely;
+use App\Models\Sor;
 use Illuminate\Http\Request;
 
 class SirhelyController extends Controller
@@ -13,6 +14,10 @@ class SirhelyController extends Controller
     public function index()
     {
         //
+    }
+    public function bySor(SorController $sor)
+    {
+        return $sor->sirhelyek()->select('id', 'sirkod', 'allapot')->orderBy('sirkod')->get();
     }
 
     /**
