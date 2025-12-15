@@ -12,7 +12,7 @@ class Sirberlo extends Model
     public $timestamps = true;
      public function kozteruletTipus()
     {
-        return $this->belongsTo(KozteruletTipus::class, 'kozterulet_tipus_id', 'id');
+        return $this->belongsTo(Kozterulet_tipus::class, 'kozterulet_tipus_id', 'id');
     }
 
     /**

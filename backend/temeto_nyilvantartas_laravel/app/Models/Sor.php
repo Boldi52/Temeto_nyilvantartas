@@ -18,7 +18,7 @@ class Sor extends Model
      */
     public function parcella()
     {
-        return $this->belongsTo(Parcella::class, 'parcella_id', 'id');
+        return $this->belongsTo(Parcela::class, 'parcella_id', 'id');
     }
 
     /**
