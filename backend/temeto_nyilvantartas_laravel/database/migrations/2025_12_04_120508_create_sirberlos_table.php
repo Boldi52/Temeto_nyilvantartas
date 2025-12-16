@@ -14,8 +14,9 @@ return new class extends Migration
         Schema::create('sirberlo', function (Blueprint $table) {
             $table->id(); 
             $table->string('nev');
+            $table->string('email_cim');
             $table->string('kozterulet_neve');
-        
+            
            
             $table->foreignId('kozterulet_tipus_id')
                   ->nullable()

@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\SorController;
 use App\Http\Controllers\SirhelyController;
 use App\Http\Controllers\ElhunytController;
+use Symfony\Component\HttpFoundation\Request;
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');

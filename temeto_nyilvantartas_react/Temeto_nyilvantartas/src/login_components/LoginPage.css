@@ -1,0 +1,142 @@
+:root {
+    --bg: #d8d8d8;
+    --card-bg: #ffffff;
+    --text: #1f1f1f;
+    --muted: #555;
+    --btn: #9b612c;
+    --btn-hover: #835227;
+    --shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    --frame: #c5c5c5;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+}
+
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: var(--bg);
+}
+
+.login-frame {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    align-items: center;
+    background: var(--bg);
+    border: 2px solid var(--frame);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow);
+    column-gap: 2rem;
+    max-width: 960px;
+    width: 100%;
+}
+
+.login-panel {
+    background: transparent;
+    max-width: 420px;
+    width: 100%;
+}
+
+.login-panel h2 {
+    margin: 0 0 1.5rem 0;
+    color: var(--text);
+    font-weight: 600;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: var(--muted);
+    text-align: left;
+    /* balra igazítás */
+}
+
+.form-group input {
+    padding: 0.9rem 1rem;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 1rem;
+    background: #fff;
+    box-shadow: var(--shadow);
+    transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: #4a90e2;
+    box-shadow: 0 0 5px rgba(74, 144, 226, 0.5);
+}
+
+.login-btn {
+    margin-top: 0.25rem;
+    padding: 0.9rem;
+    border: none;
+    border-radius: 10px;
+    background: var(--btn);
+    color: #fff;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.25s ease;
+    box-shadow: var(--shadow);
+}
+
+.login-btn:hover {
+    background: var(--btn-hover);
+}
+
+.logo-panel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-panel img {
+    width: 220px;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+/* Mobil nézet */
+@media (max-width: 768px) {
+    .login-wrapper {
+        padding: 1.5rem;
+    }
+
+    .login-frame {
+        grid-template-columns: 1fr;
+        column-gap: 0;
+        padding: 1.5rem;
+    }
+
+    .logo-panel {
+        display: none;
+    }
+
+    .login-panel {
+        max-width: 100%;
+    }
+}
