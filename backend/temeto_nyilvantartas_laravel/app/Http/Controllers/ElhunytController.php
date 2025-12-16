@@ -12,7 +12,7 @@ class ElhunytController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
