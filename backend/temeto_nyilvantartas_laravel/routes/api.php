@@ -1,8 +1,6 @@
 <?php
 
 use App\Http\Controllers\ParcelaController;
-use Illuminate\Support\Facades\Route;
-
 use App\Http\Controllers\SorController;
 use App\Http\Controllers\SirhelyController;
 use App\Http\Controllers\ElhunytController;
