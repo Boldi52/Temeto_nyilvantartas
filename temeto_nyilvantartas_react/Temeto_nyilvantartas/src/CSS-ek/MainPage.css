@@ -1,0 +1,293 @@
+:root {
+    /* Alapszínek */
+    --bg: #e9edf1;
+    --sidebar: #3f473f;
+    --sidebar-active: #5b6454;
+    --border: #0a7ac2;
+    --topbar: #404b42;
+    --topbar-strip: #68755f;
+    --sidebar-w: 170px;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    background: #000;
+    /* Külső háttér (keret mögött) */
+    overflow: hidden;
+    /* Ne legyen külső scroll/sáv */
+    font-family: "Merriweather", serif;
+}
+
+.app {
+    width: 100%;
+    height: 100%;
+}
+
+/* Teljes elrendezés: fixen kitölti a viewportot, outline a kék keret */
+.frame {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    background: #fff;
+    outline: 2px solid var(--border);
+    /* Nem növeli a méretet, csak rajzol */
+    overflow: hidden;
+}
+
+/* Oldalsó sáv */
+.sidebar {
+    width: var(--sidebar-w);
+    background: var(--sidebar);
+    color: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+/* Logó helye */
+.logo {
+    height: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 6px;
+}
+
+.logo img {
+    max-height: 56px;
+    max-width: 90%;
+    object-fit: contain;
+    display: block;
+}
+
+/* Menü */
+.menu {
+    flex: 1;
+    padding-top: 8px;
+    overflow-y: auto;
+    /* Ha hosszabb a lista, görgethető */
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 14px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.menu-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.menu-item.active {
+    background: var(--sidebar-active);
+    font-weight: 700;
+}
+
+.icon {
+    font-size: 18px;
+    width: 22px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.label {
+    white-space: nowrap;
+}
+
+/* Fő terület */
+.main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    background: #fff;
+    overflow: hidden;
+    /* A belső scroll a content-ben lesz */
+}
+
+/* Felső sáv */
+.topbar {
+    height: 64px;
+    background: var(--topbar);
+    color: #dde5dc;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px;
+    border-bottom: 8px solid var(--topbar-strip);
+    flex-shrink: 0;
+    position: relative;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* Jobb felső user blokk + lenyíló */
+.user {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    position: relative;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #bfc2c1;
+    border: 2px solid #8c8f8e;
+    flex-shrink: 0;
+}
+
+.caret {
+    font-size: 16px;
+    transition: transform 0.2s;
+}
+
+.caret.open {
+    transform: rotate(180deg);
+}
+
+/* Lenyíló menü – szöveg színe fekete (#222) */
+.dropdown {
+    position: absolute;
+    top: 48px;
+    right: 0;
+    background: #fff;
+    color: #222;
+    /* fekete szöveg */
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+    min-width: 150px;
+    overflow: hidden;
+    z-index: 10;
+}
+
+.dropdown-item {
+    width: 100%;
+    padding: 10px 14px;
+    text-align: left;
+    background: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    font-family: "Merriweather", serif;
+    color: #222;
+    /* fekete szöveg */
+}
+
+.dropdown-item:hover {
+    background: #f2f4f6;
+}
+
+/* Tartalmi terület (ide jön majd az oldalad) */
+.content {
+    flex: 1;
+    background: var(--bg);
+    padding: 28px;
+    display: flex;
+    align-items: flex-start;
+    overflow: auto;
+    /* belső görgetés, ha szükséges */
+}
+
+/* Reszponzív töréspontok */
+@media (max-width: 900px) {
+    :root {
+        --sidebar-w: 72px;
+    }
+
+    .sidebar {
+        width: var(--sidebar-w);
+    }
+
+    .menu-item {
+        padding: 12px 10px;
+        justify-content: center;
+    }
+
+    .label {
+        display: none;
+    }
+
+    .title {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 640px) {
+    .frame {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        height: auto;
+    }
+
+    .logo {
+        width: 72px;
+        height: 64px;
+        border-bottom: none;
+        border-right: 1px solid rgba(255, 255, 255, 0.15);
+        padding: 6px;
+    }
+
+    .menu {
+        flex: 1;
+        display: flex;
+        flex-wrap: wrap;
+        padding: 0;
+    }
+
+    .menu-item {
+        flex: 1 0 33%;
+        justify-content: center;
+        padding: 10px 8px;
+    }
+
+    .topbar {
+        position: sticky;
+        top: 0;
+        z-index: 2;
+        padding: 0 14px;
+    }
+
+    .content {
+        padding: 18px;
+    }
+}
+
+@media (max-width: 420px) {
+    .menu-item {
+        flex: 1 0 50%;
+    }
+
+    .title {
+        font-size: 18px;
+    }
+
+    .username {
+        display: none;
+    }
+}

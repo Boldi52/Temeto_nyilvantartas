@@ -1,9 +1,9 @@
 import React from "react";
 import "./App.css";
-import LoginPage from "./login_components/LoginPage";
+import MainPage from "./Pages/MainPage";
 
 function App() {
-  return <LoginPage />;
+  return <MainPage />;
 }
 
 export default App;

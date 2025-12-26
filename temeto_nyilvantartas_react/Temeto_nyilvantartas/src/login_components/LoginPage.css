@@ -13,6 +13,10 @@
     box-sizing: border-box;
 }
 
+.login-panel input {
+    color: #222;
+}
+
 body {
     margin: 0;
     font-family: "Segoe UI", Arial, sans-serif;
@@ -70,7 +74,6 @@ form {
     font-size: 0.9rem;
     color: var(--muted);
     text-align: left;
-    /* balra igazítás */
 }
 
 .form-group input {
