@@ -34,7 +34,7 @@ class TelepulesTipusController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Telepules_tipus $telepules_tipus)
+    public function show(TelepulesTipusController $telepules_tipus)
     {
         //
     }
@@ -42,7 +42,7 @@ class TelepulesTipusController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Telepules_tipus $telepules_tipus)
+    public function edit(TelepulesTipusController $telepules_tipus)
     {
         //
     }
@@ -50,7 +50,7 @@ class TelepulesTipusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Telepules_tipus $telepules_tipus)
+    public function update(Request $request, TelepulesTipusController $telepules_tipus)
     {
         //
     }
@@ -58,7 +58,7 @@ class TelepulesTipusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Telepules_tipus $telepules_tipus)
+    public function destroy(TelepulesTipusController $telepules_tipus)
     {
         //
     }

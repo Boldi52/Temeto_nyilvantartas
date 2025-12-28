@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Parcela;
 use App\Models\Sor;
 use App\Models\Parcella;
 use Illuminate\Http\Request;
@@ -13,7 +14,7 @@ class SorController extends Controller
         //
     }
 
-    public function byParcella(Parcella $parcella)
+    public function byParcella(Parcela $parcella)
     {
         return $parcella->sorok()
             ->select('id', 'nev')

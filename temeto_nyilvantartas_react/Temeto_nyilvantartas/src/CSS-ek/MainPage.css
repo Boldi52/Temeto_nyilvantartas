@@ -1,12 +1,28 @@
+/* Alapszínek és méretek – barna/szépia + olívás akcentus */
 :root {
-    /* Alapszínek */
-    --bg: #e9edf1;
-    --sidebar: #3f473f;
-    --sidebar-active: #5b6454;
-    --border: #0a7ac2;
-    --topbar: #404b42;
-    --topbar-strip: #68755f;
+    --bg: #F7F3ED;
+    /* tartalmi háttér: világos bézs */
+    --sidebar: #3B3027;
+    /* sidebar: sötétbarna */
+    --sidebar-active: #544337;
+    /* aktív menü: középbarna */
+    --border: #C8B8A8;
+    /* külső keret/kiemelés: világos bézs-barna */
+    --topbar: #2F261F;
+    /* felső sáv: sötétbarna */
+    --topbar-strip: #A3917E;
+    /* felső sáv alsó csík: tört bézs/olíva */
     --sidebar-w: 170px;
+
+    --text: #1F1A16;
+    /* fő szöveg */
+    --text-muted: #6B5B51;
+    /* halványított szöveg */
+    --avatar-bg: #D8CEC4;
+    /* avatar háttér */
+    --avatar-border: #B6A79A;
+
+    --hover: rgba(255, 255, 255, 0.08);
 }
 
 * {
@@ -20,9 +36,7 @@ body,
     height: 100%;
     margin: 0;
     background: #000;
-    /* Külső háttér (keret mögött) */
     overflow: hidden;
-    /* Ne legyen külső scroll/sáv */
     font-family: "Merriweather", serif;
 }
 
@@ -31,14 +45,13 @@ body,
     height: 100%;
 }
 
-/* Teljes elrendezés: fixen kitölti a viewportot, outline a kék keret */
+/* Teljes keret */
 .frame {
     position: fixed;
     inset: 0;
     display: flex;
     background: #fff;
     outline: 2px solid var(--border);
-    /* Nem növeli a méretet, csak rajzol */
     overflow: hidden;
 }
 
@@ -46,65 +59,74 @@ body,
 .sidebar {
     width: var(--sidebar-w);
     background: var(--sidebar);
-    color: #f8f8f8;
+    color: #F7F3ED;
     display: flex;
     flex-direction: column;
     flex-shrink: 0;
 }
 
-/* Logó helye */
+/* Logó */
 .logo {
     height: 72px;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 6px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .logo img {
-    max-height: 56px;
-    max-width: 90%;
+    max-width: 150%;
     object-fit: contain;
     display: block;
 }
 
-/* Menü */
+/* Menülista */
 .menu {
     flex: 1;
     padding-top: 8px;
     overflow-y: auto;
-    /* Ha hosszabb a lista, görgethető */
 }
 
+/* Menüelem – csökkentett ikon–szöveg távolság */
 .menu-item {
     display: flex;
     align-items: center;
-    gap: 10px;
-    padding: 12px 14px;
+    gap: 4px !important;
+    /* kisebb rés a flex elemek között */
+    padding: 12px 12px;
+    /* kicsit szorosabb vízszintes padding */
     font-size: 15px;
     cursor: pointer;
     transition: background 0.2s;
 }
 
-.menu-item:hover {
-    background: rgba(255, 255, 255, 0.08);
-}
-
-.menu-item.active {
-    background: var(--sidebar-active);
-    font-weight: 700;
-}
-
-.icon {
-    font-size: 18px;
-    width: 22px;
-    text-align: center;
-    flex-shrink: 0;
+/* Ikon: világosra színezve, kisebb méret */
+.icon img {
+    width: 30px;
+    height: auto;
+    display: block;
+    filter: brightness(0) invert(1);
 }
 
 .label {
     white-space: nowrap;
+}
+
+/* Hover */
+.menu-item:hover {
+    background: var(--hover);
+}
+
+/* Aktív + hover ikon */
+.menu-item:hover .icon img,
+.menu-item.active .icon img {
+    filter: none;
+}
+
+/* Aktív menüpont */
+.menu-item.active {
+    background: var(--sidebar-active);
+    font-weight: 700;
 }
 
 /* Fő terület */
@@ -115,14 +137,13 @@ body,
     min-width: 0;
     background: #fff;
     overflow: hidden;
-    /* A belső scroll a content-ben lesz */
 }
 
 /* Felső sáv */
 .topbar {
     height: 64px;
     background: var(--topbar);
-    color: #dde5dc;
+    color: #EDE5DB;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -137,7 +158,7 @@ body,
     font-weight: 700;
 }
 
-/* Jobb felső user blokk + lenyíló */
+/* User */
 .user {
     display: flex;
     align-items: center;
@@ -151,8 +172,8 @@ body,
     width: 34px;
     height: 34px;
     border-radius: 50%;
-    background: #bfc2c1;
-    border: 2px solid #8c8f8e;
+    background: var(--avatar-bg);
+    border: 2px solid var(--avatar-border);
     flex-shrink: 0;
 }
 
@@ -165,14 +186,13 @@ body,
     transform: rotate(180deg);
 }
 
-/* Lenyíló menü – szöveg színe fekete (#222) */
+/* Dropdown */
 .dropdown {
     position: absolute;
     top: 48px;
     right: 0;
     background: #fff;
     color: #222;
-    /* fekete szöveg */
     border: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
     border-radius: 6px;
@@ -191,14 +211,13 @@ body,
     font-size: 14px;
     font-family: "Merriweather", serif;
     color: #222;
-    /* fekete szöveg */
 }
 
 .dropdown-item:hover {
-    background: #f2f4f6;
+    background: #F2F4F6;
 }
 
-/* Tartalmi terület (ide jön majd az oldalad) */
+/* Tartalmi terület */
 .content {
     flex: 1;
     background: var(--bg);
@@ -206,10 +225,9 @@ body,
     display: flex;
     align-items: flex-start;
     overflow: auto;
-    /* belső görgetés, ha szükséges */
 }
 
-/* Reszponzív töréspontok */
+/* Reszponzív */
 @media (max-width: 900px) {
     :root {
         --sidebar-w: 72px;

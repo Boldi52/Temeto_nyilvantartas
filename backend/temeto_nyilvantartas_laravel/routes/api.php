@@ -18,6 +18,8 @@ Route::get('/sorok/{sor}/sirhelyek', [SirhelyController::class, 'bySor']);
 Route::get('/sirhelyek/{sirhely}/elhunytak', [ElhunytController::class, 'bySirhely']);
 Route::get('/elhunytak/nev/{name}', [ElhunytController::class, 'show']);
 
+Route::get('/elhunytMindenAdata', [ElhunytController::class, 'index']);
+
 Route::post('/login', function (Request $request) {
     $creds = $request->validate([
         'email' => 'required|email',

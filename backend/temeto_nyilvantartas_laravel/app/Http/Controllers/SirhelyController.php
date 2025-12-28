@@ -6,6 +6,7 @@ use App\Models\Sirhely;
 use App\Models\Sor;
 use Illuminate\Http\Request;
 
+
 class SirhelyController extends Controller
 {
     /**
@@ -15,9 +16,13 @@ class SirhelyController extends Controller
     {
         //
     }
-    public function bySor(SorController $sor)
+    public function bySor(Sor $sor)
     {
-        return $sor->sirhelyek()->select('id', 'sirkod', 'allapot')->orderBy('sirkod')->get();
+        return $sor
+            ->sirhelyek()              // kapcsolat a Sor modellen: hasMany(Sirhely::class, 'sor_id', 'id')
+            ->select('id', 'sirkod', 'allapot')
+            ->orderBy('sirkod')
+            ->get();
     }
 
     /**
