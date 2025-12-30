@@ -13,7 +13,8 @@ class BefizetesController extends Controller
      */
     public function index()
     {
-        //
+        $befizetesek = Befizetes::all();
+        return response()->json($befizetesek);
     }
 
     /**

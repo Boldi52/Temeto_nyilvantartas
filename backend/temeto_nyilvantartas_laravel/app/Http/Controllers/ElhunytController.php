@@ -5,7 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Elhunyt;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-use App\Models\Sirhely; 
+use App\Models\Sirhely;
+
 class ElhunytController extends Controller
 {
     /**
@@ -29,70 +30,70 @@ class ElhunytController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    $elhunytValidator = Validator::make(
-        $request->all(),
-        [
-            'nev' => 'required|string|max:100',
-            'szul_datum' => 'nullable|date',
-            'halal_datuma' => 'nullable|date',
-            'anyja_neve' => 'nullable|string|max:100',
-            'halotti_anyakonyvi_kiv'=> 'nullable|file|mimes:pdf,jpg,png|max:5120',
-            'sirhely_id' => 'required|integer|exists:sirhely,id',
-        ],
-        [
-            'nev.required' => 'A név megadása kötelező.',
-            'nev.string' => 'A név szöveg típusú legyen.',
-            'nev.max' => 'A név legfeljebb 100 karakter lehet.',
+    {
+        $elhunytValidator = Validator::make(
+            $request->all(),
+            [
+                'nev' => 'required|string|max:100',
+                'szul_datum' => 'nullable|date',
+                'halal_datuma' => 'nullable|date',
+                'anyja_neve' => 'nullable|string|max:100',
+                'halotti_anyakonyvi_kiv' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
+                'sirhely_id' => 'required|integer|exists:sirhely,id',
+            ],
+            [
+                'nev.required' => 'A név megadása kötelező.',
+                'nev.string' => 'A név szöveg típusú legyen.',
+                'nev.max' => 'A név legfeljebb 100 karakter lehet.',
 
-            'szul_datum.required' => 'A születési dátum megadása kötelező.',
-            'szul_datum.date' => 'A születési dátum formátuma nem megfelelő.',
+                'szul_datum.required' => 'A születési dátum megadása kötelező.',
+                'szul_datum.date' => 'A születési dátum formátuma nem megfelelő.',
 
-            'halal_datuma.required' => 'A halál dátumának megadása kötelező.',
-            'halal_datuma.date' => 'A halál dátumának formátuma nem megfelelő.',
+                'halal_datuma.required' => 'A halál dátumának megadása kötelező.',
+                'halal_datuma.date' => 'A halál dátumának formátuma nem megfelelő.',
 
-            'anyja_neve.required' => 'Az anya neve megadása kötelező.',
-            'anyja_neve.string' => 'Az anya neve szöveg típusú legyen.',
-            'anyja_neve.max' => 'Az anya neve legfeljebb 100 karakter lehet.',
+                'anyja_neve.required' => 'Az anya neve megadása kötelező.',
+                'anyja_neve.string' => 'Az anya neve szöveg típusú legyen.',
+                'anyja_neve.max' => 'Az anya neve legfeljebb 100 karakter lehet.',
 
-            'halotti_anyakonyvi_kiv.required' => 'A halotti anyakönyvi kivonat feltöltése kötelező.',
-            'halotti_anyakonyvi_kiv.file' => 'A halotti anyakönyvi kivonat fájl legyen.',
-            'halotti_anyakonyvi_kiv.mimes' => 'Csak PDF, JPG vagy PNG tölthető fel.',
-            'halotti_anyakonyvi_kiv.max' => 'A fájl mérete legfeljebb 5 MB lehet.',
-            'sirhely_id.required' => 'A sírhely megadása kötelező.',
-            'sirhely_id.integer'  => 'A sírhely azonosító csak szám lehet.',
-            'sirhely_id.exists'   => 'A megadott sírhely nem található.',
-        ]
-    );
+                'halotti_anyakonyvi_kiv.required' => 'A halotti anyakönyvi kivonat feltöltése kötelező.',
+                'halotti_anyakonyvi_kiv.file' => 'A halotti anyakönyvi kivonat fájl legyen.',
+                'halotti_anyakonyvi_kiv.mimes' => 'Csak PDF, JPG vagy PNG tölthető fel.',
+                'halotti_anyakonyvi_kiv.max' => 'A fájl mérete legfeljebb 5 MB lehet.',
+                'sirhely_id.required' => 'A sírhely megadása kötelező.',
+                'sirhely_id.integer'  => 'A sírhely azonosító csak szám lehet.',
+                'sirhely_id.exists'   => 'A megadott sírhely nem található.',
+            ]
+        );
 
-    if ($elhunytValidator->fails()) {
+        if ($elhunytValidator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Az adatok nem megfelelőek!',
+                'errors'  => $elhunytValidator->errors()->toArray(),
+            ], 422);
+        }
+
+        // Fájl mentése a storage/app/public/halotti_anyakonyvi_kiv mappába
+        $path = $request->file('halotti_anyakonyvi_kiv')->store('halotti_anyakonyvi_kiv', 'public');
+        $elhunyt = new Elhunyt();
+        $elhunyt->nev = $request->nev;
+        $elhunyt->szul_datum = $request->szul_datum;
+        $elhunyt->halal_datuma = $request->halal_datuma;
+        $elhunyt->anyja_neve = $request->anyja_neve;
+        $elhunyt->halotti_anyakonyvi_kiv = $path; // elérési út mentése az adatbázisba
+
+        // ha van sirhely_id vagy más idegen kulcs, itt állítsd be:
+        $elhunyt->sirhely_id = $request->sirhely_id;
+
+        $elhunyt->save();
+
         return response()->json([
-            'success' => false,
-            'message' => 'Az adatok nem megfelelőek!',
-            'errors'  => $elhunytValidator->errors()->toArray(),
-        ], 422);
+            'success' => true,
+            'message' => 'Elhunyt mentve.',
+            'data'    => $elhunyt,
+        ], 201);
     }
-
-    // Fájl mentése a storage/app/public/halotti_anyakonyvi_kiv mappába
-    $path = $request->file('halotti_anyakonyvi_kiv')->store('halotti_anyakonyvi_kiv', 'public');
-    $elhunyt = new Elhunyt();
-    $elhunyt->nev = $request->nev;
-    $elhunyt->szul_datum = $request->szul_datum;
-    $elhunyt->halal_datuma = $request->halal_datuma;
-    $elhunyt->anyja_neve = $request->anyja_neve;
-    $elhunyt->halotti_anyakonyvi_kiv = $path; // elérési út mentése az adatbázisba
-
-    // ha van sirhely_id vagy más idegen kulcs, itt állítsd be:
-    $elhunyt->sirhely_id = $request->sirhely_id;
-
-    $elhunyt->save();
-
-    return response()->json([
-        'success' => true,
-        'message' => 'Elhunyt mentve.',
-        'data'    => $elhunyt,
-    ], 201);
-}
 
     /**
      * Display the specified resource.
@@ -109,21 +110,21 @@ class ElhunytController extends Controller
         return response()->json($elhunytByName);
     }
 
-    
 
-public function bySirhely(Sirhely $sirhely)
-{
-    $elhunytak = $sirhely
-        ->elhunytak()
-        ->select('id', 'nev', 'szul_datum', 'halal_datuma', 'anyja_neve')
-        ->get();
 
-    if ($elhunytak->isEmpty()) {
-        return response()->json(['message' => 'Nincs elhunyt ezen a sírhelyen.'], 404);
+    public function bySirhely(Sirhely $sirhely)
+    {
+        $elhunytak = $sirhely
+            ->elhunytak()
+            ->select('id', 'nev', 'szul_datum', 'halal_datuma', 'anyja_neve')
+            ->get();
+
+        if ($elhunytak->isEmpty()) {
+            return response()->json(['message' => 'Nincs elhunyt ezen a sírhelyen.'], 404);
+        }
+
+        return response()->json($elhunytak);
     }
-
-    return response()->json($elhunytak);
-}
 
     /**
      * Show the form for editing the specified resource.
@@ -138,29 +139,30 @@ public function bySirhely(Sirhely $sirhely)
      */
     public function update(Request $request, Elhunyt $id)
     {
-        $elhunytValidator = Validator::make($request->all(),
+        $elhunytValidator = Validator::make(
+            $request->all(),
             [
                 'nev' => 'nullable|string|max:100',
                 'szul_datum' => 'nullable|date',
                 'halal_datuma' => 'nullable|date',
                 'anyja_neve' => 'nullable|string|max:100',
-                'halotti_anyakonyvi_kiv'=> 'nullable|file|mimes:pdf,jpg,png|max:5120',
+                'halotti_anyakonyvi_kiv' => 'nullable|file|mimes:pdf,jpg,png|max:5120',
                 'sirhely_id' => 'required|integer|exists:sirhely,id',
             ],
             [
                 'nev.string' => 'A név szöveg típusú legyen.',
                 'nev.max' => 'A név legfeljebb 100 karakter lehet.',
-    
+
                 'szul_datum.required' => 'A születési dátum megadása kötelező.',
                 'szul_datum.date' => 'A születési dátum formátuma nem megfelelő.',
-    
+
                 'halal_datuma.required' => 'A halál dátumának megadása kötelező.',
                 'halal_datuma.date' => 'A halál dátumának formátuma nem megfelelő.',
-    
+
                 'anyja_neve.required' => 'Az anya neve megadása kötelező.',
                 'anyja_neve.string' => 'Az anya neve szöveg típusú legyen.',
                 'anyja_neve.max' => 'Az anya neve legfeljebb 100 karakter lehet.',
-    
+
                 'halotti_anyakonyvi_kiv.required' => 'A halotti anyakönyvi kivonat feltöltése kötelező.',
                 'halotti_anyakonyvi_kiv.file' => 'A halotti anyakönyvi kivonat fájl legyen.',
                 'halotti_anyakonyvi_kiv.mimes' => 'Csak PDF, JPG vagy PNG tölthető fel.',
@@ -170,7 +172,7 @@ public function bySirhely(Sirhely $sirhely)
                 'sirhely_id.exists'   => 'A megadott sírhely nem található.',
             ]
         );
-    
+
         if ($elhunytValidator->fails()) {
             return response()->json([
                 'success' => false,
@@ -180,19 +182,17 @@ public function bySirhely(Sirhely $sirhely)
         }
 
         $elhunyt = Elhunyt::find($id);
-        if(!empty($elhunyt)){
-            $elhunyt -> nev = $request->string('nev');
-            $elhunyt -> szul_datum = $request->date('szul_datum');
-            $elhunyt -> halal_datuma = $request->date('halal_datuma');
-            $elhunyt -> anyja_neve = $request->string('anyja_neve');
-            $elhunyt -> halotti_anyakonyvi_kiv = $request->string('halotti_anyakonyvi_kiv');
-            
-            $elhunyt -> save();
-            return response()->json(["message: " => "elhunyt sikeresen módosítva!"], 202);
-        }
+        if (!empty($elhunyt)) {
+            $elhunyt->nev = $request->string('nev');
+            $elhunyt->szul_datum = $request->date('szul_datum');
+            $elhunyt->halal_datuma = $request->date('halal_datuma');
+            $elhunyt->anyja_neve = $request->string('anyja_neve');
+            $elhunyt->halotti_anyakonyvi_kiv = $request->string('halotti_anyakonyvi_kiv');
 
-        else{
-             return response()->json(["message"=> "Nincs halott ezzel az id val."], 404);
+            $elhunyt->save();
+            return response()->json(["message: " => "elhunyt sikeresen módosítva!"], 202);
+        } else {
+            return response()->json(["message" => "Nincs halott ezzel az id val."], 404);
         }
     }
 
@@ -202,12 +202,10 @@ public function bySirhely(Sirhely $sirhely)
     public function destroy(Elhunyt $id)
     {
         $elhunytTorles = Elhunyt::find($id);
-        if(!empty($elhunytTorles)){
+        if (!empty($elhunytTorles)) {
             $elhunytTorles->delete();
             return response()->json(["message: " => "Elhunyt sikeresen törölve!"]);
-
-        }
-        else{
+        } else {
             return response()->json(["message: " => "Nincs halott ezzel az id-val!"]);
         }
     }
