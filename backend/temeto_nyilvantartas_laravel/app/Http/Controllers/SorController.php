@@ -11,10 +11,15 @@ use Illuminate\Support\Facades\Validator;
 
 class SorController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $sorok = Sor::all();
-        return response()->json($sorok);
+        $query = Sor::query()->select('id', 'parcella_id', 'nev')->orderBy('nev');
+
+        if ($request->filled('parcella_id')) {
+            $query->where('parcella_id', $request->parcella_id);
+        }
+
+        return response()->json($query->get());
     }
 
     public function byParcella(Parcela $parcella)

@@ -13,14 +13,14 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/parcellak', [ParcelaController::class, 'index']);
-Route::get('/parcellak/{parcella}/sorok', [SorController::class, 'byParcella']);
-Route::get('/sorok/{sor}/sirhelyek', [SirhelyController::class, 'bySor']);
-Route::get('/sirhelyek/{sirhely}/elhunytak', [ElhunytController::class, 'bySirhely']);
-Route::get('/elhunytak/nev/{name}', [ElhunytController::class, 'show']);
-Route::get('/befizetesek', [BefizetesController::class, 'index']);
+Route::get('/parcellak', action: [ParcelaController::class, 'index']); // ez a 3 route köti össze a táblákat az összefüggő kereséshez
+Route::get('/sorok', [SorController::class, 'index']); // a frontend-en 3 darab legördülő menüs select lesz, először a parcellát majd a sort végül a sirt kell kivállasztani
+Route::get('/sirhelyek', [SirhelyController::class, 'index']); //ez lesz az egyik szűrési lehetőség.
 
-Route::get('/elhunytMindenAdata', [ElhunytController::class, 'index']);
+Route::get('/elhunytak/nev/{name}', [ElhunytController::class, 'show']); // ezzel a route-al náv alapján lehet szűrni az elhunnytra.
+Route::get('/befizetesek', [BefizetesController::class, 'index']); // ez a route kiirja az összes befizetést.
+
+Route::get('/elhunytMindenAdata', [ElhunytController::class, 'index']); // ez a route minden elhunyt minden adatát kiírja.
 
 Route::post('/login', function (Request $request) {
     $creds = $request->validate([
@@ -35,4 +35,4 @@ Route::post('/login', function (Request $request) {
     $user = \App\Models\User::where('email', $request->email)->first();
     $token = $user->createToken('auth')->plainTextToken; // Sanctum token
     return response()->json(['token' => $token, 'user' => $user]);
-});
+});// ez a route a bejelentkezést csinálja.

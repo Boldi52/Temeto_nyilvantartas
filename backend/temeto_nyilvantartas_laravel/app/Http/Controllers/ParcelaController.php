@@ -14,7 +14,9 @@ class ParcelaController extends Controller
      */
     public function index()
     {
-        return Parcela::select('id', 'nev')->orderBy('nev')->get();
+        return response()->json(
+            Parcela::select('id', 'nev')->orderBy('nev')->get()
+        );
     }
 
     /**

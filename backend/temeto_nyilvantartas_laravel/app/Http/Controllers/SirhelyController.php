@@ -13,19 +13,19 @@ class SirhelyController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $sirhelyek = Sirhely::all();
-        return response()->json($sirhelyek);
+        $query = Sirhely::query()
+            ->select('id', 'sor_id', 'sirkod', 'allapot')
+            ->orderBy('sirkod');
+
+        if ($request->filled('sor_id')) {
+            $query->where('sor_id', $request->sor_id);
+        }
+
+        return response()->json($query->get());
     }
-    public function bySor(Sor $sor)
-    {
-        return $sor
-            ->sirhelyek()              // kapcsolat a Sor modellen: hasMany(Sirhely::class, 'sor_id', 'id')
-            ->select('id', 'sirkod', 'allapot')
-            ->orderBy('sirkod')
-            ->get();
-    }
+
 
     /**
      * Show the form for creating a new resource.
