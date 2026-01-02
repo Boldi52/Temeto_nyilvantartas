@@ -2,19 +2,21 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Elhunyt extends Model
 {
+    use HasFactory;
     protected $table = 'elhunyt';
 
     public $incrementing = true;
     protected $keyType = 'int';
     public $timestamps = true;
-    
-    /**
-     * Kapcsolat a sirhely táblához (1-to-1, belongsTo).
-     */
+
+    /*
+     Kapcsolat a sirhely táblához (1-to-1, belongsTo).
+    */
     public function sirhely()
     {
         return $this->belongsTo(Sirhely::class, 'sirhely_id', 'id');

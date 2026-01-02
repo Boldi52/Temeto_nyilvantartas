@@ -22,6 +22,10 @@ Route::get('/befizetesek', [BefizetesController::class, 'index']); // ez a route
 
 Route::get('/elhunytMindenAdata', [ElhunytController::class, 'index']); // ez a route minden elhunyt minden adatát kiírja.
 
+Route::post('/elhunytak', [ElhunytController::class, 'store']); //elhunyt hozzáadása
+
+
+
 Route::post('/login', function (Request $request) {
     $creds = $request->validate([
         'email' => 'required|email',
