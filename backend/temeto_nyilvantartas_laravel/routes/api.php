@@ -40,3 +40,22 @@ Route::post('/login', function (Request $request) {
     $token = $user->createToken('auth')->plainTextToken; // Sanctum token
     return response()->json(['token' => $token, 'user' => $user]);
 });// ez a route a bejelentkezést csinálja.
+Route::post('/logout', function (Request $request) {
+    $request->user()->currentAccessToken()->delete();
+    return response()->json(['message' => 'Sikeres kijelentkezés!']);
+})->middleware('auth:sanctum'); // ez a route a kijelentkezést csinálja.
+Route::post('/register', function (Request $request) {
+    $validated = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+    ]);
+
+    $user = \App\Models\User::create([
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'password' => Hash::make($validated['password']),
+    ]);
+    $token = $user->createToken('auth')->plainTextToken; // Sanctum token
+    return response()->json(['token' => $token, 'user' => $user], 201);
+});// ez a route a regisztrációt csinálja.
