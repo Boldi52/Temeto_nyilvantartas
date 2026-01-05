@@ -8,6 +8,8 @@ use App\Http\Controllers\ElhunytController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -39,7 +41,7 @@ Route::post('/login', function (Request $request) {
     $user = \App\Models\User::where('email', $request->email)->first();
     $token = $user->createToken('auth')->plainTextToken; // Sanctum token
     return response()->json(['token' => $token, 'user' => $user]);
-});// ez a route a bejelentkezést csinálja.
+}); // ez a route a bejelentkezést csinálja.
 Route::post('/logout', function (Request $request) {
     $request->user()->currentAccessToken()->delete();
     return response()->json(['message' => 'Sikeres kijelentkezés!']);

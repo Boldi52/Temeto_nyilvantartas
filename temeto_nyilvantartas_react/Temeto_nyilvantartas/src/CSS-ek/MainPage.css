@@ -141,7 +141,7 @@ body,
 
 /* Felső sáv */
 .topbar {
-    height: 80px;
+    height: 71.5px;
     background: var(--topbar);
     color: #EDE5DB;
     display: flex;
