@@ -1,16 +1,23 @@
-import React from "react";
-import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Layout from "./Layouts/Layout.jsx";
 import MainPage from "./Pages/MainPage";
-import LoginPage from "./login_components/LoginPage";
-import { Routes, Route } from "react-router-dom";
+import DeceasedPage from "./Pages/DeceasedPage";
+import GraveSitesPage from "./Pages/GraveSitesPage";
+import MapPage from "./Pages/MapPage";
+import AdminPage from "./Login_components/LoginPage.jsx";
 
-function App() {
+export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<LoginPage />} />
-      <Route path="/main" element={<MainPage />} />
-    </Routes>
+
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/" element={<MainPage />} />
+          <Route path="/elhunytak" element={<DeceasedPage />} />
+          <Route path="/sirhelyek" element={<GraveSitesPage />} />
+          <Route path="/terkep" element={<MapPage />} />
+          <Route path="/admin" element={<AdminPage />} />
+        </Route>
+      </Routes>
+
   );
 }
-
-export default App;
