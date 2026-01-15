@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { Link, Routes, Route } from "react-router-dom";
 import "../CSS-ek/MainPage.css";
 
-
 // Egyes menüelemekhez adott a path, ami az adott oldalhoz navigál.
 const menuItems = [
     { icon: <img src="/img/icons/kezdolap-removebg-preview.png" alt="kezdolap_logo" />, label: "Kezdőlap", path: "/" },
@@ -12,7 +11,7 @@ const menuItems = [
     { icon: <img src="/img/icons/adminfeher.png" alt="admin_logo" />, label: "Admin", path: "/admin" },
 ];
 
-export default function MainPage() {
+export default function MapPage() {
     // Lenyíló állapota
     const [open, setOpen] = useState(false);
 

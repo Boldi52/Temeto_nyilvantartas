@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, Routes, Route } from "react-router-dom";
 import "../CSS-ek/MainPage.css";
-
+import DeceasedPage from "./DeceasedPage";
 
 // Egyes menüelemekhez adott a path, ami az adott oldalhoz navigál.
 const menuItems = [
@@ -12,7 +12,7 @@ const menuItems = [
     { icon: <img src="/img/icons/adminfeher.png" alt="admin_logo" />, label: "Admin", path: "/admin" },
 ];
 
-export default function MainPage() {
+export default function GraveSitesPage() {
     // Lenyíló állapota
     const [open, setOpen] = useState(false);
 
