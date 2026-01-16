@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Layout from "./Layouts/Layout.jsx";
 import MainPage from "./Pages/MainPage";
 import DeceasedPage from "./Pages/DeceasedPage";
@@ -8,16 +8,14 @@ import AdminPage from "./Login_components/LoginPage.jsx";
 
 export default function App() {
   return (
-
-      <Routes>
-        <Route element={<Layout />}>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/elhunytak" element={<DeceasedPage />} />
-          <Route path="/sirhelyek" element={<GraveSitesPage />} />
-          <Route path="/terkep" element={<MapPage />} />
-          <Route path="/admin" element={<AdminPage />} />
-        </Route>
-      </Routes>
-
+    <Routes>
+      <Route element={<Layout />}>
+        <Route index element={<MainPage />} />
+        <Route path="elhunytak" element={<DeceasedPage />} />
+        <Route path="sirhelyek" element={<GraveSitesPage />} />
+        <Route path="terkep" element={<MapPage />} />
+        <Route path="admin" element={<AdminPage />} />
+      </Route>
+    </Routes>
   );
 }
