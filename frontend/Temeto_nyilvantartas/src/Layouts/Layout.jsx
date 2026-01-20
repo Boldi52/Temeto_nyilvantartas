@@ -5,7 +5,7 @@ import "../Layouts/Layout.css";
 const menuItems = [
   { icon: <img src="/img/icons/kezdolap-removebg-preview.png" alt="kezdolap_logo" />, label: "Kezdőlap", path: "/" },
   { icon: <img src="/img/icons/galambfeher.png" alt="galamb_logo" />, label: "Elhunytak", path: "/elhunytak" },
-  { icon: <img src="/img/icons/sirfeher.png" alt="kereszt_logo" />, label: "Sírhelyek", path: "/sirhelyek" },
+  { icon: <img src="/img/icons/sirFeher.png" alt="kereszt_logo" />, label: "Sírhelyek", path: "/sirhelyek" },
   { icon: <img src="/img/icons/terkepfeher.png" alt="terkep_logo" />, label: "Térkép", path: "/terkep" },
   { icon: <img src="/img/icons/adminfeher.png" alt="admin_logo" />, label: "Admin", path: "/admin" },
 ];
