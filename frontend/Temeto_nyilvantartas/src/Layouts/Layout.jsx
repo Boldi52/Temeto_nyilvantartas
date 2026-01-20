@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, Outlet } from "react-router-dom";
-import "../CSS-ek/MainPage.css";
+import "../Layouts/Layout.css";
 
 const menuItems = [
   { icon: <img src="/img/icons/kezdolap-removebg-preview.png" alt="kezdolap_logo" />, label: "Kezdőlap", path: "/" },
