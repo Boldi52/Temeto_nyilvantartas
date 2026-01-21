@@ -4,7 +4,7 @@ import "../CSS-ek/MainPage.css";
 const API_BASE = "http://localhost:8000"; // állítsd a saját backend host/portra
 
 const MainPage = () => {
-  const [stats, setStats] = useState({ dead: 0, graves: 0, free: 0 });
+  const [stats, setStats] = useState({ dead: 0, graves: 0, free: 5 });
   const [recent, setRecent] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -22,14 +22,13 @@ const MainPage = () => {
         if (!sirhelyCountRes.ok) throw new Error(`/sirhelyek/count hiba: ${sirhelyCountRes.status} ${sirhelyCountRes.statusText}`);
         if (!recentRes.ok) throw new Error(`/elhunytak/recent hiba: ${recentRes.status} ${recentRes.statusText}`);
 
-        const elhunytCount = await elhunytCountRes.json(); // pl. { osszes: 123, free: 23 }
-        const sirhelyCount = await sirhelyCountRes.json(); // pl. { graves: 456 }
-        const recentJson = await recentRes.json();         // pl. [ { id, name, date }, ... ]
-
+        const elhunytCount = await elhunytCountRes.json(); 
+        const sirhelyCount = await sirhelyCountRes.json(); 
+        const recentJson = await recentRes.json();
         setStats({
           dead: elhunytCount.osszes ?? 0,
           graves: sirhelyCount.graves ?? 0,
-          free: elhunytCount.free ?? stats.free, // ha a backend adja; különben marad a korábbi érték
+          free: elhunytCount.free ?? stats.free,
         });
         setRecent(Array.isArray(recentJson) ? recentJson : []);
       } catch (err) {
@@ -75,7 +74,7 @@ const MainPage = () => {
 
         <section className="content-row">
           <div className="left panel">
-            <h3>Frissen elhunytak</h3>
+            <h3>Legutóbbi elhunytak</h3>
             <ul className="recent-list">
               {recent.map((r) => (
                 <li key={r.id}>
