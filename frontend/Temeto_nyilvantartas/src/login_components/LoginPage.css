@@ -31,7 +31,7 @@ body,
 
 /* Wrapper: teljes viewport, grid-középre, nagyobb padding */
 .login-wrapper {
-    min-height: 100vh;
+    margin: auto;
     width: 100%;
     display: grid;
     place-items: center;
@@ -47,7 +47,6 @@ body,
     align-items: center;
     gap: 22px 32px;
     padding: 80px;
-    /* nagyobb belső tér */
     background: var(--card-bg);
     border: 2px solid var(--frame);
     border-radius: 16px;
@@ -155,6 +154,7 @@ form {
     object-fit: cover;
     border-radius: 10px;
     box-shadow: var(--shadow);
+    margin: auto;
 }
 
 /* Tablet/mobil */
@@ -171,6 +171,7 @@ form {
 
     .logo-panel {
         justify-content: flex-start;
+        margin: auto;
     }
 }
 
@@ -178,6 +179,7 @@ form {
 @media (max-width: 480px) {
     .login-wrapper {
         padding: 16px;
+        margin: auto;
     }
 
     .login-frame {
@@ -188,5 +190,6 @@ form {
     .logo-panel img {
         width: 200px;
         height: 200px;
+        margin: auto;
     }
 }

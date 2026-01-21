@@ -26,6 +26,11 @@ Route::get('/elhunytMindenAdata', [ElhunytController::class, 'index']); // ez a 
 
 Route::post('/elhunytak', [ElhunytController::class, 'store']); //elhunyt hozzáadása
 
+Route::get('/elhunytak/count', [ElhunytController::class, 'count']);// ez a route az elhunytak számát adja vissza.
+
+Route::get('/elhunytak/recent', [ElhunytController::class, 'recent']);  // ez a route a legutóbbi 7 elhunytat adja vissza.
+
+Route::get('/sirhelyek/count', [SirhelyController::class, 'count']); // ez a route a sirhelyek számát adja vissza.
 
 
 Route::post('/login', function (Request $request) {

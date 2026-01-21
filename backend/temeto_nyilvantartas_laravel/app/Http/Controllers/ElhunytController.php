@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Dokumentum;
 use App\Models\Elhunyt;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use App\Models\Sirhely;
@@ -19,6 +20,27 @@ class ElhunytController extends Controller
         return response()->json($elhunytMindenAdata);
     }
 
+    public function count()
+    {
+        return response()->json([
+            'osszes' => Elhunyt::count(), 
+        ]);
+    }
+
+    public function recent(): JsonResponse
+    {                   
+       
+        $recent = Elhunyt::select([
+                'id',
+                'nev as name',
+                'halal_datuma as date',
+            ])
+            ->orderByDesc('halal_datuma')
+            ->take(7)
+            ->get();
+
+        return response()->json($recent);
+    }
     /**
      * Show the form for creating a new resource.
      */

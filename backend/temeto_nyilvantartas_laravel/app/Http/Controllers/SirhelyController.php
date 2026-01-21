@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Sirhely;
 use App\Models\Sor;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -24,6 +25,13 @@ class SirhelyController extends Controller
         }
 
         return response()->json($query->get());
+    }
+
+     public function count(): JsonResponse
+    {
+        return response()->json([
+            'graves' => Sirhely::count(), // sírhelyek száma a sirhely táblából
+        ]);
     }
 
 

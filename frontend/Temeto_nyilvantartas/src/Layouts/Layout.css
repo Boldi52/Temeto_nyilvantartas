@@ -75,7 +75,7 @@ body,
 }
 
 .logo img {
-    max-width: 110%;
+    max-width: 100%;
     object-fit: contain;
     display: block;
 }

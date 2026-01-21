@@ -1,14 +1,49 @@
-import React from "react";
-import '../CSS-ek/MainPage.css';
+import React, { useEffect, useState } from "react";
+import "../CSS-ek/MainPage.css";
+
+const API_BASE = "http://localhost:8000"; // állítsd a saját backend host/portra
 
 const MainPage = () => {
-  // példa adatok; később cserélhetők API-ról érkező értékekre
-  const stats = { dead: 567, graves: 667, free: 23 };
-  const recent = new Array(7).fill("Nagy János").map((n, i) => ({
-    name: n,
-    date: "2025.12.30",
-    id: i,
-  }));
+  const [stats, setStats] = useState({ dead: 0, graves: 0, free: 0 });
+  const [recent, setRecent] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [elhunytCountRes, sirhelyCountRes, recentRes] = await Promise.all([
+          fetch(`${API_BASE}/api/elhunytak/count`),
+          fetch(`${API_BASE}/api/sirhelyek/count`),
+          fetch(`${API_BASE}/api/elhunytak/recent`),
+        ]);
+
+        if (!elhunytCountRes.ok) throw new Error(`/elhunytak/count hiba: ${elhunytCountRes.status} ${elhunytCountRes.statusText}`);
+        if (!sirhelyCountRes.ok) throw new Error(`/sirhelyek/count hiba: ${sirhelyCountRes.status} ${sirhelyCountRes.statusText}`);
+        if (!recentRes.ok) throw new Error(`/elhunytak/recent hiba: ${recentRes.status} ${recentRes.statusText}`);
+
+        const elhunytCount = await elhunytCountRes.json(); // pl. { osszes: 123, free: 23 }
+        const sirhelyCount = await sirhelyCountRes.json(); // pl. { graves: 456 }
+        const recentJson = await recentRes.json();         // pl. [ { id, name, date }, ... ]
+
+        setStats({
+          dead: elhunytCount.osszes ?? 0,
+          graves: sirhelyCount.graves ?? 0,
+          free: elhunytCount.free ?? stats.free, // ha a backend adja; különben marad a korábbi érték
+        });
+        setRecent(Array.isArray(recentJson) ? recentJson : []);
+      } catch (err) {
+        setError(err.message || "Ismeretlen hiba");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadData();
+  }, []);
+
+  if (loading) return <div className="page-wrapper">Betöltés...</div>;
+  if (error) return <div className="page-wrapper">Hiba: {error}</div>;
 
   return (
     <div className="page-wrapper">
@@ -58,7 +93,7 @@ const MainPage = () => {
               <ul>
                 <li>Telefon: +36 1 234 5678</li>
                 <li>Email: ugyfelszolgalat@zalatemeto.hu</li>
-                <li>Ügyfélfogadási idő: Hétfő–Péntek: 08:00–16:00</li>
+                <li>Ügyfélfogadási idő: Hétfő-Péntek: 08:00-16:00</li>
               </ul>
             </div>
 
