@@ -83,7 +83,7 @@ body,
 /* Menülista */
 .menu {
     flex: 1;
-    padding-top: 8px;
+    padding-top: 10px;
     overflow-y: auto;
 }
 
@@ -92,10 +92,10 @@ body,
     display: flex;
     align-items: center;
     gap: 4px !important;
-    /* kisebb rés a flex elemek között */
-    padding: 0; /* a teljes mezőt kattinthatóvá tesszük: a paddingot áthelyezzük a linkre */
-    font-size: 15px;
-    /* kurzor a linken lesz (link kitölti a teljes mezőt) */
+
+    padding: 0;
+    font-size: 16px;
+    cursor: pointer;
     transition: background 0.2s;
 }
 
@@ -124,7 +124,7 @@ body,
 }
 
 .menu-link .icon img {
-    width: 30px;
+    width: 35px;
     height: auto;
     display: block;
     filter: brightness(0) invert(1);
