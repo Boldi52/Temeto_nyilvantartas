@@ -1,0 +1,152 @@
+/* Alap layout */
+.map-page h1 {
+  margin: 0 0 12px;
+  font-size: 1.4rem;
+}
+
+/* panel, kétoszlopos elrendezés (map + info) */
+.map-panel {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 18px;
+  align-items: start;
+}
+
+/* mobil: egy oszlop */
+@media (max-width: 920px) {
+  .map-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* SVG konténer */
+.svg-container {
+  width: 100%;
+  background: #f6f7f9;
+  border: 1px solid #e0e6ef;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(16,24,40,0.04);
+}
+
+/* svg maga rugalmasan igazodik */
+.map-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* pin stílusok */
+.map-pin { cursor: pointer; }
+.pin-circle {
+  fill: #007bff;
+  stroke: #fff;
+  stroke-width: 0.25;
+  transition: r 120ms ease, fill 120ms ease;
+}
+.pin-circle.selected {
+  fill: #ff4d4f;
+}
+
+/* nagyobb, átlátszó hitbox a könnyebb kattintáshoz (érintőképernyő) */
+.pin-hitbox {
+  fill: transparent;
+  pointer-events: all;
+}
+
+/* Info panel jobb oldalt */
+.info-panel {
+  min-height: 240px;
+}
+
+/* üres állapotok */
+.info-empty {
+  padding: 18px;
+  background: #fff;
+  border: 1px dashed #e6edf6;
+  border-radius: 8px;
+  color: #4b5563;
+}
+.info-empty.error { color: #b91c1c; border-color: #fca5a5; }
+
+/* info card */
+.info-card {
+  background: #fff;
+  border: 1px solid #e6edf6;
+  border-radius: 8px;
+  padding: 14px;
+  box-shadow: 0 2px 6px rgba(16,24,40,0.04);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* header */
+.info-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+.sirkod {
+  margin: 0;
+  font-size: 1.1rem;
+}
+.meta {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+  align-items: center;
+}
+.muted { color: #6b7280; font-size: 0.9rem; }
+
+/* státusz badge */
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  color: #fff;
+  background: #6b7280;
+}
+.status-badge.szabad { background: #10b981; } /* zöld */
+.status-badge.foglalt { background: #ef4444; } /* piros */
+
+/* koordináták */
+.coords { text-align: right; font-size: 0.85rem; color: #374151; }
+
+/* részletek rács */
+.details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.details-grid .full { grid-column: 1 / -1; }
+
+@media (max-width: 480px) {
+  .details-grid { grid-template-columns: 1fr; }
+}
+
+/* detail mezők */
+.detail { background: #fbfdff; padding: 10px; border-radius: 6px; border: 1px solid #eef4ff; }
+.detail-label { font-size: 0.75rem; color: #6b7280; margin-bottom: 6px; }
+.detail-value { font-size: 0.95rem; color: #111827; }
+
+/* elhunyt lista */
+.elhunyt-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.elhunyt-item { display: flex; gap: 10px; align-items: center; }
+.elhunyt-avatar {
+  width: 36px; height: 36px; border-radius: 6px;
+  background: #eef2ff; color: #1f2937; display: flex; align-items: center; justify-content: center;
+  font-weight: 600; border: 1px solid #e5e7eb;
+}
+.elhunyt-meta .elhunyt-name { font-weight: 600; }
+.elhunyt-meta .elhunyt-date { font-size: 0.85rem; color: #6b7280; }
+
+/* actions */
+.info-actions { display:flex; gap:10px; justify-content:flex-end; margin-top:4px; }
+.btn {
+  background:#0b61ff; color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer;
+  text-decoration:none; display:inline-flex; align-items:center; gap:8px;
+}
+.btn-outline { background: transparent; border:1px solid #dbeafe; color:#0b61ff; padding:7px 12px; border-radius:6px; text-decoration:none; }
+.btn:active { transform: translateY(1px); }

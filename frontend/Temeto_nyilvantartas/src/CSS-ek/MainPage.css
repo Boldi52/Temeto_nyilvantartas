@@ -78,9 +78,11 @@
 }
 
 .card-label {
+  padding: 3%;
   color: var(--muted);
   font-weight: 600;
   margin-top: 10px;
+  font-size: 1.5rem;
 }
 
 /* Fő tartalom: 2 oszlopos elrendezés nagy képernyőn, mobilon egy oszlop */

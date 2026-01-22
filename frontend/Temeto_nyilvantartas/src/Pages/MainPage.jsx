@@ -58,16 +58,16 @@ const MainPage = () => {
           <h2>Statisztika</h2>
           <div className="stat-cards">
             <div className="card">
-              <div className="card-num">{stats.dead}</div>
               <div className="card-label">Elhunytak:</div>
+              <div className="card-num">{stats.dead}</div>
             </div>
             <div className="card">
-              <div className="card-num">{stats.graves}</div>
               <div className="card-label">Sírhelyek:</div>
+              <div className="card-num">{stats.graves}</div>
             </div>
             <div className="card">
-              <div className="card-num">{stats.free}</div>
               <div className="card-label">Szabad sírhely:</div>
+              <div className="card-num">{stats.free}</div>
             </div>
           </div>
         </section>
