@@ -12,7 +12,7 @@ export default function DeceasedPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  // Segédfüggvény: endpoint neve + hívás
+ 
   const safeFetch = async (label, path) => {
     try {
       return await apiFetch(path);
@@ -29,7 +29,6 @@ export default function DeceasedPage() {
       try {
         const elhunytak = await safeFetch("Elhunytak", "/api/elhunytMindenAdata");
 
-        // A kapcsolódó táblák külön hibakezeléssel: ha valamelyik nem jön, a többivel továbbmegyünk
         let parcellak = [];
         let sorok = [];
         let sirhelyek = [];
@@ -103,8 +102,7 @@ export default function DeceasedPage() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    // Ha szerveroldali név-szűrést szeretnél:
-    // apiFetch(`/api/elhunytak/nev/${encodeURIComponent(filters.name)}`)
+    
   };
 
   const filteredList = useMemo(() => {
@@ -140,7 +138,7 @@ export default function DeceasedPage() {
         <button className="search-button" type="submit">Keresés</button>
       </form>
 
-      <div className="table-wrapper">
+         <div className="table-wrapper">
         <table className="deceased-table" cellSpacing="0">
           <thead>
             <tr>
@@ -164,12 +162,12 @@ export default function DeceasedPage() {
                 const displaySirhely = d.sirhely || sirhelyMap[d.sirhelyId] || "—";
                 return (
                   <tr key={d.id}>
-                    <td>{d.name || "—"}</td>
-                    <td>{d.birthDate || "—"}</td>
-                    <td>{d.deathDate || "—"}</td>
-                    <td>{displayParcella}</td>
-                    <td>{displaySor}</td>
-                    <td>{displaySirhely}</td>
+                    <td data-label="Név">{d.name || "—"}</td>
+                    <td data-label="Születési dátum">{d.birthDate || "—"}</td>
+                    <td data-label="Halálozási dátum">{d.deathDate || "—"}</td>
+                    <td data-label="Parcella">{displayParcella}</td>
+                    <td data-label="Sor">{displaySor}</td>
+                    <td data-label="Sírhely">{displaySirhely}</td>
                   </tr>
                 );
               })
@@ -177,6 +175,6 @@ export default function DeceasedPage() {
           </tbody>
         </table>
       </div>
-    </div>
+    </div> 
   );
 }

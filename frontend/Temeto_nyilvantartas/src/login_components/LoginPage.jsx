@@ -32,7 +32,6 @@ const LoginPage = () => {
             if (data.token) {
                 localStorage.setItem("token", data.token);
                 setInfo("Sikeres bejelentkezés!");
-                // Nincs reload: az App a token alapján újrarenderel, és eltűnik a login form
             }
         } catch (err) {
             setError(err.message);
