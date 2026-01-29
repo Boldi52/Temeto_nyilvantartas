@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Outlet } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, Outlet, useNavigate } from "react-router-dom";
 import "../Layouts/Layout.css";
 
 const menuItems = [
@@ -12,6 +12,23 @@ const menuItems = [
 
 export default function Layout() {
   const [open, setOpen] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const navigate = useNavigate();
+
+  // Minden mountnál olvassuk ki a localStorage-ból
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
+    setIsAdmin(!!token && role === "admin");
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    setOpen(false);
+    setIsAdmin(false);
+    navigate("/admin", { replace: true });
+  };
 
   return (
     <div className="app">
@@ -35,21 +52,24 @@ export default function Layout() {
         <main className="main">
           <header className="topbar">
             <div className="title">Zala Temető</div>
-            <div className="user" onClick={() => setOpen((v) => !v)}>
-              <div className="avatar" />
-              <span className="username">felhasználó név</span>
-              <span className={`caret ${open ? "open" : ""}`}>▾</span>
-              {open && (
-                <div className="dropdown">
-                  <button className="dropdown-item">Kijelentkezés</button>
-                  <button className="dropdown-item">Profil adatok</button>
-                </div>
-              )}
-            </div>
+
+            {isAdmin && (
+              <div className="user" onClick={() => setOpen((v) => !v)}>
+                <div className="avatar" />
+                <span className="username">admin</span>
+                <span className={`caret ${open ? "open" : ""}`}>▾</span>
+                {open && (
+                  <div className="dropdown">
+                    <button className="dropdown-item" onClick={handleLogout}>Kijelentkezés</button>
+                    <button className="dropdown-item" onClick={() => setOpen(false)}>Profil adatok</button>
+                  </div>
+                )}
+              </div>
+            )}
           </header>
 
           <section className="content">
-            <Outlet /> {/* ide jön az aktuális oldal */}
+            <Outlet />
           </section>
         </main>
       </div>

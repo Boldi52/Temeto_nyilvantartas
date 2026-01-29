@@ -31,6 +31,21 @@ const LoginPage = () => {
 
             if (data.token) {
                 localStorage.setItem("token", data.token);
+                if (data.user?.role) {
+                    localStorage.setItem("role", data.user.role);
+                } else {
+                    localStorage.removeItem("role");
+                }
+
+                const role = data.user?.role;
+                if (role === "admin") {
+                    window.location.replace("/admin/dashboard");
+                } else if (role === "user") {
+                    window.location.replace("/");
+                } else {
+                    window.location.replace("/admin/dashboard"); // fallback, ha nincs role
+                }
+
                 setInfo("Sikeres bejelentkezés!");
             }
         } catch (err) {
