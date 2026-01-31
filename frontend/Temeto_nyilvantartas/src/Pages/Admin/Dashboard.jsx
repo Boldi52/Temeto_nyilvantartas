@@ -33,7 +33,7 @@ function Card({ title, value, desc, to }) {
                     <div className="admin-card-value">{value}</div>
                     <div className="admin-card-desc">{desc}</div>
                 </div>
-                <span className="admin-card-arrow">Tovább →</span>
+                <span className="admin-card-arrow">Tovább</span>
             </div>
         </a>
     );

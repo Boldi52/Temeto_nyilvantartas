@@ -7,6 +7,7 @@ import GraveSitesPage from "./Pages/GraveSitesPage";
 import MapPage from "./Pages/MapPage";
 import AdminPage from "./Login_components/LoginPage.jsx";
 import AdminDashboard from "./Pages/Admin/Dashboard.jsx";
+import AdminGraveSites from "./Pages/Admin/AdminGraveSites.jsx";
 
 export default function App() {
   return (
@@ -18,6 +19,8 @@ export default function App() {
         <Route path="terkep" element={<MapPage />} />
         <Route path="admin" element={<AdminPage />} />
         <Route path="admin/dashboard" element={<AdminDashboard />} />
+        <Route path="admin/sirhelyek" element={<AdminGraveSites />} />
+
       </Route>
     </Routes>
   );

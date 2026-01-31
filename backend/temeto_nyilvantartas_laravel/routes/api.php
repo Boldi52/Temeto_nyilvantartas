@@ -16,7 +16,7 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::get('/parcellak', action: [ParcelaController::class, 'index']); // ez a 3 route köti össze a táblákat az összefüggő kereséshez
+Route::get('/parcellak',  [ParcelaController::class, 'index']); // ez a 3 route köti össze a táblákat az összefüggő kereséshez
 Route::get('/sorok', [SorController::class, 'index']); // a frontend-en 3 darab legördülő menüs select lesz, először a parcellát majd a sort végül a sirt kell kivállasztani
 Route::get('/sirhelyek', [SirhelyController::class, 'index']); //ez lesz az egyik szűrési lehetőség.
 
@@ -27,13 +27,20 @@ Route::get('/elhunytMindenAdata', [ElhunytController::class, 'index']); // ez a 
 
 Route::post('/elhunytak', [ElhunytController::class, 'store']); //elhunyt hozzáadása
 
-Route::get('/elhunytak/count', [ElhunytController::class, 'count']);// ez a route az elhunytak számát adja vissza.
+Route::get('/elhunytak/count', [ElhunytController::class, 'count']); // ez a route az elhunytak számát adja vissza.
 
 Route::get('/elhunytak/recent', [ElhunytController::class, 'recent']);  // ez a route a legutóbbi 7 elhunytat adja vissza.
 
 Route::get('/sirhelyek/count', [SirhelyController::class, 'count']); // ez a route a sirhelyek számát adja vissza.
 
 
+Route::post('/sirhelyek', [SirhelyController::class, 'store']);
+Route::get('/sirhelyek/{sirhely}', [SirhelyController::class, 'show']);
+Route::put('/sirhelyek/{sirhely}', [SirhelyController::class, 'update']);
+Route::delete('/sirhelyek/{sirhely}', [SirhelyController::class, 'destroy']);
+
+
+Route::get('/sirberlok', [\App\Http\Controllers\SirberloController::class, 'index']);
 
 
 

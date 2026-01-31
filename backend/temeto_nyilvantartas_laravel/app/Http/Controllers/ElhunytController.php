@@ -23,18 +23,18 @@ class ElhunytController extends Controller
     public function count()
     {
         return response()->json([
-            'osszes' => Elhunyt::count(), 
+            'osszes' => Elhunyt::count(),
         ]);
     }
 
     public function recent(): JsonResponse
-    {                   
-       
+    {
+
         $recent = Elhunyt::select([
-                'id',
-                'nev as name',
-                'halal_datuma as date',
-            ])
+            'id',
+            'nev as name',
+            'halal_datuma as date',
+        ])
             ->orderByDesc('halal_datuma')
             ->take(7)
             ->get();

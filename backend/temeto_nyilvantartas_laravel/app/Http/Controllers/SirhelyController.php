@@ -27,7 +27,7 @@ class SirhelyController extends Controller
         return response()->json($query->get());
     }
 
-     public function count(): JsonResponse
+    public function count(): JsonResponse
     {
         return response()->json([
             'graves' => Sirhely::count(), // sírhelyek száma a sirhely táblából
@@ -120,7 +120,7 @@ class SirhelyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sirhely $id)
+    public function update(Request $request, Sirhely $sirhely)
     {
         $sirhelyValidator = Validator::make(
             $request->all(),
@@ -158,7 +158,7 @@ class SirhelyController extends Controller
             ], 422);
         }
 
-        $sirhely = Sirhely::find($id);
+        $sirhely = Sirhely::find($sirhely);
         if (!empty($sirhely)) {
             $sirhely->sor_id      = $request->sor_id;
             $sirhely->sirkod      = $request->sirkod;
@@ -176,9 +176,9 @@ class SirhelyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sirhely $id)
+    public function destroy(Sirhely $sirhely)
     {
-        $sirhelyTorles = Sirhely::find($id);
+        $sirhelyTorles = Sirhely::find($sirhely);
         if (!empty($sirhelyTorles)) {
             $sirhelyTorles->delete();
             return response()->json(["message" => "Sírhely sikeresen törölve!"]);
