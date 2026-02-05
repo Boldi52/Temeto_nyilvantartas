@@ -20,6 +20,7 @@ export default function App() {
         <Route path="admin" element={<AdminPage />} />
         <Route path="admin/dashboard" element={<AdminDashboard />} />
         <Route path="admin/sirhelyek" element={<AdminGraveSites />} />
+        <Route path="admin/sirberlok" element={<AdminGraveTenant />} />
 
       </Route>
     </Routes>

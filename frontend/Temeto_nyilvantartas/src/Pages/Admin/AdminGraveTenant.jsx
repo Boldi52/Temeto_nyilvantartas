@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
-import "../../CSS-ek/AdminGraveSites.css";
+import "../../CSS-ek/AdminGraveTenant.css";
+
+
 
 const API_BASE = "http://localhost:8000"; // igazítsd a backend host/portra
 

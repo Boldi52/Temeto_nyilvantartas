@@ -1,0 +1,301 @@
+:root{
+  --bg: #ffffff;
+  --muted: #6b7280;
+  --border: #e5e7eb;
+  --accent: #2563eb;
+  --danger: #dc2626;
+  --success: #16a34a;
+  --card-radius: 12px;
+  --shadow: 0 1px 2px rgba(0,0,0,0.04);
+  --mono-font: Menlo, Monaco, "Courier New", monospace;
+}
+
+/* Page layout */
+.digger-page {
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #111827;
+}
+
+.digger-header {
+  margin-bottom: 1.25rem;
+}
+
+.admin-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.admin-text {
+  margin: 0.25rem 0 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* Grid: bal oldalon űrlap/kártya, jobb oldalon lista */
+.digger-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 1rem;
+}
+
+@media (max-width: 980px) {
+  .digger-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Kártya stílusok */
+.digger-card {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--card-radius);
+  box-shadow: var(--shadow);
+  padding: 1.25rem;
+}
+
+/* Section címsorok */
+.section-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+/* List header (címsor + frissítés gomb) */
+.list-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.list-header button {
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 0.45rem 0.6rem;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #111827;
+  font-size: 0.9rem;
+}
+
+.list-header button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Űrlap elemek */
+.digger-form label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-size: 0.95rem;
+  color: #111827;
+}
+
+.digger-form input[type="text"],
+.digger-form input[type="date"],
+.digger-form select,
+.digger-form textarea {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: #fff;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  color: #111827;
+  margin-top: 0.35rem;
+}
+
+.digger-form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+/* Űrlap akció gombok */
+.form-actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+
+.form-actions button {
+  padding: 0.55rem 0.85rem;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.form-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Alap gomb variánsok */
+button[type="submit"] {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+
+button.ghost {
+  background: transparent;
+  border: 1px solid var(--border);
+  color: #111827;
+}
+
+/* Tábla wrapper és tábla stílusok */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.diggers-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  min-width: 720px;
+}
+
+.diggers-table thead th {
+  text-align: left;
+  padding: 0.6rem 0.75rem;
+  background: #fafafa;
+  border-bottom: 1px solid var(--border);
+  font-weight: 600;
+}
+
+.diggers-table tbody td {
+  padding: 0.65rem 0.75rem;
+  border-bottom: 1px solid #f3f4f6;
+  vertical-align: middle;
+  color: #111827;
+}
+
+/* Alternáló sorok */
+.diggers-table tbody tr:nth-child(odd) {
+  background: #fff;
+}
+
+.diggers-table tbody tr:nth-child(even) {
+  background: #fbfbfb;
+}
+
+/* Empty state */
+.diggers-table .empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 2rem 0;
+}
+
+/* Mono oszlop (pl. URL) */
+.mono {
+  font-family: var(--mono-font);
+  font-size: 0.9rem;
+  color: #0f172a;
+  word-break: break-all;
+}
+
+/* Műveletek gombok */
+.actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.actions button {
+  padding: 0.35rem 0.55rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.actions button:hover {
+  filter: brightness(0.98);
+}
+
+.actions button.danger {
+  background: var(--danger);
+  color: #fff;
+  border-color: rgba(0,0,0,0.04);
+}
+
+/* Figyelmeztetések és hibaüzenetek */
+.alert {
+  padding: 0.6rem 0.75rem;
+  border-radius: 8px;
+  background: #f8fafc;
+  color: var(--muted);
+  border: 1px solid var(--border);
+  margin-bottom: 0.75rem;
+}
+
+.alert-error {
+  background: #fff1f2;
+  border-color: rgba(220,38,38,0.15);
+  color: var(--danger);
+}
+
+/* Mező-specifikus hibák */
+.field-error {
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--danger);
+}
+
+/* Kis információs címkék */
+.badge {
+  display: inline-block;
+  padding: 0.2rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  color: #fff;
+  background: var(--accent);
+}
+
+/* Kereső sáv (ha lesz) */
+.search-row {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.search-row input[type="text"] {
+  flex: 1;
+}
+
+/* Kis segéd stílusok */
+.kv {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+/* Mobilbarát: tábla olvashatóság javítása kicsi képernyőn */
+@media (max-width: 640px) {
+  .diggers-table thead {
+    display: none;
+  }
+  .diggers-table tbody td {
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0.5rem 0.75rem;
+  }
+  .diggers-table tbody tr {
+    margin-bottom: 0.6rem;
+    display: block;
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .actions {
+    justify-content: flex-end;
+  }
+}
