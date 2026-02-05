@@ -8,6 +8,7 @@ import MapPage from "./Pages/MapPage";
 import AdminPage from "./Login_components/LoginPage.jsx";
 import AdminDashboard from "./Pages/Admin/Dashboard.jsx";
 import AdminGraveSites from "./Pages/Admin/AdminGraveSites.jsx";
+import AdminGraveTenant from "./Pages/Admin/AdminGraveTenant.jsx";
 
 export default function App() {
   return (
