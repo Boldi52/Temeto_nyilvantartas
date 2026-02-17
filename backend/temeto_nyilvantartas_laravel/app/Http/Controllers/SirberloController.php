@@ -88,9 +88,14 @@ class SirberloController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Sirberlo $sirberlo)
+    public function show(string $id)
     {
-        //
+        $sirberlo = Sirberlo::find($id);
+        if (!empty($sirberlo)) {
+            return response()->json($sirberlo);
+        } else {
+            return response()->json(["message" => "Nincs sírbérlő ezzel az id-val."], 404);
+        }
     }
 
     /**
@@ -104,7 +109,7 @@ class SirberloController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sirberlo $id)
+    public function update(Request $request, string $id)
     {
         $sirberloValidator = Validator::make(
             $request->all(),
@@ -162,7 +167,7 @@ class SirberloController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sirberlo $id)
+    public function destroy(string $id)
     {
         $sirberloTorles = Sirberlo::find($id);
         if (!empty($sirberloTorles)) {

@@ -7,8 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Telepules extends Model
 {
     protected $table = 'Telepules';
+    protected $primaryKey = 'ir_szam';
     public $incrementing = false;
-    protected $keyType = 'int';
+    protected $keyType = 'string';
     public $timestamps = true;
 
     public function sirberlok()
@@ -16,4 +17,3 @@ class Telepules extends Model
         return $this->hasMany(Sirberlo::class, 'ir_szam', 'ir_szam');
     }
 }
-

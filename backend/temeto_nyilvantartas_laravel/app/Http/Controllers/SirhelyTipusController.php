@@ -72,9 +72,14 @@ class SirhelyTipusController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Sirhely_tipus $sirhely_tipus)
+    public function show(string $id)
     {
-        //
+        $sirhely_tipus = Sirhely_tipus::find($id);
+        if (!empty($sirhely_tipus)) {
+            return response()->json($sirhely_tipus);
+        } else {
+            return response()->json(["message" => "Nincs sírhely típus ezzel az id-val."], 404);
+        }
     }
 
     /**
@@ -88,7 +93,7 @@ class SirhelyTipusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sirhely_tipus $id)
+    public function update(Request $request, string $id)
     {
         $sirhelyTipusValidator = Validator::make(
             $request->all(),
@@ -130,7 +135,7 @@ class SirhelyTipusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sirhely_tipus $id)
+    public function destroy(string $id)
     {
         $torles = Sirhely_tipus::find($id);
         if (!empty($torles)) {

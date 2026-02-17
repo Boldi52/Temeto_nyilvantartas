@@ -95,7 +95,7 @@ class ElhunytController extends Controller
         if ($request->hasFile('halotti_anyakonyvi_kiv')) {
             $path = $request->file('halotti_anyakonyvi_kiv')->store('halotti_anyakonyvi_kiv', 'public');
 
-            // ha van Dokumentum modelled/táblád:
+
             $doc = new Dokumentum();
             $doc->nev      = $request->file('halotti_anyakonyvi_kiv')->getClientOriginalName();
             $doc->path     = $path;
@@ -112,7 +112,7 @@ class ElhunytController extends Controller
         $elhunyt->halal_datuma           = $data['halal_datuma'] ?? null;
         $elhunyt->anyja_neve             = $data['anyja_neve'] ?? null;
         $elhunyt->sirhely_id             = $data['sirhely_id'] ?? null;
-        $elhunyt->halotti_anyakonyvi_kiv = $dokumentumId; // FK (int), nem path string
+        $elhunyt->halotti_anyakonyvi_kiv = $dokumentumId;
         $elhunyt->save();
 
         return response()->json([

@@ -64,9 +64,14 @@ class KozteruletTipusController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Kozterulet_tipus $kozterulet_tipus)
+    public function show(string $id)
     {
-        //
+        $kozterulet_tipus = Kozterulet_tipus::find($id);
+        if (!empty($kozterulet_tipus)) {
+            return response()->json($kozterulet_tipus);
+        } else {
+            return response()->json(["message" => "Nincs közterület típus ezzel az id-val."], 404);
+        }
     }
 
     /**
@@ -80,7 +85,7 @@ class KozteruletTipusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Kozterulet_tipus $id)
+    public function update(Request $request, string $id)
     {
         $kozteruletTipusValidator = Validator::make(
             $request->all(),
@@ -116,7 +121,7 @@ class KozteruletTipusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Kozterulet_tipus $id)
+    public function destroy(string $id)
     {
         $tipusTorles = Kozterulet_tipus::find($id);
         if (!empty($tipusTorles)) {

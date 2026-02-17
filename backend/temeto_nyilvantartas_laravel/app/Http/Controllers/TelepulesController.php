@@ -71,9 +71,14 @@ class TelepulesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Telepules $telepules)
+    public function show(string $ir_szam)
     {
-        //
+        $telepules = Telepules::find($ir_szam);
+        if (!empty($telepules)) {
+            return response()->json($telepules);
+        } else {
+            return response()->json(["message" => "Nincs település ezzel az id-val."], 404);
+        }
     }
 
     /**
@@ -87,7 +92,7 @@ class TelepulesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Telepules $id)
+    public function update(Request $request, string $id)
     {
         $validator = Validator::make(
             $request->all(),
@@ -128,7 +133,7 @@ class TelepulesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Telepules $id)
+    public function destroy(string $id)
     {
 
         $telepulesTorles = Telepules::find($id);

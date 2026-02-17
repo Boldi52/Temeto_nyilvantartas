@@ -87,9 +87,14 @@ class BefizetesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Befizetes $befizetes)
+    public function show(string $id)
     {
-        //
+        $befizetesAdatok = Befizetes::find($id);
+        if (!empty($befizetesAdatok)) {
+            return response()->json($befizetesAdatok);
+        } else {
+            return response()->json(["message" => "Nincs befizetés ezzel az id-val."], 404);
+        }
     }
 
     /**
@@ -103,7 +108,7 @@ class BefizetesController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Befizetes $id)
+    public function update(Request $request, string $id)
     {
         $befizetesValidator = Validator::make(
             $request->all(),
@@ -156,7 +161,7 @@ class BefizetesController extends Controller
     /**
      * Remove the specified resource from storage.s
      */
-    public function destroy(Befizetes $id)
+    public function destroy(string $id)
     {
         $befizetesTorles = Befizetes::find($id);
         if (!empty($befizetesTorles)) {

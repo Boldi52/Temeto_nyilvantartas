@@ -21,69 +21,64 @@ Route::get('/elhunytMindenAdata', [ElhunytController::class, 'index']); // ez a 
 Route::post('/elhunytak', [ElhunytController::class, 'store']); //elhunyt hozzáadása
 Route::get('/elhunytak/count', [ElhunytController::class, 'count']); // ez a route az elhunytak számát adja vissza.
 Route::get('/elhunytak/recent', [ElhunytController::class, 'recent']);  // ez a route a legutóbbi 7 elhunytat adja vissza.
-Route::get('/sirhelyek/count', [SirhelyController::class, 'count']); // ez a route a sirhelyek számát adja vissza.
 
+Route::get('/sirhelyek/count', [SirhelyController::class, 'count']); // ez a route a sirhelyek számát adja vissza.
 Route::get('/sirhelyek', [SirhelyController::class, 'index']); //ez lesz az egyik szűrési lehetőség.
-Route::post('/sirhelyek', [SirhelyController::class, 'store']);
-Route::get('/sirhelyek/{sirhely}', [SirhelyController::class, 'show']);
-Route::put('/sirhelyek/{sirhely}', [SirhelyController::class, 'update']);
-Route::delete('/sirhelyek/{sirhely}', [SirhelyController::class, 'destroy']);
+Route::get('/sirhelyek/{id}', [SirhelyController::class, 'show']); // id val szűrési lehetőség, ez a route egy konkrét sirhely adatait adja vissza.
+Route::post('/sirhelyek', [SirhelyController::class, 'store']); // új sírhely létrehozása
+Route::put('/sirhelyek/{id}', [SirhelyController::class, 'update']); // ez a route egy konkrét sirhely adatait frissíti, a request-ben megadott adatokkal, id alapján szűrve.
+Route::delete('/sirhelyek/{id}', [SirhelyController::class, 'destroy']); // ez a route egy sirhelyet töröl id alapján
 
 Route::get('/parcellak',  [ParcelaController::class, 'index']); // ez a 3 route köti össze a táblákat az összefüggő kereséshez
-Route::post('/parcellak', [ParcelaController::class, 'store']);
-Route::get('/parcellak/{parcela}', [ParcelaController::class, 'show']);
-Route::put('/parcellak/{parcela}', [ParcelaController::class, 'update']);
-Route::delete('/parcellak/{parcela}', [ParcelaController::class, 'destroy']);
+Route::get('/parcellak/{id}', [ParcelaController::class, 'show']); // ez a route egy parcella adatait adja vissza, id alapján szűrve.
+Route::post('/parcellak', [ParcelaController::class, 'store']); // ez a route egy új parcellát hoz létre a request-ben megadott adatokkal.
+Route::put('/parcellak/{id}', [ParcelaController::class, 'update']); // ez a route egy konkrét parcellát frissíti a request-ben megadott adatokkal, id alapján szűrve.
+Route::delete('/parcellak/{id}', [ParcelaController::class, 'destroy']); // ez a route egy parcellát töröl id alapján szűrve.
 
 Route::get('/sorok', [SorController::class, 'index']); // a frontend-en 3 darab legördülő menüs select lesz, először a parcellát majd a sort végül a sirt 
-Route::post('/sorok', [SorController::class, 'store']);
-Route::get('/sorok/{sor}', [SorController::class, 'show']);
-Route::put('/sorok/{sor}', [SorController::class, 'update']);
-Route::delete('/sorok/{sor}', [SorController::class, 'destroy']);
+Route::get('/sorok/{sor}', [SorController::class, 'show']); // sor szűrése id alapján
+Route::post('/sorok', [SorController::class, 'store']); //új sor létrehozása
+Route::put('/sorok/{id}', [SorController::class, 'update']); // sor frissítése id alapján
+Route::delete('/sorok/{id}', [SorController::class, 'destroy']); // sor törlése id alapján
 
-Route::get('/sirberlok', [\App\Http\Controllers\SirberloController::class, 'index']);
-Route::get('/sirberlok/{sirberlo}', [\App\Http\Controllers\SirberloController::class, 'show']);
-Route::get('/sirberlok/count', [\App\Http\Controllers\SirberloController::class, 'count']);
-Route::post('/sirberlok', [\App\Http\Controllers\SirberloController::class, 'store']);
-Route::put('/sirberlok/{sirberlo}', [\App\Http\Controllers\SirberloController::class, 'update']);
-Route::delete('/sirberlok/{sirberlo}', [\App\Http\Controllers\SirberloController::class, 'destroy']);
+Route::get('/sirberlok', [\App\Http\Controllers\SirberloController::class, 'index']); // ez a route kiirja az összes sírberlőt.
+Route::get('/sirberlok/{id}', [\App\Http\Controllers\SirberloController::class, 'show']); // sírbérlő id aalpján
+Route::post('/sirberlok', [\App\Http\Controllers\SirberloController::class, 'store']); // új sírbérlő létrehozása a request-ben megadott adatokkal
+Route::put('/sirberlok/{id}', [\App\Http\Controllers\SirberloController::class, 'update']); // sírbérlő frissítése id alapján
+Route::delete('/sirberlok/{id}', [\App\Http\Controllers\SirberloController::class, 'destroy']); // sírbérlő törlése id alapján
 
-Route::get('/dokumentumok', [\App\Http\Controllers\DokumentumController::class, 'index']);
-Route::get('/dokumentumok/{dokumentum}', [\App\Http\Controllers\DokumentumController::class, 'show']);
-Route::post('/dokumentumok', [\App\Http\Controllers\DokumentumController::class, 'store']);
-Route::put('/dokumentumok/{dokumentum}', [\App\Http\Controllers\DokumentumController::class, 'update']);
-Route::delete('/dokumentumok/{dokumentum}', [\App\Http\Controllers\DokumentumController::class, 'destroy']);
+Route::get('/dokumentumok', [\App\Http\Controllers\DokumentumController::class, 'index']); // ez a route kiirja az összes dokumentumot.
+Route::post('/dokumentumok', [\App\Http\Controllers\DokumentumController::class, 'store']); // ez a route egy új dokumentumot hoz létre a request-ben megadott adatokkal.
+Route::delete('/dokumentumok/{id}', [\App\Http\Controllers\DokumentumController::class, 'destroy']); // ez a route egy dokumentumot töröl id alapján szűrve.
 
 Route::get('/befizetesek', [BefizetesController::class, 'index']); // ez a route kiirja az összes befizetést.
-Route::get('/befizetesek/{befizetes}', [BefizetesController::class, 'show']);
-Route::post('/befizetesek', [BefizetesController::class, 'store']);
-Route::put('/befizetesek/{befizetes}', [BefizetesController::class, 'update']);
-Route::delete('/befizetesek/{befizetes}', [BefizetesController::class, 'destroy']);
+Route::get('/befizetesek/{id}', [BefizetesController::class, 'show']); // befizetés id alapján
+Route::post('/befizetesek', [BefizetesController::class, 'store']); // új befizetés létrehozása
+Route::put('/befizetesek/{id}', [BefizetesController::class, 'update']); // befizetés frissítése id alapján
+Route::delete('/befizetesek/{id}', [BefizetesController::class, 'destroy']); // befizetés törlése id alapján
 
-Route::get('/dokumentumtipusok', [\App\Http\Controllers\DokumentumTipusController::class, 'index']);
-Route::get('/dokumentumtipusok/{dokumentumtipus}', [\App\Http\Controllers\DokumentumTipusController::class, 'show']);
-Route::post('/dokumentumtipusok', [\App\Http\Controllers\DokumentumTipusController::class, 'store']);
-Route::put('/dokumentumtipusok/{dokumentumtipus}', [\App\Http\Controllers\DokumentumTipusController::class, 'update']); 
-Route::delete('/dokumentumtipusok/{dokumentumtipus}', [\App\Http\Controllers\DokumentumTipusController::class, 'destroy']);
+Route::get('/dokumentumtipusok', [\App\Http\Controllers\DokumentumTipusController::class, 'index']); // ez a route kiirja az összes dokumentum típust.
+Route::post('/dokumentumtipusok', [\App\Http\Controllers\DokumentumTipusController::class, 'store']); // új doksi
+Route::put('/dokumentumtipusok/{id}', [\App\Http\Controllers\DokumentumTipusController::class, 'update']); // doksi frissítése id alapján
+Route::delete('/dokumentumtipusok/{id}', [\App\Http\Controllers\DokumentumTipusController::class, 'destroy']); // doksi törlése id alapján
 
-Route::get('/kozteuletTipusok', [\App\Http\Controllers\KozteruletTipusController::class, 'index']);
-Route::get('/kozteuletTipusok/{kozteuletTipus}', [\App\Http\Controllers\KozteruletTipusController::class, 'show']);
-Route::post('/kozteuletTipusok', [\App\Http\Controllers\KozteruletTipusController::class, 'store']);
-Route::put('/kozteuletTipusok/{kozteuletTipus}', [\App\Http\Controllers\KozteruletTipusController::class, 'update']);
-Route::delete('/kozteuletTipusok/{kozteuletTipus}', [\App\Http\Controllers\KozteruletTipusController::class, 'destroy']);
+Route::get('/kozteuletTipusok', [\App\Http\Controllers\KozteruletTipusController::class, 'index']); // ez a route kiirja az összes közterület típust.
+Route::get('/kozteuletTipusok/{id}', [\App\Http\Controllers\KozteruletTipusController::class, 'show']); //kozt tipus id alapján
+Route::post('/kozteuletTipusok', [\App\Http\Controllers\KozteruletTipusController::class, 'store']); // új kozt tipus létrehozása a request-ben megadott adatokkal
+Route::put('/kozteuletTipusok/{id}', [\App\Http\Controllers\KozteruletTipusController::class, 'update']); // kozt tipus frissítése id alapján
+Route::delete('/kozteuletTipusok/{id}', [\App\Http\Controllers\KozteruletTipusController::class, 'destroy']); // kozt tipus törlése id alapján
 
-Route::get('/sirhelytipusok', [\App\Http\Controllers\SirhelyTipusController::class, 'index']);
-Route::get('/sirhelytipusok/{sirhelytipus}', [\App\Http\Controllers\SirhelyTipusController::class, 'show']);
-Route::post('/sirhelytipusok', [\App\Http\Controllers\SirhelyTipusController::class, 'store']);
-Route::put('/sirhelytipusok/{sirhelytipus}', [\App\Http\Controllers\SirhelyTipusController::class, 'update']);
-Route::delete('/sirhelytipusok/{sirhelytipus}', [\App\Http\Controllers\SirhelyTipusController::class, 'destroy']);
+Route::get('/sirhelytipusok', [\App\Http\Controllers\SirhelyTipusController::class, 'index']); // ez a route kiirja az összes sírhely típust.
+Route::get('/sirhelytipusok/{id}', [\App\Http\Controllers\SirhelyTipusController::class, 'show']); // sirhely tipus id alapján
+Route::post('/sirhelytipusok', [\App\Http\Controllers\SirhelyTipusController::class, 'store']);  // új sirhely tipus létrehozása a request-ben megadott adatokkal
+Route::put('/sirhelytipusok/{id}', [\App\Http\Controllers\SirhelyTipusController::class, 'update']); // sirhely tipus frissítése id alapján
+Route::delete('/sirhelytipusok/{id}', [\App\Http\Controllers\SirhelyTipusController::class, 'destroy']); // sirhely tipus törlése id alapján
 
-Route::get('/telepulesek', [\App\Http\Controllers\TelepulesController::class, 'index']);
-Route::get('/telepulesek/{telepules}', [\App\Http\Controllers\TelepulesController::class, 'show']);
-Route::post('/telepulesek', [\App\Http\Controllers\TelepulesController::class, 'store']);
-Route::put('/telepulesek/{telepules}', [\App\Http\Controllers\TelepulesController::class, 'update']);
-Route::delete('/telepulesek/{telepules}', [\App\Http\Controllers\TelepulesController::class, 'destroy']);
-
+Route::get('/telepulesek', [\App\Http\Controllers\TelepulesController::class, 'index']); // ez a route kiirja az összes települést.
+Route::get('/telepulesek/{ir_szam}', [\App\Http\Controllers\TelepulesController::class, 'show']); // ez a route egy település adatait adja vissza, ir_szam alapján szűrve.
+Route::post('/telepulesek', [\App\Http\Controllers\TelepulesController::class, 'store']); // új település létrehozása a request-ben megadott adatokkal
+Route::put('/telepulesek/{ir_szam}', [\App\Http\Controllers\TelepulesController::class, 'update']); // település frissítése ir_szam alapján
+Route::delete('/telepulesek/{ir_szam}', [\App\Http\Controllers\TelepulesController::class, 'destroy']); // település törlése ir_szam alapján
 
 
 

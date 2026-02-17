@@ -75,9 +75,14 @@ class SorController extends Controller
         ], 201);
     }
 
-    public function show(Sor $sor)
+    public function show(string $sor)
     {
-        //
+        $soridval = Sor::find($sor);
+        if (!empty($soridval)) {
+            return response()->json($soridval);
+        } else {
+            return response()->json(["message" => "Nincs sor ezzel az id-val."], 404);
+        }
     }
 
     public function edit(Sor $sor)
@@ -85,7 +90,7 @@ class SorController extends Controller
         //
     }
 
-    public function update(Request $request, Sor $id)
+    public function update(Request $request, string $id)
     {
         $sorValidator = Validator::make(
             $request->all(),
@@ -123,7 +128,7 @@ class SorController extends Controller
         }
     }
 
-    public function destroy(Sor $id)
+    public function destroy(string $id)
     {
         $sorTorles = Sor::find($id);
         if (!empty($sorTorles)) {

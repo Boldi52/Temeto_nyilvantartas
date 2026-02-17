@@ -104,9 +104,14 @@ class SirhelyController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Sirhely $sirhely)
+    public function show(string $id)
     {
-        //
+        $sirhely = Sirhely::find($id);
+        if (!empty($sirhely)) {
+            return response()->json($sirhely);
+        } else {
+            return response()->json(["message" => "Nincs sírhely ezzel az id-val."], 404);
+        }
     }
 
     /**
@@ -120,7 +125,7 @@ class SirhelyController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Sirhely $sirhely)
+    public function update(Request $request, string $sirhely)
     {
         $sirhelyValidator = Validator::make(
             $request->all(),
@@ -176,9 +181,9 @@ class SirhelyController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Sirhely $sirhely)
+    public function destroy(string $id)
     {
-        $sirhelyTorles = Sirhely::find($sirhely);
+        $sirhelyTorles = Sirhely::find($id);
         if (!empty($sirhelyTorles)) {
             $sirhelyTorles->delete();
             return response()->json(["message" => "Sírhely sikeresen törölve!"]);

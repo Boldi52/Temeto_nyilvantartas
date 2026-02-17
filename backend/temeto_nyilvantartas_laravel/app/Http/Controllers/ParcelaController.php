@@ -66,9 +66,13 @@ class ParcelaController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Parcela $parcela)
+    public function show(string $id)
     {
-        //
+        $parcella = Parcela::find($id);
+        if (!$parcella) {
+            return response()->json(["message" => "Nincs parcella ezzel az id-val!"], 404);
+        }
+        return response()->json($parcella);
     }
 
     /**
@@ -82,7 +86,7 @@ class ParcelaController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Parcela $id)
+    public function update(Request $request, string $id)
     {
         $parcellaValidator = Validator::make(
             $request->all(),
@@ -104,28 +108,27 @@ class ParcelaController extends Controller
             ], 422);
         }
 
-        $parcella = Parcela::find($id);
-        if (!empty($parcella)) {
-            $parcella->nev = $request->nev;
-            $parcella->save();
-
-            return response()->json(["message" => "Parcella sikeresen módosítva!"], 202);
-        } else {
-            return response()->json(["message" => "Nincs parcella ezzel az id-val."], 404);
+        $parcela = Parcela::find($id);
+        if (!$parcela) {
+            return response()->json(["message" => "Nincs parcella ezzel az id-val!"], 404);
         }
+        $parcela->nev = $request->nev;
+        $parcela->save();
+
+        return response()->json(["message" => "Parcella sikeresen módosítva!"], 202);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Parcela $id)
+    public function destroy(string $id)
     {
-        $parcellaTorles = Parcela::find($id);
-        if (!empty($parcellaTorles)) {
-            $parcellaTorles->delete();
-            return response()->json(["message" => "Parcella sikeresen törölve!"]);
-        } else {
+        $parcela = Parcela::find($id);
+        if (!$parcela) {
             return response()->json(["message" => "Nincs parcella ezzel az id-val!"], 404);
         }
+
+        $parcela->delete();
+        return response()->json(["message" => "Parcella sikeresen törölve!"]);
     }
 }

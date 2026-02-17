@@ -28,7 +28,7 @@ class DokumentumController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request, Dokumentum $id)
+    public function store(Request $request)
     {
         $dokumentumValidator = Validator::make(
             $request->all(),
@@ -64,19 +64,16 @@ class DokumentumController extends Controller
             ], 422);
         }
 
-        $dokumentum = Dokumentum::find($id);
-        if (!empty($dokumentum)) {
-            $dokumentum->sirhely_id  = $request->sirhely_id;
-            $dokumentum->sirberlo_id = $request->sirberlo_id;
-            $dokumentum->tipus = $request->tipus;
-            $dokumentum->datum = $request->datum;
-            $dokumentum->leiras = $request->leiras;
-            $dokumentum->save();
 
-            return response()->json(["message" => "Dokumentum sikeresen módosítva!"], 202);
-        } else {
-            return response()->json(["message" => "Nincs dokumentum ezzel az id-val."], 404);
-        }
+        $dokumentum = new Dokumentum();
+        $dokumentum->sirhely_id  = $request->sirhely_id;
+        $dokumentum->sirberlo_id = $request->sirberlo_id;
+        $dokumentum->tipus = $request->tipus;
+        $dokumentum->datum = $request->datum;
+        $dokumentum->leiras = $request->leiras;
+        $dokumentum->save();
+
+        return response()->json(["message" => "Dokumentum sikeresen módosítva!"], 202);
     }
 
     /**
@@ -106,8 +103,13 @@ class DokumentumController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Dokumentum $dokumentum)
+    public function destroy(string $id)
     {
-        //
+        $dokumentum = Dokumentum::find($id);
+        if (!$dokumentum) {
+            return response()->json(["message" => "Nincs dokumentum ezzel az id-val!"], 404);
+        }
+        $dokumentum->delete();
+        return response()->json(["message" => "Dokumentum sikeresen törölve!"], 200);
     }
 }
