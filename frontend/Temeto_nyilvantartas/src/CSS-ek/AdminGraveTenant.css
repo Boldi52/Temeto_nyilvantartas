@@ -1,301 +1,630 @@
-:root{
+:root {
   --bg: #ffffff;
   --muted: #6b7280;
   --border: #e5e7eb;
   --accent: #2563eb;
+  --accent-hover: #1d4ed8;
   --danger: #dc2626;
+  --danger-hover: #b91c1c;
   --success: #16a34a;
-  --card-radius: 12px;
-  --shadow: 0 1px 2px rgba(0,0,0,0.04);
+  --card-radius: 14px;
+  --input-radius: 10px;
+  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --mono-font: Menlo, Monaco, "Courier New", monospace;
+  --input-focus: rgba(37, 99, 235, 0.12);
 }
 
-/* Page layout */
-.digger-page {
-  padding: 2rem 1rem;
-  max-width: 1200px;
+* {
+  box-sizing: border-box;
+}
+
+.tenant-page {
+  padding: 2rem 1.5rem;
+  max-width: 1400px;
   margin: 0 auto;
   color: #111827;
+  background: #f9fafb;
+  min-height: 100vh;
 }
 
-.digger-header {
-  margin-bottom: 1.25rem;
+.tenant-header {
+  margin-bottom: 2rem;
 }
 
 .admin-title {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 2rem;
   font-weight: 700;
+  color: #111827;
+  letter-spacing: -0.025em;
 }
 
 .admin-text {
-  margin: 0.25rem 0 0;
+  margin: 0.5rem 0 0;
   color: var(--muted);
-  font-size: 0.95rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
 }
 
-/* Grid: bal oldalon űrlap/kártya, jobb oldalon lista */
-.digger-grid {
+
+.tenant-grid {
   display: grid;
-  grid-template-columns: 420px 1fr;
-  gap: 1rem;
+  grid-template-columns: 480px 1fr;
+  gap: 1.5rem;
+  align-items: start;
 }
 
-@media (max-width: 980px) {
-  .digger-grid {
+@media (max-width: 1200px) {
+  .tenant-grid {
+    grid-template-columns: 420px 1fr;
+  }
+}
+
+@media (max-width: 1024px) {
+  .tenant-grid {
     grid-template-columns: 1fr;
   }
 }
 
-/* Kártya stílusok */
-.digger-card {
+@media (max-width: 640px) {
+  .tenant-page {
+    padding: 1rem;
+  }
+  
+  .tenant-header {
+    margin-bottom: 1.5rem;
+  }
+  
+  .admin-title {
+    font-size: 1.5rem;
+  }
+  
+  .admin-text {
+    font-size: 0.95rem;
+  }
+}
+
+
+.tenant-card {
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: var(--card-radius);
-  box-shadow: var(--shadow);
-  padding: 1.25rem;
+  box-shadow: var(--shadow-lg);
+  padding: 1.75rem;
+  animation: fadeIn 0.3s ease-out;
 }
 
-/* Section címsorok */
+@media (max-width: 640px) {
+  .tenant-card {
+    padding: 1.25rem;
+    border-radius: 12px;
+  }
+}
+
+
 .section-title {
-  margin: 0 0 0.75rem;
-  font-size: 1.05rem;
+  margin: 0 0 1.25rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #111827;
+  letter-spacing: -0.015em;
 }
 
-/* List header (címsor + frissítés gomb) */
+@media (max-width: 640px) {
+  .section-title {
+    font-size: 1.1rem;
+    margin-bottom: 1rem;
+  }
+}
+
+
 .list-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
+  gap: 1rem;
+  flex-wrap: wrap;
 }
 
 .list-header button {
-  background: transparent;
-  border: 1px solid var(--border);
-  padding: 0.45rem 0.6rem;
-  border-radius: 8px;
+  background: #fff;
+  border: 2px solid var(--border);
+  padding: 0.6rem 0.9rem;
+  border-radius: 9px;
   cursor: pointer;
   color: #111827;
   font-size: 0.9rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.list-header button:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #9ca3af;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
 .list-header button:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Űrlap elemek */
-.digger-form label {
+@media (max-width: 640px) {
+  .list-header button {
+    padding: 0.55rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+
+.tenant-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+}
+
+@media (max-width: 640px) {
+  .tenant-form {
+    gap: 1.25rem;
+  }
+}
+
+.tenant-form label {
   display: block;
-  margin-bottom: 0.75rem;
   font-size: 0.95rem;
-  color: #111827;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0;
 }
 
-.digger-form input[type="text"],
-.digger-form input[type="date"],
-.digger-form select,
-.digger-form textarea {
-  width: 100%;
-  padding: 0.5rem 0.6rem;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  background: #fff;
-  box-sizing: border-box;
-  font-size: 0.95rem;
-  color: #111827;
-  margin-top: 0.35rem;
+@media (max-width: 640px) {
+  .tenant-form label {
+    font-size: 0.9rem;
+  }
 }
 
-.digger-form textarea {
-  min-height: 80px;
-  resize: vertical;
+
+.tenant-form input[type="text"],
+.tenant-form input[type="email"],
+.tenant-form input[name="nev"],
+.tenant-form input[name="telefonszam"],
+.tenant-form input[name="kozterulet_neve"],
+.tenant-form input[name="email_cim"],
+.tenant-form select {
+  width: 100% !important;
+  padding: 0.75rem 1rem !important;
+  border: 2px solid var(--border) !important;
+  border-radius: var(--input-radius) !important;
+  background: #fff !important;
+  box-sizing: border-box !important;
+  font-size: 0.95rem !important;
+  color: #111827 !important;
+  margin-top: 0.5rem !important;
+  transition: all 0.2s ease !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
+  line-height: 1.5 !important;
+  min-height: 44px !important;
 }
 
-/* Űrlap akció gombok */
+@media (max-width: 640px) {
+  .tenant-form input[type="text"],
+  .tenant-form input[type="email"],
+  .tenant-form input[name="nev"],
+  .tenant-form input[name="telefonszam"],
+  .tenant-form input[name="kozterulet_neve"],
+  .tenant-form input[name="email_cim"],
+  .tenant-form select {
+    padding: 0.7rem 0.9rem !important;
+    font-size: 0.9rem !important;
+    min-height: 42px !important;
+    border-radius: 9px !important;
+  }
+}
+
+.tenant-form input::placeholder {
+  color: #9ca3af !important;
+  font-size: 0.9rem !important;
+}
+
+@media (max-width: 640px) {
+  .tenant-form input::placeholder {
+    font-size: 0.85rem !important;
+  }
+}
+
+.tenant-form input:focus,
+.tenant-form select:focus {
+  outline: none !important;
+  border-color: var(--accent) !important;
+  background: #fafbff !important;
+  box-shadow: 0 0 0 3px var(--input-focus), 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+  transform: translateY(-1px);
+}
+
+.tenant-form input:disabled,
+.tenant-form select:disabled {
+  background: #f9fafb !important;
+  color: #9ca3af !important;
+  cursor: not-allowed !important;
+  opacity: 0.7 !important;
+}
+
+
+.tenant-form select {
+  cursor: pointer !important;
+  appearance: none !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3E%3C/svg%3E") !important;
+  background-position: right 0.85rem center !important;
+  background-repeat: no-repeat !important;
+  background-size: 1.3em 1.3em !important;
+  padding-right: 2.75rem !important;
+}
+
+@media (max-width: 640px) {
+  .tenant-form select {
+    background-position: right 0.7rem center !important;
+    background-size: 1.15em 1.15em !important;
+    padding-right: 2.5rem !important;
+  }
+}
+
+
 .form-actions {
   display: flex;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
+  gap: 0.7rem;
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+}
+
+@media (max-width: 640px) {
+  .form-actions {
+    flex-direction: column;
+    gap: 0.7rem;
+  }
 }
 
 .form-actions button {
-  padding: 0.55rem 0.85rem;
-  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--input-radius);
   border: none;
   cursor: pointer;
   font-weight: 600;
   font-size: 0.95rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  flex: 1;
+  min-height: 44px;
+}
+
+@media (max-width: 640px) {
+  .form-actions button {
+    width: 100%;
+    flex: none;
+    padding: 0.7rem 1.1rem;
+    font-size: 0.9rem;
+    min-height: 42px;
+  }
 }
 
 .form-actions button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
+  transform: none !important;
 }
 
-/* Alap gomb variánsok */
 button[type="submit"] {
   background: var(--accent);
   color: #fff;
-  box-shadow: 0 1px 0 rgba(0,0,0,0.04);
+  flex: 2;
 }
+
+button[type="submit"]:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+}
+
+button[type="submit"]:active:not(:disabled) {
+  transform: translateY(0);
+}
+
 
 button.ghost {
-  background: transparent;
-  border: 1px solid var(--border);
-  color: #111827;
+  background: #fff;
+  border: 2px solid var(--border) !important;
+  color: #374151;
+  flex: 1;
 }
 
-/* Tábla wrapper és tábla stílusok */
+button.ghost:hover:not(:disabled) {
+  background: #f9fafb;
+  border-color: #9ca3af !important;
+  transform: translateY(-1px);
+}
+
+
 .table-wrapper {
   overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: #fff;
 }
 
-.diggers-table {
+
+.tenant-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.95rem;
-  min-width: 720px;
+  font-size: 0.9rem;
+  min-width: 900px;
 }
 
-.diggers-table thead th {
+@media (max-width: 1024px) {
+  .tenant-table {
+    min-width: 100%;
+  }
+}
+
+.tenant-table thead th {
   text-align: left;
-  padding: 0.6rem 0.75rem;
-  background: #fafafa;
-  border-bottom: 1px solid var(--border);
+  padding: 0.875rem 1rem;
+  background: #f9fafb;
+  border-bottom: 2px solid var(--border);
   font-weight: 600;
+  color: #374151;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
 }
 
-.diggers-table tbody td {
-  padding: 0.65rem 0.75rem;
+.tenant-table tbody td {
+  padding: 1rem;
   border-bottom: 1px solid #f3f4f6;
   vertical-align: middle;
   color: #111827;
 }
 
-/* Alternáló sorok */
-.diggers-table tbody tr:nth-child(odd) {
-  background: #fff;
+.tenant-table tbody tr {
+  transition: background 0.15s ease;
 }
 
-.diggers-table tbody tr:nth-child(even) {
-  background: #fbfbfb;
+.tenant-table tbody tr:hover {
+  background: #fafbfc;
 }
 
-/* Empty state */
-.diggers-table .empty {
+.tenant-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+
+.tenant-table .empty {
   text-align: center;
   color: var(--muted);
-  padding: 2rem 0;
+  padding: 3rem 1rem;
+  font-style: italic;
+  font-size: 1rem;
 }
 
-/* Mono oszlop (pl. URL) */
+
 .mono {
   font-family: var(--mono-font);
-  font-size: 0.9rem;
-  color: #0f172a;
-  word-break: break-all;
+  font-size: 0.85rem;
+  color: #374151;
+  background: #f9fafb;
+  padding: 0.35rem 0.6rem;
+  border-radius: 6px;
+  display: inline-block;
 }
 
-/* Műveletek gombok */
+
 .actions {
   display: flex;
-  gap: 0.4rem;
+  gap: 0.5rem;
+  flex-wrap: wrap;
 }
 
 .actions button {
-  padding: 0.35rem 0.55rem;
+  padding: 0.5rem 0.85rem;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: #fff;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-.actions button:hover {
-  filter: brightness(0.98);
+.actions button:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .actions button.danger {
   background: var(--danger);
   color: #fff;
-  border-color: rgba(0,0,0,0.04);
+  border-color: var(--danger);
 }
 
-/* Figyelmeztetések és hibaüzenetek */
+.actions button.danger:hover:not(:disabled) {
+  background: var(--danger-hover);
+  box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
+}
+
 .alert {
-  padding: 0.6rem 0.75rem;
-  border-radius: 8px;
-  background: #f8fafc;
-  color: var(--muted);
-  border: 1px solid var(--border);
-  margin-bottom: 0.75rem;
+  padding: 0.85rem 1.1rem;
+  border-radius: 10px;
+  background: #f0f9ff;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+  margin-bottom: 1.25rem;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  line-height: 1.5;
+}
+
+.alert::before {
+  content: "ℹ️";
+  font-size: 1.15rem;
+  flex-shrink: 0;
 }
 
 .alert-error {
-  background: #fff1f2;
-  border-color: rgba(220,38,38,0.15);
+  background: #fef2f2;
+  border-color: #fecaca;
   color: var(--danger);
 }
 
-/* Mező-specifikus hibák */
-.field-error {
-  margin-top: 0.35rem;
-  font-size: 0.85rem;
-  color: var(--danger);
+.alert-error::before {
+  content: "⚠️";
 }
 
-/* Kis információs címkék */
-.badge {
-  display: inline-block;
-  padding: 0.2rem 0.45rem;
-  border-radius: 999px;
-  font-size: 0.8rem;
-  color: #fff;
-  background: var(--accent);
-}
-
-/* Kereső sáv (ha lesz) */
-.search-row {
-  display: flex;
-  gap: 0.5rem;
-  align-items: center;
-  margin-bottom: 0.75rem;
-}
-
-.search-row input[type="text"] {
-  flex: 1;
-}
-
-/* Kis segéd stílusok */
-.kv {
-  color: var(--muted);
-  font-size: 0.85rem;
-}
-
-/* Mobilbarát: tábla olvashatóság javítása kicsi képernyőn */
 @media (max-width: 640px) {
-  .diggers-table thead {
+  .alert {
+    padding: 0.75rem 0.9rem;
+    font-size: 0.85rem;
+  }
+}
+
+
+.field-error {
+  margin-top: 0.45rem;
+  font-size: 0.85rem;
+  color: var(--danger);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  line-height: 1.4;
+}
+
+.field-error::before {
+  content: "⚠";
+  font-size: 0.95rem;
+  flex-shrink: 0;
+}
+
+
+@media (max-width: 1024px) {
+  .tenant-table thead {
     display: none;
   }
-  .diggers-table tbody td {
+
+  .tenant-table tbody td {
     display: block;
     width: 100%;
-    box-sizing: border-box;
-    padding: 0.5rem 0.75rem;
+    padding: 0.75rem 1rem;
+    text-align: right;
+    border: none;
   }
-  .diggers-table tbody tr {
-    margin-bottom: 0.6rem;
+
+  .tenant-table tbody td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: 600;
+    color: #6b7280;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+
+  .tenant-table tbody tr {
     display: block;
-    background: #fff;
+    margin-bottom: 1rem;
     border: 1px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: var(--shadow);
   }
+
+  .tenant-table tbody td:first-child {
+    padding-top: 1rem;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+  }
+
+  .tenant-table tbody td:last-child {
+    padding-bottom: 1rem;
+    border-bottom-left-radius: 12px;
+    border-bottom-right-radius: 12px;
+  }
+
   .actions {
     justify-content: flex-end;
+    margin-top: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .mono {
+    font-size: 0.8rem;
+    padding: 0.25rem 0.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .actions button {
+    font-size: 0.8rem;
+    padding: 0.45rem 0.7rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.table-wrapper::-webkit-scrollbar {
+  height: 8px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+
+.tenant-form input:focus-visible,
+.tenant-form select:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media print {
+  .tenant-page {
+    background: white;
+  }
+  
+  .form-actions,
+  .actions,
+  .list-header button {
+    display: none;
+  }
+  
+  .tenant-card {
+    box-shadow: none;
+    border: 1px solid #ccc;
   }
 }

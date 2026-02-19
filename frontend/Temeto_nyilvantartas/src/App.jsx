@@ -10,6 +10,7 @@ import AdminDashboard from "./Pages/Admin/Dashboard.jsx";
 import AdminGraveSites from "./Pages/Admin/AdminGraveSites.jsx";
 import AdminGraveTenant from "./Pages/Admin/AdminGraveTenant.jsx";
 import AdminPayment from './Pages/Admin/AdminPayment.jsx';
+import AdminDocument from './Pages/Admin/AdminDocument.jsx';
 
 export default function App() {
   return (
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="admin/sirhelyek" element={<AdminGraveSites />} />
         <Route path="admin/sirberlok" element={<AdminGraveTenant />} />
         <Route path='admin/befizetesek' element={<AdminPayment />} />
+        <Route path='admin/dokumentumok' element={<AdminDocument />} />
 
       </Route>
     </Routes>
