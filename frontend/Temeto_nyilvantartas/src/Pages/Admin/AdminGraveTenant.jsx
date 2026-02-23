@@ -23,7 +23,7 @@ export default function AdminGraveTenant() {
     const [error, setError] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
 
-    // Token lekérése
+  
     const getAuthHeaders = () => {
         const token = localStorage.getItem('token');
         return {
@@ -32,7 +32,7 @@ export default function AdminGraveTenant() {
         };
     };
 
-    // Adatok betöltése
+   
     const loadData = async () => {
         setLoading(true);
         setError("");
@@ -79,7 +79,6 @@ export default function AdminGraveTenant() {
     const handleChange = (e) => {
         const { name, value } = e.target;
         setForm((f) => ({ ...f, [name]: value }));
-        // Töröljük az adott mező hibáját amikor kezd el írni a user
         if (fieldErrors[name]) {
             setFieldErrors(prev => {
                 const newErrors = { ...prev };
@@ -101,7 +100,6 @@ export default function AdminGraveTenant() {
         });
         setFieldErrors({});
         setError("");
-        // Scroll az űrlaphoz
         window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 

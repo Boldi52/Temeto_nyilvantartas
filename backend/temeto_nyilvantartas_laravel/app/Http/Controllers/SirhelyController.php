@@ -17,7 +17,7 @@ class SirhelyController extends Controller
     public function index(Request $request)
     {
         $query = Sirhely::query()
-            ->select('id', 'sor_id', 'sirkod', 'allapot')
+            ->select('id', 'sor_id', 'sirkod', 'allapot', 'foto', 'sirberlo_id')
             ->orderBy('sirkod');
 
         if ($request->filled('sor_id')) {
@@ -51,28 +51,28 @@ class SirhelyController extends Controller
         $sirhelyvalidator = Validator::make(
             $request->all(),
             [
-                'sor_id'      => 'required|integer|exists:sor,id',
-                'sirkod'      => 'nullable|string|max:255',
-                'allapot'     => 'nullable|string|max:255',
-                'foto'        => 'nullable|string|max:255', // ha fájlt töltesz, válts file|mimes...-ra
+                'sor_id' => 'required|integer|exists:sor,id',
+                'sirkod' => 'nullable|string|max:255',
+                'allapot' => 'nullable|string|max:255',
+                'foto' => 'nullable|string|max:255', // ha fájlt töltesz, válts file|mimes...-ra
                 'sirberlo_id' => 'nullable|integer|exists:sirberlo,id',
             ],
             [
                 'sor_id.required' => 'A sor megadása kötelező.',
-                'sor_id.integer'  => 'A sor azonosító csak szám lehet.',
-                'sor_id.exists'   => 'A megadott sor nem található.',
+                'sor_id.integer' => 'A sor azonosító csak szám lehet.',
+                'sor_id.exists' => 'A megadott sor nem található.',
 
-                'sirkod.string'   => 'A sírkód szöveg típusú legyen.',
-                'sirkod.max'      => 'A sírkód legfeljebb 255 karakter lehet.',
+                'sirkod.string' => 'A sírkód szöveg típusú legyen.',
+                'sirkod.max' => 'A sírkód legfeljebb 255 karakter lehet.',
 
-                'allapot.string'  => 'Az állapot szöveg típusú legyen.',
-                'allapot.max'     => 'Az állapot legfeljebb 255 karakter lehet.',
+                'allapot.string' => 'Az állapot szöveg típusú legyen.',
+                'allapot.max' => 'Az állapot legfeljebb 255 karakter lehet.',
 
-                'foto.string'     => 'A fotó elérési útja szöveg típusú legyen.',
-                'foto.max'        => 'A fotó elérési útja legfeljebb 255 karakter lehet.',
+                'foto.string' => 'A fotó elérési útja szöveg típusú legyen.',
+                'foto.max' => 'A fotó elérési útja legfeljebb 255 karakter lehet.',
 
                 'sirberlo_id.integer' => 'A sírbérlő azonosító csak szám lehet.',
-                'sirberlo_id.exists'  => 'A megadott sírbérlő nem található.',
+                'sirberlo_id.exists' => 'A megadott sírbérlő nem található.',
             ]
         );
 
@@ -80,24 +80,24 @@ class SirhelyController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Az adatok nem megfelelőek!',
-                'errors'  => $sirhelyvalidator->errors()->toArray(),
+                'errors' => $sirhelyvalidator->errors()->toArray(),
             ], 422);
         }
 
         $data = $sirhelyvalidator->validated();
 
         $sirhely = new Sirhely();
-        $sirhely->sor_id      = $data['sor_id'];
-        $sirhely->sirkod      = $data['sirkod'] ?? null;
-        $sirhely->allapot     = $data['allapot'] ?? null;
-        $sirhely->foto        = $data['foto'] ?? null;
+        $sirhely->sor_id = $data['sor_id'];
+        $sirhely->sirkod = $data['sirkod'] ?? null;
+        $sirhely->allapot = $data['allapot'] ?? null;
+        $sirhely->foto = $data['foto'] ?? null;
         $sirhely->sirberlo_id = $data['sirberlo_id'] ?? null;
         $sirhely->save();
 
         return response()->json([
             'success' => true,
             'message' => 'Sírhely rögzítve.',
-            'data'    => $sirhely,
+            'data' => $sirhely,
         ], 201);
     }
 
@@ -130,28 +130,28 @@ class SirhelyController extends Controller
         $sirhelyValidator = Validator::make(
             $request->all(),
             [
-                'sor_id'      => 'required|integer|exists:sor,id',
-                'sirkod'      => 'nullable|string|max:255',
-                'allapot'     => 'nullable|string|max:255',
-                'foto'        => 'nullable|string|max:255', // ha fájl, használj file|mimes... szabályt
+                'sor_id' => 'required|integer|exists:sor,id',
+                'sirkod' => 'nullable|string|max:255',
+                'allapot' => 'nullable|string|max:255',
+                'foto' => 'nullable|string|max:255', // ha fájl, használj file|mimes... szabályt
                 'sirberlo_id' => 'nullable|integer|exists:sirberlo,id',
             ],
             [
                 'sor_id.required' => 'A sor megadása kötelező.',
-                'sor_id.integer'  => 'A sor azonosító csak szám lehet.',
-                'sor_id.exists'   => 'A megadott sor nem található.',
+                'sor_id.integer' => 'A sor azonosító csak szám lehet.',
+                'sor_id.exists' => 'A megadott sor nem található.',
 
-                'sirkod.string'   => 'A sírkód szöveg típusú legyen.',
-                'sirkod.max'      => 'A sírkód legfeljebb 255 karakter lehet.',
+                'sirkod.string' => 'A sírkód szöveg típusú legyen.',
+                'sirkod.max' => 'A sírkód legfeljebb 255 karakter lehet.',
 
-                'allapot.string'  => 'Az állapot szöveg típusú legyen.',
-                'allapot.max'     => 'Az állapot legfeljebb 255 karakter lehet.',
+                'allapot.string' => 'Az állapot szöveg típusú legyen.',
+                'allapot.max' => 'Az állapot legfeljebb 255 karakter lehet.',
 
-                'foto.string'     => 'A fotó elérési útja szöveg típusú legyen.',
-                'foto.max'        => 'A fotó elérési útja legfeljebb 255 karakter lehet.',
+                'foto.string' => 'A fotó elérési útja szöveg típusú legyen.',
+                'foto.max' => 'A fotó elérési útja legfeljebb 255 karakter lehet.',
 
                 'sirberlo_id.integer' => 'A sírbérlő azonosító csak szám lehet.',
-                'sirberlo_id.exists'  => 'A megadott sírbérlő nem található.',
+                'sirberlo_id.exists' => 'A megadott sírbérlő nem található.',
             ]
         );
 
@@ -159,16 +159,16 @@ class SirhelyController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Az adatok nem megfelelőek!',
-                'errors'  => $sirhelyValidator->errors()->toArray(),
+                'errors' => $sirhelyValidator->errors()->toArray(),
             ], 422);
         }
 
         $sirhely = Sirhely::find($sirhely);
         if (!empty($sirhely)) {
-            $sirhely->sor_id      = $request->sor_id;
-            $sirhely->sirkod      = $request->sirkod;
-            $sirhely->allapot     = $request->allapot;
-            $sirhely->foto        = $request->foto;
+            $sirhely->sor_id = $request->sor_id;
+            $sirhely->sirkod = $request->sirkod;
+            $sirhely->allapot = $request->allapot;
+            $sirhely->foto = $request->foto;
             $sirhely->sirberlo_id = $request->sirberlo_id;
             $sirhely->save();
 

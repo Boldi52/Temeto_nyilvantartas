@@ -499,59 +499,66 @@ body {
     gap: 6px;
 }
 
-.actions button {
-    background: transparent;
-    border: none;
+/* Base for action icon buttons in table */
+.payment-table td.actions button.btn-icon {
+    border: 1px solid transparent;
     padding: 8px 12px;
     cursor: pointer;
     font-size: 0.85rem;
-    font-weight: 600;
+    font-weight: 700;
     transition: all 120ms ease;
     min-height: 36px;
     min-width: auto;
     flex: none;
-    border-radius: 6px;
+    border-radius: 8px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 4px;
+    gap: 6px;
+    line-height: 1;
 }
 
-.btn-edit {
-    background-color: #dbeafe;
-    color: #1e40af;
+/* EDIT: blue background, white text */
+.payment-table td.actions button.btn-edit {
+    background: #2563eb;
+    color: #ffffff;
+    border-color: #1d4ed8;
 }
 
-.btn-edit:hover:not(:disabled) {
-    background-color: #bfdbfe;
-    color: #1e3a8a;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+.payment-table td.actions button.btn-edit:hover:not(:disabled) {
+    background: #1d4ed8;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25);
 }
 
-.btn-edit:active:not(:disabled) {
+.payment-table td.actions button.btn-edit:active:not(:disabled) {
     transform: translateY(0);
 }
 
-.btn-delete {
-    background-color: #fee2e2;
-    color: #991b1b;
+/* DELETE: red background, white text */
+.payment-table td.actions button.btn-delete {
+    background: #dc2626;
+    color: #ffffff;
+    border-color: #b91c1c;
 }
 
-.btn-delete:hover:not(:disabled) {
-    background-color: #fecaca;
-    color: #7f1d1d;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 6px rgba(220, 38, 38, 0.2);
+.payment-table td.actions button.btn-delete:hover:not(:disabled) {
+    background: #b91c1c;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.25);
 }
 
-.btn-delete:active:not(:disabled) {
+.payment-table td.actions button.btn-delete:active:not(:disabled) {
     transform: translateY(0);
 }
 
-.actions button:disabled {
+.payment-table td.actions button:disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
 }
 
 /* ===== LOADING & EMPTY STATES ===== */
@@ -647,7 +654,7 @@ body {
         flex: none;
     }
 
-    .actions button {
+    .payment-table td.actions button.btn-icon {
         padding: 6px 10px;
         font-size: 0.8rem;
         min-height: 32px;
