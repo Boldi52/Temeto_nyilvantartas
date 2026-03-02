@@ -1,73 +1,78 @@
-/* Alap: az egész oldal teljes szélességben, háttérkép teljes ablakra */
+
 :root {
-  --panel-bg: rgba(255,255,255,0.95);
-  --muted: #6b6b6b;
-  --accent: #222;
-  --card-shadow: 0 6px 18px rgba(22,22,22,0.07);
+  --mp-panel-bg: rgba(255,255,255,0.95);
+  --mp-muted: #6b6b6b;
+  --mp-accent: #222;
+  --mp-card-shadow: 0 6px 18px rgba(22,22,22,0.07);
 }
 
 
-.page-wrapper {
+.mainpage-wrapper {
   min-height: 100%;
   width: 100%;
   box-sizing: border-box;
   background-image:
     linear-gradient(rgba(255,255,255,0.78), rgba(255,255,255,0.78)),
-    url("/public/img/hatter.png");
+    url("img/hatter.png");
   background-size: cover;
   background-position: center center;
   background-attachment: fixed;
   padding: 24px 36px;
   font-family: "Georgia", serif;
-  color: var(--accent);
+  color: var(--mp-accent);
 }
 
 
-.site-header {
-  background: var(--panel-bg);
+.mainpage-header {
+  background: var(--mp-panel-bg);
   border-radius: 8px;
   padding: 18px 22px;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--mp-card-shadow);
   margin-bottom: 28px;
 }
 
-.site-header h1 {
+.mainpage-header h1 {
   margin: 0;
   font-size: 1.9rem;
 }
 
-.subtitle {
+.mainpage-header__subtitle {
   margin-top: 6px;
-  color: var(--muted);
+  color: var(--mp-muted);
   font-size: 0.95rem;
 }
+
 
 .mainpage {
   width: 100%;
 }
 
-/* Statisztika kártyák sorban, széles képernyőn 3 oszlop */
-.stats h2 {
+
+.mainpage-stats {
+  margin-bottom: 24px;
+}
+
+.mainpage-stats h2 {
   font-size: 1.4rem;
   margin-bottom: 12px;
 }
 
-.stat-cards {
+.mainpage-stat-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 20px;
   margin-bottom: 24px;
 }
 
-.card {
-  background: var(--panel-bg);
+.mainpage-stat-card {
+  background: var(--mp-panel-bg);
   border-radius: 12px;
   padding: 22px;
   text-align: center;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--mp-card-shadow);
 }
 
-.card-num {
+.mainpage-stat-card__number {
   background: #f1f1f1;
   display: inline-block;
   padding: 18px 28px;
@@ -77,69 +82,91 @@
   margin-bottom: 12px;
 }
 
-.card-label {
+.mainpage-stat-card__label {
   padding: 3%;
-  color: var(--muted);
+  color: var(--mp-muted);
   font-weight: 600;
   margin-top: 10px;
   font-size: 1.5rem;
 }
 
-/* Fő tartalom: 2 oszlopos elrendezés nagy képernyőn, mobilon egy oszlop */
-.content-row {
+.mainpage-content-row {
   display: grid;
   grid-template-columns: 2fr 1fr;
   gap: 22px;
   align-items: start;
 }
 
-/* panelek */
-.panel {
-  background: var(--panel-bg);
+.mainpage-panel {
+  background: var(--mp-panel-bg);
   border-radius: 12px;
   padding: 20px;
-  box-shadow: var(--card-shadow);
+  box-shadow: var(--mp-card-shadow);
 }
 
-.left .recent-list {
+.mainpage-panel--left {
+  grid-column: 1;
+}
+
+.mainpage-panel--right {
+  grid-column: 2;
+}
+
+.mainpage-recent-list {
   list-style: disc;
   padding-left: 20px;
   margin: 0;
 }
 
-.left .recent-list li {
+.mainpage-recent-list li {
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
   border-bottom: 1px dashed rgba(0,0,0,0.03);
 }
 
-.left .name {
+.mainpage-recent-list__name {
   font-weight: 700;
 }
 
-.left .date {
-  color: var(--muted);
+.mainpage-recent-list__date {
+  color: var(--mp-muted);
   font-weight: 500;
 }
 
-/* jobb oldali kártya */
-.right ul {
+
+.mainpage-contact {
+  margin-bottom: 20px;
+}
+
+.mainpage-contact strong,
+.mainpage-docs strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.mainpage-panel ul {
   margin: 8px 0 0 18px;
   padding: 0;
 }
 
-.right li {
+.mainpage-panel li {
   margin-bottom: 8px;
-  color: var(--muted);
+  color: var(--mp-muted);
 }
 
-/* mobil */
+
 @media (max-width: 900px) {
-  .content-row {
+  .mainpage-content-row {
     grid-template-columns: 1fr;
   }
-  .page-wrapper {
+
+  .mainpage-panel--left,
+  .mainpage-panel--right {
+    grid-column: auto;
+  }
+
+  .mainpage-wrapper {
     padding: 16px;
   }
 }

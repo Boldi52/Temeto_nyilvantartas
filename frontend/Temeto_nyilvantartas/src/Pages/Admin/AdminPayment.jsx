@@ -63,7 +63,6 @@ export default function AdminPayment() {
     }
   };
 
-  // Hossz (hónap) számítása az űrlapon beírt összegből (kerekítve)
   const computedMonths = useMemo(() => {
     const amount = Number(form.osszeg);
     if (!Number.isFinite(amount) || amount <= 0) return null;
@@ -81,7 +80,6 @@ export default function AdminPayment() {
       sirberlo_id: form.sirberlo_id ? Number(form.sirberlo_id) : null,
       osszeg: form.osszeg ? parseFloat(form.osszeg) : null,
       datum: form.datum || null,
-      // backend mező: hossza (hónap) -> itt küldjük a számolt értéket
       hossza: computedMonths,
     };
 
@@ -135,18 +133,18 @@ export default function AdminPayment() {
   };
 
   return (
-    <div className="admin-page admin-payment">
+    <div className="admin-payment">
       <h2 className="admin-title">Befizetések</h2>
 
-      {error && <div className="alert alert-error">{error}</div>}
+      {error && <div className="admin-payment-alert admin-payment-alert--error">{error}</div>}
 
-      <div className="payment-container">
+      <div className="admin-payment-container">
         {/* Form Panel */}
-        <div className="payment-form-section">
-          <h3 className="section-title">Új befizetés</h3>
+        <div className="admin-payment-form-section">
+          <h3 className="admin-payment-section-title">Új befizetés</h3>
 
-          <form onSubmit={handleSubmit} className="payment-form">
-            <div className="form-group">
+          <form onSubmit={handleSubmit} className="admin-payment-form">
+            <div className="admin-payment-form-group">
               <label htmlFor="sirberlo_id">Sírbérlő *</label>
               <select
                 id="sirberlo_id"
@@ -165,11 +163,11 @@ export default function AdminPayment() {
                 ))}
               </select>
               {fieldErrors.sirberlo_id && (
-                <span className="error-text">{fieldErrors.sirberlo_id}</span>
+                <span className="admin-payment-field-error">{fieldErrors.sirberlo_id}</span>
               )}
             </div>
 
-            <div className="form-group">
+            <div className="admin-payment-form-group">
               <label htmlFor="osszeg">Összeg (Ft) *</label>
               <input
                 type="number"
@@ -183,7 +181,9 @@ export default function AdminPayment() {
                 disabled={saving}
                 className={fieldErrors.osszeg ? "input-error" : ""}
               />
-              {fieldErrors.osszeg && <span className="error-text">{fieldErrors.osszeg}</span>}
+              {fieldErrors.osszeg && (
+                <span className="admin-payment-field-error">{fieldErrors.osszeg}</span>
+              )}
 
               <div style={{ marginTop: 6, fontSize: 13, opacity: 0.85 }}>
                 Számolt hossz:{" "}
@@ -194,7 +194,7 @@ export default function AdminPayment() {
               </div>
             </div>
 
-            <div className="form-group">
+            <div className="admin-payment-form-group">
               <label htmlFor="datum">Dátum *</label>
               <input
                 type="date"
@@ -206,18 +206,20 @@ export default function AdminPayment() {
                 disabled={saving}
                 className={fieldErrors.datum ? "input-error" : ""}
               />
-              {fieldErrors.datum && <span className="error-text">{fieldErrors.datum}</span>}
+              {fieldErrors.datum && (
+                <span className="admin-payment-field-error">{fieldErrors.datum}</span>
+              )}
             </div>
 
-            <div className="form-actions">
-              <button type="submit" disabled={saving} className="btn btn-primary">
+            <div className="admin-payment-form-actions">
+              <button type="submit" disabled={saving} className="admin-payment-btn">
                 {saving ? "Mentés..." : "Hozzáadás"}
               </button>
               <button
                 type="button"
                 onClick={handleReset}
                 disabled={saving}
-                className="btn btn-secondary"
+                className="admin-payment-btn admin-payment-btn--secondary"
               >
                 Mégsem
               </button>
@@ -226,26 +228,26 @@ export default function AdminPayment() {
         </div>
 
         {/* List Panel */}
-        <div className="payment-list-section">
-          <h3 className="section-title">Befizetések listája</h3>
+        <div className="admin-payment-list-section">
+          <h3 className="admin-payment-section-title">Befizetések listája</h3>
 
-          <div className="payment-filters">
+          <div className="admin-payment-filters">
             <input
               type="text"
               placeholder="Keresés sírbérlő nevében..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="search-input"
+              className="admin-payment-search-input"
             />
           </div>
 
           {loading ? (
-            <div className="loading">Betöltés...</div>
+            <div className="admin-payment-loading">Betöltés...</div>
           ) : filteredPayments.length === 0 ? (
-            <div className="no-data">Nincsenek befizetések.</div>
+            <div className="admin-payment-no-data">Nincsenek befizetések.</div>
           ) : (
-            <div className="table-wrapper">
-              <table className="payment-table">
+            <div className="admin-payment-table-wrapper">
+              <table className="admin-payment-table">
                 <thead>
                   <tr>
                     <th>Sírbérlő</th>

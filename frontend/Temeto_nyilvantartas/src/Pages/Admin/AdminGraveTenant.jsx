@@ -23,7 +23,6 @@ export default function AdminGraveTenant() {
     const [error, setError] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
 
-  
     const getAuthHeaders = () => {
         const token = localStorage.getItem('token');
         return {
@@ -32,7 +31,6 @@ export default function AdminGraveTenant() {
         };
     };
 
-   
     const loadData = async () => {
         setLoading(true);
         setError("");
@@ -183,7 +181,6 @@ export default function AdminGraveTenant() {
 
     const isEditing = !!form.id;
 
-    // Segédfüggvények
     const getKozteruletTipusNev = (id) => {
         if (!id) return "";
         const tipus = kozteruletTipusok.find(k => k.id === parseInt(id));
@@ -205,22 +202,22 @@ export default function AdminGraveTenant() {
     };
 
     return (
-        <div className="admin-page tenant-page">
-            <div className="tenant-header">
-                <h2 className="admin-title">Sírbérlők kezelése</h2>
-                <p className="admin-text">Itt kezelheted a sírbérlők adatait - hozzáadás, módosítás és törlés.</p>
+        <div className="admin-gravetenant-page">
+            <div className="admin-gravetenant-header">
+                <h2 className="admin-gravetenant-title">Sírbérlők kezelése</h2>
+                <p className="admin-gravetenant-subtitle">Itt kezelheted a sírbérlők adatait - hozzáadás, módosítás és törlés.</p>
             </div>
 
-            <div className="tenant-grid">
+            <div className="admin-gravetenant-grid">
                 {/* Bal oldali űrlap kártya */}
-                <div className="tenant-card">
-                    <h3 className="section-title">
+                <div className="admin-gravetenant-card">
+                    <h3 className="admin-gravetenant-section-title">
                         {isEditing ? "Sírbérlő szerkesztése" : "Új sírbérlő hozzáadása"}
                     </h3>
                     
-                    {error && <div className="alert alert-error">{error}</div>}
+                    {error && <div className="admin-gravetenant-alert admin-gravetenant-alert--error">{error}</div>}
                     
-                    <form className="tenant-form" onSubmit={handleSubmit}>
+                    <form className="admin-gravetenant-form" onSubmit={handleSubmit}>
                         <label>
                             Név *
                             <input 
@@ -232,7 +229,7 @@ export default function AdminGraveTenant() {
                                 disabled={saving}
                             />
                             {fieldErrors.nev && (
-                                <div className="field-error">
+                                <div className="admin-gravetenant-field-error">
                                     {Array.isArray(fieldErrors.nev) ? fieldErrors.nev[0] : fieldErrors.nev}
                                 </div>
                             )}
@@ -249,7 +246,7 @@ export default function AdminGraveTenant() {
                                 disabled={saving}
                             />
                             {fieldErrors.email_cim && (
-                                <div className="field-error">
+                                <div className="admin-gravetenant-field-error">
                                     {Array.isArray(fieldErrors.email_cim) ? fieldErrors.email_cim[0] : fieldErrors.email_cim}
                                 </div>
                             )}
@@ -265,7 +262,7 @@ export default function AdminGraveTenant() {
                                 disabled={saving}
                             />
                             {fieldErrors.telefonszam && (
-                                <div className="field-error">
+                                <div className="admin-gravetenant-field-error">
                                     {Array.isArray(fieldErrors.telefonszam) ? fieldErrors.telefonszam[0] : fieldErrors.telefonszam}
                                 </div>
                             )}
@@ -282,7 +279,7 @@ export default function AdminGraveTenant() {
                                 disabled={saving}
                             />
                             {fieldErrors.kozterulet_neve && (
-                                <div className="field-error">
+                                <div className="admin-gravetenant-field-error">
                                     {Array.isArray(fieldErrors.kozterulet_neve) ? fieldErrors.kozterulet_neve[0] : fieldErrors.kozterulet_neve}
                                 </div>
                             )}
@@ -302,7 +299,7 @@ export default function AdminGraveTenant() {
                                 ))}
                             </select>
                             {fieldErrors.kozterulet_tipus_id && (
-                                <div className="field-error">
+                                <div className="admin-gravetenant-field-error">
                                     {Array.isArray(fieldErrors.kozterulet_tipus_id) ? fieldErrors.kozterulet_tipus_id[0] : fieldErrors.kozterulet_tipus_id}
                                 </div>
                             )}
@@ -325,20 +322,20 @@ export default function AdminGraveTenant() {
                                 ))}
                             </select>
                             {fieldErrors.ir_szam && (
-                                <div className="field-error">
+                                <div className="admin-gravetenant-field-error">
                                     {Array.isArray(fieldErrors.ir_szam) ? fieldErrors.ir_szam[0] : fieldErrors.ir_szam}
                                 </div>
                             )}
                         </label>
 
-                        <div className="form-actions">
+                        <div className="admin-gravetenant-form-actions">
                             <button type="submit" disabled={saving}>
                                 {saving ? "Mentés..." : (isEditing ? "Módosítások mentése" : "Hozzáadás")}
                             </button>
                             {isEditing && (
                                 <button
                                     type="button"
-                                    className="ghost"
+                                    className="admin-gravetenant-btn--ghost"
                                     onClick={() => { 
                                         setForm(emptyForm); 
                                         setFieldErrors({}); 
@@ -353,20 +350,20 @@ export default function AdminGraveTenant() {
                     </form>
                 </div>
 
-               
-                <div className="tenant-card">
-                    <div className="list-header">
-                        <h3 className="section-title">Sírbérlők listája ({tenants.length})</h3>
+                {/* Jobb oldali lista kártya */}
+                <div className="admin-gravetenant-card">
+                    <div className="admin-gravetenant-list-header">
+                        <h3 className="admin-gravetenant-section-title">Sírbérlők listája ({tenants.length})</h3>
                         <button onClick={loadData} disabled={loading || saving}>
                             {loading ? "Betöltés..." : "🔄 Frissítés"}
                         </button>
                     </div>
 
                     {loading ? (
-                        <div className="alert">⏳ Adatok betöltése folyamatban...</div>
+                        <div className="admin-gravetenant-alert">⏳ Adatok betöltése folyamatban...</div>
                     ) : (
-                        <div className="table-wrapper">
-                            <table className="tenant-table">
+                        <div className="admin-gravetenant-table-wrapper">
+                            <table className="admin-gravetenant-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -389,13 +386,13 @@ export default function AdminGraveTenant() {
 
                                     {tenants.map((t) => (
                                         <tr key={t.id}>
-                                            <td>{t.id}</td>
-                                            <td><strong>{t.nev}</strong></td>
-                                            <td className="mono">{t.email_cim || "—"}</td>
-                                            <td>{t.telefonszam || "—"}</td>
-                                            <td>{formatCim(t)}</td>
-                                            <td>{getTelepulesNev(t.ir_szam)}</td>
-                                            <td className="actions">
+                                            <td data-label="ID">{t.id}</td>
+                                            <td data-label="Név"><strong>{t.nev}</strong></td>
+                                            <td data-label="E-mail" className="admin-gravetenant-mono">{t.email_cim || "—"}</td>
+                                            <td data-label="Telefon">{t.telefonszam || "—"}</td>
+                                            <td data-label="Cím">{formatCim(t)}</td>
+                                            <td data-label="Település">{getTelepulesNev(t.ir_szam)}</td>
+                                            <td data-label="Műveletek" className="admin-gravetenant-actions">
                                                 <button 
                                                     onClick={() => handleEdit(t)}
                                                     disabled={saving}

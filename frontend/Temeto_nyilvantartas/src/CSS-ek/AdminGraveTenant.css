@@ -1,25 +1,28 @@
+/* Admin Grave Tenant - Sírbérlők kezelés oldalspecifikus CSS */
+
 :root {
-  --bg: #ffffff;
-  --muted: #6b7280;
-  --border: #e5e7eb;
-  --accent: #2563eb;
-  --accent-hover: #1d4ed8;
-  --danger: #dc2626;
-  --danger-hover: #b91c1c;
-  --success: #16a34a;
-  --card-radius: 14px;
-  --input-radius: 10px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --mono-font: Menlo, Monaco, "Courier New", monospace;
-  --input-focus: rgba(37, 99, 235, 0.12);
+  --agt-bg: #ffffff;
+  --agt-muted: #6b7280;
+  --agt-border: #e5e7eb;
+  --agt-accent: #2563eb;
+  --agt-accent-hover: #1d4ed8;
+  --agt-danger: #dc2626;
+  --agt-danger-hover: #b91c1c;
+  --agt-success: #16a34a;
+  --agt-card-radius: 14px;
+  --agt-input-radius: 10px;
+  --agt-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --agt-shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --agt-mono-font: Menlo, Monaco, "Courier New", monospace;
+  --agt-input-focus: rgba(37, 99, 235, 0.12);
 }
 
 * {
   box-sizing: border-box;
 }
 
-.tenant-page {
+/* ===== MAIN PAGE ===== */
+.admin-gravetenant-page {
   padding: 2rem 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
@@ -28,11 +31,11 @@
   min-height: 100vh;
 }
 
-.tenant-header {
+.admin-gravetenant-header {
   margin-bottom: 2rem;
 }
 
-.admin-title {
+.admin-gravetenant-title {
   margin: 0;
   font-size: 2rem;
   font-weight: 700;
@@ -40,15 +43,15 @@
   letter-spacing: -0.025em;
 }
 
-.admin-text {
+.admin-gravetenant-subtitle {
   margin: 0.5rem 0 0;
-  color: var(--muted);
+  color: var(--agt-muted);
   font-size: 1.05rem;
   line-height: 1.5;
 }
 
-
-.tenant-grid {
+/* ===== GRID LAYOUT ===== */
+.admin-gravetenant-grid {
   display: grid;
   grid-template-columns: 480px 1fr;
   gap: 1.5rem;
@@ -56,55 +59,55 @@
 }
 
 @media (max-width: 1200px) {
-  .tenant-grid {
+  .admin-gravetenant-grid {
     grid-template-columns: 420px 1fr;
   }
 }
 
 @media (max-width: 1024px) {
-  .tenant-grid {
+  .admin-gravetenant-grid {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-  .tenant-page {
+  .admin-gravetenant-page {
     padding: 1rem;
   }
   
-  .tenant-header {
+  .admin-gravetenant-header {
     margin-bottom: 1.5rem;
   }
   
-  .admin-title {
+  .admin-gravetenant-title {
     font-size: 1.5rem;
   }
   
-  .admin-text {
+  .admin-gravetenant-subtitle {
     font-size: 0.95rem;
   }
 }
 
-
-.tenant-card {
-  background: var(--bg);
-  border: 1px solid var(--border);
-  border-radius: var(--card-radius);
-  box-shadow: var(--shadow-lg);
+/* ===== CARD ===== */
+.admin-gravetenant-card {
+  background: var(--agt-bg);
+  border: 1px solid var(--agt-border);
+  border-radius: var(--agt-card-radius);
+  box-shadow: var(--agt-shadow-lg);
   padding: 1.75rem;
-  animation: fadeIn 0.3s ease-out;
+  animation: agtFadeIn 0.3s ease-out;
 }
 
 @media (max-width: 640px) {
-  .tenant-card {
+  .admin-gravetenant-card {
     padding: 1.25rem;
     border-radius: 12px;
   }
 }
 
-
-.section-title {
-  margin: 0 0 1.25rem;
+/* ===== SECTION TITLE ===== */
+.admin-gravetenant-section-title {
+  margin: 0 0 1.25rem 0;
   font-size: 1.2rem;
   font-weight: 600;
   color: #111827;
@@ -112,14 +115,14 @@
 }
 
 @media (max-width: 640px) {
-  .section-title {
+  .admin-gravetenant-section-title {
     font-size: 1.1rem;
     margin-bottom: 1rem;
   }
 }
 
-
-.list-header {
+/* ===== LIST HEADER ===== */
+.admin-gravetenant-list-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -128,9 +131,9 @@
   flex-wrap: wrap;
 }
 
-.list-header button {
+.admin-gravetenant-list-header button {
   background: #fff;
-  border: 2px solid var(--border);
+  border: 2px solid var(--agt-border);
   padding: 0.6rem 0.9rem;
   border-radius: 9px;
   cursor: pointer;
@@ -141,39 +144,39 @@
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.list-header button:hover:not(:disabled) {
+.admin-gravetenant-list-header button:hover:not(:disabled) {
   background: #f9fafb;
   border-color: #9ca3af;
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
 }
 
-.list-header button:disabled {
+.admin-gravetenant-list-header button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
 
 @media (max-width: 640px) {
-  .list-header button {
+  .admin-gravetenant-list-header button {
     padding: 0.55rem 0.8rem;
     font-size: 0.85rem;
   }
 }
 
-
-.tenant-form {
+/* ===== FORM ===== */
+.admin-gravetenant-form {
   display: flex;
   flex-direction: column;
   gap: 1.4rem;
 }
 
 @media (max-width: 640px) {
-  .tenant-form {
+  .admin-gravetenant-form {
     gap: 1.25rem;
   }
 }
 
-.tenant-form label {
+.admin-gravetenant-form label {
   display: block;
   font-size: 0.95rem;
   font-weight: 600;
@@ -182,23 +185,23 @@
 }
 
 @media (max-width: 640px) {
-  .tenant-form label {
+  .admin-gravetenant-form label {
     font-size: 0.9rem;
   }
 }
 
-
-.tenant-form input[type="text"],
-.tenant-form input[type="email"],
-.tenant-form input[name="nev"],
-.tenant-form input[name="telefonszam"],
-.tenant-form input[name="kozterulet_neve"],
-.tenant-form input[name="email_cim"],
-.tenant-form select {
+/* ===== FORM INPUTS ===== */
+.admin-gravetenant-form input[type="text"],
+.admin-gravetenant-form input[type="email"],
+.admin-gravetenant-form input[name="nev"],
+.admin-gravetenant-form input[name="telefonszam"],
+.admin-gravetenant-form input[name="kozterulet_neve"],
+.admin-gravetenant-form input[name="email_cim"],
+.admin-gravetenant-form select {
   width: 100% !important;
   padding: 0.75rem 1rem !important;
-  border: 2px solid var(--border) !important;
-  border-radius: var(--input-radius) !important;
+  border: 2px solid var(--agt-border) !important;
+  border-radius: var(--agt-input-radius) !important;
   background: #fff !important;
   box-sizing: border-box !important;
   font-size: 0.95rem !important;
@@ -211,13 +214,13 @@
 }
 
 @media (max-width: 640px) {
-  .tenant-form input[type="text"],
-  .tenant-form input[type="email"],
-  .tenant-form input[name="nev"],
-  .tenant-form input[name="telefonszam"],
-  .tenant-form input[name="kozterulet_neve"],
-  .tenant-form input[name="email_cim"],
-  .tenant-form select {
+  .admin-gravetenant-form input[type="text"],
+  .admin-gravetenant-form input[type="email"],
+  .admin-gravetenant-form input[name="nev"],
+  .admin-gravetenant-form input[name="telefonszam"],
+  .admin-gravetenant-form input[name="kozterulet_neve"],
+  .admin-gravetenant-form input[name="email_cim"],
+  .admin-gravetenant-form select {
     padding: 0.7rem 0.9rem !important;
     font-size: 0.9rem !important;
     min-height: 42px !important;
@@ -225,36 +228,36 @@
   }
 }
 
-.tenant-form input::placeholder {
+.admin-gravetenant-form input::placeholder {
   color: #9ca3af !important;
   font-size: 0.9rem !important;
 }
 
 @media (max-width: 640px) {
-  .tenant-form input::placeholder {
+  .admin-gravetenant-form input::placeholder {
     font-size: 0.85rem !important;
   }
 }
 
-.tenant-form input:focus,
-.tenant-form select:focus {
+.admin-gravetenant-form input:focus,
+.admin-gravetenant-form select:focus {
   outline: none !important;
-  border-color: var(--accent) !important;
+  border-color: var(--agt-accent) !important;
   background: #fafbff !important;
-  box-shadow: 0 0 0 3px var(--input-focus), 0 2px 4px rgba(0, 0, 0, 0.05) !important;
+  box-shadow: 0 0 0 3px var(--agt-input-focus), 0 2px 4px rgba(0, 0, 0, 0.05) !important;
   transform: translateY(-1px);
 }
 
-.tenant-form input:disabled,
-.tenant-form select:disabled {
+.admin-gravetenant-form input:disabled,
+.admin-gravetenant-form select:disabled {
   background: #f9fafb !important;
   color: #9ca3af !important;
   cursor: not-allowed !important;
   opacity: 0.7 !important;
 }
 
-
-.tenant-form select {
+/* ===== SELECT ===== */
+.admin-gravetenant-form select {
   cursor: pointer !important;
   appearance: none !important;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3E%3C/svg%3E") !important;
@@ -265,15 +268,15 @@
 }
 
 @media (max-width: 640px) {
-  .tenant-form select {
+  .admin-gravetenant-form select {
     background-position: right 0.7rem center !important;
     background-size: 1.15em 1.15em !important;
     padding-right: 2.5rem !important;
   }
 }
 
-
-.form-actions {
+/* ===== FORM ACTIONS ===== */
+.admin-gravetenant-form-actions {
   display: flex;
   gap: 0.7rem;
   margin-top: 0.4rem;
@@ -281,15 +284,15 @@
 }
 
 @media (max-width: 640px) {
-  .form-actions {
+  .admin-gravetenant-form-actions {
     flex-direction: column;
     gap: 0.7rem;
   }
 }
 
-.form-actions button {
+.admin-gravetenant-form-actions button {
   padding: 0.75rem 1.25rem;
-  border-radius: var(--input-radius);
+  border-radius: var(--agt-input-radius);
   border: none;
   cursor: pointer;
   font-weight: 600;
@@ -301,7 +304,7 @@
 }
 
 @media (max-width: 640px) {
-  .form-actions button {
+  .admin-gravetenant-form-actions button {
     width: 100%;
     flex: none;
     padding: 0.7rem 1.1rem;
@@ -310,52 +313,51 @@
   }
 }
 
-.form-actions button:disabled {
+.admin-gravetenant-form-actions button:disabled {
   opacity: 0.6;
   cursor: not-allowed;
   transform: none !important;
 }
 
-button[type="submit"] {
-  background: var(--accent);
+.admin-gravetenant-form-actions button[type="submit"] {
+  background: var(--agt-accent);
   color: #fff;
   flex: 2;
 }
 
-button[type="submit"]:hover:not(:disabled) {
-  background: var(--accent-hover);
+.admin-gravetenant-form-actions button[type="submit"]:hover:not(:disabled) {
+  background: var(--agt-accent-hover);
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
 }
 
-button[type="submit"]:active:not(:disabled) {
+.admin-gravetenant-form-actions button[type="submit"]:active:not(:disabled) {
   transform: translateY(0);
 }
 
-
-button.ghost {
+/* ===== GHOST BUTTON ===== */
+.admin-gravetenant-form-actions button.admin-gravetenant-btn--ghost {
   background: #fff;
-  border: 2px solid var(--border) !important;
+  border: 2px solid var(--agt-border) !important;
   color: #374151;
   flex: 1;
 }
 
-button.ghost:hover:not(:disabled) {
+.admin-gravetenant-form-actions button.admin-gravetenant-btn--ghost:hover:not(:disabled) {
   background: #f9fafb;
   border-color: #9ca3af !important;
   transform: translateY(-1px);
 }
 
-
-.table-wrapper {
+/* ===== TABLE ===== */
+.admin-gravetenant-table-wrapper {
   overflow-x: auto;
   border-radius: 12px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--agt-border);
   background: #fff;
 }
 
-
-.tenant-table {
+.admin-gravetenant-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
@@ -363,16 +365,16 @@ button.ghost:hover:not(:disabled) {
 }
 
 @media (max-width: 1024px) {
-  .tenant-table {
+  .admin-gravetenant-table {
     min-width: 100%;
   }
 }
 
-.tenant-table thead th {
+.admin-gravetenant-table thead th {
   text-align: left;
   padding: 0.875rem 1rem;
   background: #f9fafb;
-  border-bottom: 2px solid var(--border);
+  border-bottom: 2px solid var(--agt-border);
   font-weight: 600;
   color: #374151;
   font-size: 0.85rem;
@@ -381,37 +383,36 @@ button.ghost:hover:not(:disabled) {
   white-space: nowrap;
 }
 
-.tenant-table tbody td {
+.admin-gravetenant-table tbody td {
   padding: 1rem;
   border-bottom: 1px solid #f3f4f6;
   vertical-align: middle;
   color: #111827;
 }
 
-.tenant-table tbody tr {
+.admin-gravetenant-table tbody tr {
   transition: background 0.15s ease;
 }
 
-.tenant-table tbody tr:hover {
+.admin-gravetenant-table tbody tr:hover {
   background: #fafbfc;
 }
 
-.tenant-table tbody tr:last-child td {
+.admin-gravetenant-table tbody tr:last-child td {
   border-bottom: none;
 }
 
-
-.tenant-table .empty {
+.admin-gravetenant-table td.empty {
   text-align: center;
-  color: var(--muted);
+  color: var(--agt-muted);
   padding: 3rem 1rem;
   font-style: italic;
   font-size: 1rem;
 }
 
-
-.mono {
-  font-family: var(--mono-font);
+/* ===== MONO (code) ===== */
+.admin-gravetenant-mono {
+  font-family: var(--agt-mono-font);
   font-size: 0.85rem;
   color: #374151;
   background: #f9fafb;
@@ -420,17 +421,17 @@ button.ghost:hover:not(:disabled) {
   display: inline-block;
 }
 
-
-.actions {
+/* ===== ACTIONS ===== */
+.admin-gravetenant-actions {
   display: flex;
   gap: 0.5rem;
   flex-wrap: wrap;
 }
 
-.actions button {
+.admin-gravetenant-actions button {
   padding: 0.5rem 0.85rem;
   border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 1px solid var(--agt-border);
   background: #fff;
   cursor: pointer;
   font-size: 0.85rem;
@@ -439,23 +440,24 @@ button.ghost:hover:not(:disabled) {
   white-space: nowrap;
 }
 
-.actions button:hover:not(:disabled) {
+.admin-gravetenant-actions button:hover:not(:disabled) {
   transform: translateY(-1px);
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-.actions button.danger {
-  background: var(--danger);
+.admin-gravetenant-actions button.danger {
+  background: var(--agt-danger);
   color: #fff;
-  border-color: var(--danger);
+  border-color: var(--agt-danger);
 }
 
-.actions button.danger:hover:not(:disabled) {
-  background: var(--danger-hover);
+.admin-gravetenant-actions button.danger:hover:not(:disabled) {
+  background: var(--agt-danger-hover);
   box-shadow: 0 2px 4px rgba(220, 38, 38, 0.3);
 }
 
-.alert {
+/* ===== ALERTS ===== */
+.admin-gravetenant-alert {
   padding: 0.85rem 1.1rem;
   border-radius: 10px;
   background: #f0f9ff;
@@ -469,34 +471,34 @@ button.ghost:hover:not(:disabled) {
   line-height: 1.5;
 }
 
-.alert::before {
+.admin-gravetenant-alert::before {
   content: "ℹ️";
   font-size: 1.15rem;
   flex-shrink: 0;
 }
 
-.alert-error {
+.admin-gravetenant-alert--error {
   background: #fef2f2;
   border-color: #fecaca;
-  color: var(--danger);
+  color: var(--agt-danger);
 }
 
-.alert-error::before {
+.admin-gravetenant-alert--error::before {
   content: "⚠️";
 }
 
 @media (max-width: 640px) {
-  .alert {
+  .admin-gravetenant-alert {
     padding: 0.75rem 0.9rem;
     font-size: 0.85rem;
   }
 }
 
-
-.field-error {
+/* ===== FIELD ERROR ===== */
+.admin-gravetenant-field-error {
   margin-top: 0.45rem;
   font-size: 0.85rem;
-  color: var(--danger);
+  color: var(--agt-danger);
   font-weight: 500;
   display: flex;
   align-items: center;
@@ -504,7 +506,7 @@ button.ghost:hover:not(:disabled) {
   line-height: 1.4;
 }
 
-.field-error::before {
+.admin-gravetenant-field-error::before {
   content: "⚠";
   font-size: 0.95rem;
   flex-shrink: 0;
@@ -512,11 +514,11 @@ button.ghost:hover:not(:disabled) {
 
 
 @media (max-width: 1024px) {
-  .tenant-table thead {
+  .admin-gravetenant-table thead {
     display: none;
   }
 
-  .tenant-table tbody td {
+  .admin-gravetenant-table tbody td {
     display: block;
     width: 100%;
     padding: 0.75rem 1rem;
@@ -524,7 +526,7 @@ button.ghost:hover:not(:disabled) {
     border: none;
   }
 
-  .tenant-table tbody td::before {
+  .admin-gravetenant-table tbody td::before {
     content: attr(data-label);
     float: left;
     font-weight: 600;
@@ -534,48 +536,48 @@ button.ghost:hover:not(:disabled) {
     letter-spacing: 0.05em;
   }
 
-  .tenant-table tbody tr {
+  .admin-gravetenant-table tbody tr {
     display: block;
     margin-bottom: 1rem;
-    border: 1px solid var(--border);
+    border: 1px solid var(--agt-border);
     border-radius: 12px;
     background: #fff;
-    box-shadow: var(--shadow);
+    box-shadow: var(--agt-shadow);
   }
 
-  .tenant-table tbody td:first-child {
+  .admin-gravetenant-table tbody td:first-child {
     padding-top: 1rem;
     border-top-left-radius: 12px;
     border-top-right-radius: 12px;
   }
 
-  .tenant-table tbody td:last-child {
+  .admin-gravetenant-table tbody td:last-child {
     padding-bottom: 1rem;
     border-bottom-left-radius: 12px;
     border-bottom-right-radius: 12px;
   }
 
-  .actions {
+  .admin-gravetenant-actions {
     justify-content: flex-end;
     margin-top: 0.5rem;
     padding-top: 0.75rem;
-    border-top: 1px solid var(--border);
+    border-top: 1px solid var(--agt-border);
   }
 
-  .mono {
+  .admin-gravetenant-mono {
     font-size: 0.8rem;
     padding: 0.25rem 0.5rem;
   }
 }
 
 @media (max-width: 640px) {
-  .actions button {
+  .admin-gravetenant-actions button {
     font-size: 0.8rem;
     padding: 0.45rem 0.7rem;
   }
 }
 
-@keyframes fadeIn {
+@keyframes agtFadeIn {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -586,44 +588,45 @@ button.ghost:hover:not(:disabled) {
   }
 }
 
-.table-wrapper::-webkit-scrollbar {
+
+.admin-gravetenant-table-wrapper::-webkit-scrollbar {
   height: 8px;
 }
 
-.table-wrapper::-webkit-scrollbar-track {
+.admin-gravetenant-table-wrapper::-webkit-scrollbar-track {
   background: #f1f5f9;
   border-radius: 4px;
 }
 
-.table-wrapper::-webkit-scrollbar-thumb {
+.admin-gravetenant-table-wrapper::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
 }
 
-.table-wrapper::-webkit-scrollbar-thumb:hover {
+.admin-gravetenant-table-wrapper::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
 
 
-.tenant-form input:focus-visible,
-.tenant-form select:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--accent);
+.admin-gravetenant-form input:focus-visible,
+.admin-gravetenant-form select:focus-visible,
+.admin-gravetenant-form-actions button:focus-visible {
+  outline: 2px solid var(--agt-accent);
   outline-offset: 2px;
 }
 
 @media print {
-  .tenant-page {
+  .admin-gravetenant-page {
     background: white;
   }
   
-  .form-actions,
-  .actions,
-  .list-header button {
+  .admin-gravetenant-form-actions,
+  .admin-gravetenant-actions,
+  .admin-gravetenant-list-header button {
     display: none;
   }
   
-  .tenant-card {
+  .admin-gravetenant-card {
     box-shadow: none;
     border: 1px solid #ccc;
   }

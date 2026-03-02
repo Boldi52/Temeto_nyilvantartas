@@ -43,7 +43,7 @@ const LoginPage = () => {
                 } else if (role === "user") {
                     window.location.replace("/");
                 } else {
-                    window.location.replace("/admin/dashboard"); // fallback, ha nincs role
+                    window.location.replace("/admin/dashboard");
                 }
 
                 setInfo("Sikeres bejelentkezés!");
@@ -56,43 +56,65 @@ const LoginPage = () => {
     };
 
     return (
-        <div className="login-wrapper">
-            <div className="login-frame">
-                <div className="login-panel">
-                    <h2>Bejelentkezés</h2>
-                    <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label htmlFor="email">e-mail cím</label>
+        <div className="loginpage-wrapper">
+            <div className="loginpage-frame">
+                <div className="loginpage-panel">
+                    <h2 className="loginpage-panel__title">Bejelentkezés</h2>
+                    <form className="loginpage-form" onSubmit={handleSubmit}>
+                        <div className="loginpage-form-group">
+                            <label htmlFor="email" className="loginpage-form-group__label">
+                                e-mail cím
+                            </label>
                             <input
                                 id="email"
                                 type="email"
                                 placeholder="email@example.com"
+                                className="loginpage-form-group__input"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
                             />
                         </div>
-                        <div className="form-group">
-                            <label htmlFor="password">jelszó</label>
+                        <div className="loginpage-form-group">
+                            <label htmlFor="password" className="loginpage-form-group__label">
+                                jelszó
+                            </label>
                             <input
                                 id="password"
                                 type="password"
                                 placeholder="••••••••"
+                                className="loginpage-form-group__input"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
                         </div>
-                        <button type="submit" className="login-btn" disabled={loading}>
+                        <button
+                            type="submit"
+                            className="loginpage-btn"
+                            disabled={loading}
+                        >
                             {loading ? "Belépés..." : "Bejelentkezés"}
                         </button>
-                        {error && <div style={{ color: "red", marginTop: "0.5rem" }}>{error}</div>}
-                        {info && <div style={{ color: "green", marginTop: "0.5rem" }}>{info}</div>}
+                        {error && (
+                            <div className="loginpage-message loginpage-message--error">
+                                {error}
+                            </div>
+                        )}
+                        {info && (
+                            <div className="loginpage-message loginpage-message--success">
+                                {info}
+                            </div>
+                        )}
                     </form>
                 </div>
 
-                <div className="logo-panel">
-                    <img src="/img/zala_logo.png" alt="Logo" />
+                <div className="loginpage-logo-panel">
+                    <img
+                        src="/img/zala_logo.png"
+                        alt="Zala temető logó"
+                        className="loginpage-logo-panel__img"
+                    />
                 </div>
             </div>
         </div>

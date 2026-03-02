@@ -1,91 +1,182 @@
-.admin-title {
-    font-weight: 600;
-    font-size: 1.25rem;
-    color: #1f2937;
-    margin-bottom: 1rem;
+/* Admin Dashboard oldalspecifikus stílusok */
+:root {
+  --adm-text-primary: #111827;
+  --adm-text-secondary: #1f2937;
+  --adm-text-muted: #4b5563;
+  --adm-text-label: #6b7280;
+  --adm-bg-primary: #ffffff;
+  --adm-border-default: #e5e7eb;
+  --adm-border-hover: #818cf8;
+  --adm-shadow-default: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --adm-shadow-hover: 0 4px 10px rgba(129, 140, 248, 0.18);
+  --adm-accent-primary: #6366f1;
+  --adm-accent-light: #818cf8;
 }
 
-.admin-page {
-    padding: 2rem 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
+/* Admin Dashboard wrapper */
+.admin-dashboard-page {
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.admin-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-    padding: 1.5rem;
+/* Főcím */
+.admin-dashboard-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+  color: var(--adm-text-secondary);
+  margin-bottom: 1rem;
 }
 
-.admin-subtitle {
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: #111827;
-    margin-bottom: 0.5rem;
+/* Fő kártya (welcome card) */
+.admin-dashboard-card {
+  background: var(--adm-bg-primary);
+  border: 1px solid var(--adm-border-default);
+  border-radius: 12px;
+  box-shadow: var(--adm-shadow-default);
+  padding: 1.5rem;
 }
 
-.admin-text {
-    font-size: 0.95rem;
-    color: #4b5563;
-    margin-bottom: 1.25rem;
+.admin-dashboard-card__subtitle {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--adm-text-primary);
+  margin-bottom: 0.5rem;
 }
 
-.admin-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 0.75rem;
+.admin-dashboard-card__text {
+  font-size: 0.95rem;
+  color: var(--adm-text-muted);
+  margin-bottom: 1.25rem;
 }
 
-.admin-card-link {
-    display: block;
-    border: 1px solid #e5e7eb;
-    border-radius: 10px;
+/* Grid container */
+.admin-dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 0.75rem;
+}
+
+/* Kártya linkek */
+.admin-dashboard-card-link {
+  display: block;
+  border: 1px solid var(--adm-border-default);
+  border-radius: 10px;
+  padding: 1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
+  background: var(--adm-bg-primary);
+}
+
+.admin-dashboard-card-link:hover {
+  border-color: var(--adm-border-hover);
+  box-shadow: var(--adm-shadow-hover);
+  transform: translateY(-1px);
+}
+
+.admin-dashboard-card-link:active {
+  transform: translateY(0);
+}
+
+/* Kártya tartalom */
+.admin-dashboard-card-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.admin-dashboard-card-texts {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.admin-dashboard-card-title {
+  font-size: 0.9rem;
+  color: var(--adm-text-label);
+  margin-bottom: 0.25rem;
+}
+
+.admin-dashboard-card-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--adm-text-primary);
+  line-height: 1.2;
+}
+
+.admin-dashboard-card-desc {
+  font-size: 0.8rem;
+  color: var(--adm-text-label);
+  margin-top: 0.25rem;
+}
+
+/* Nyíl ikon */
+.admin-dashboard-card-arrow {
+  color: var(--adm-accent-primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Tablet responsív */
+@media (max-width: 768px) {
+  .admin-dashboard-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .admin-dashboard-title {
+    font-size: 1.1rem;
+  }
+
+  .admin-dashboard-grid {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 0.5rem;
+  }
+
+  .admin-dashboard-card-link {
+    padding: 0.875rem;
+  }
+
+  .admin-dashboard-card-value {
+    font-size: 1.4rem;
+  }
+}
+
+/* Mobil */
+@media (max-width: 480px) {
+  .admin-dashboard-page {
     padding: 1rem;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.1s ease;
-}
+  }
 
-.admin-card-link:hover {
-    border-color: #818cf8;
-    box-shadow: 0 4px 10px rgba(129, 140, 248, 0.18);
-    transform: translateY(-1px);
-}
+  .admin-dashboard-card {
+    padding: 1rem;
+  }
 
-.admin-card-body {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
+  .admin-dashboard-title {
+    font-size: 1rem;
+  }
 
-.admin-card-texts {
-    display: flex;
-    flex-direction: column;
-}
+  .admin-dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
 
-.admin-card-title {
-    font-size: 0.9rem;
-    color: #6b7280;
-    margin-bottom: 0.25rem;
-}
+  .admin-dashboard-card-link {
+    padding: 0.75rem;
+  }
 
-.admin-card-value {
-    font-size: 1.6rem;
-    font-weight: 700;
-    color: #111827;
-    line-height: 1.2;
-}
+  .admin-dashboard-card-body {
+    gap: 0.5rem;
+  }
 
-.admin-card-desc {
+  .admin-dashboard-card-value {
+    font-size: 1.3rem;
+  }
+
+  .admin-dashboard-card-arrow {
     font-size: 0.8rem;
-    color: #6b7280;
-    margin-top: 0.25rem;
-}
-
-.admin-card-arrow {
-    color: #6366f1;
-    font-size: 0.9rem;
-    font-weight: 600;
+  }
 }

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../../CSS-ek/AdminGraveSites.css";
 
-const API_BASE = "http://localhost:8000"; // igazítsd a backend host/portra
+const API_BASE = "http://localhost:8000";
 
 export default function AdminGraveSites() {
     const emptyForm = {
@@ -104,7 +104,6 @@ export default function AdminGraveSites() {
             ? `${API_BASE}/api/sirhelyek/${form.id}`
             : `${API_BASE}/api/sirhelyek`;
 
-        // Üres stringek helyett null küldése az opcionális mezőkre
         const payload = {
             sor_id: form.sor_id ? Number(form.sor_id) : null,
             sirkod: form.sirkod || null,
@@ -143,19 +142,27 @@ export default function AdminGraveSites() {
     const isEditing = !!form.id;
 
     return (
-        <div className="admin-page graves-page">
-            <div className="graves-header">
-                <h2 className="admin-title">Sírhelyek kezelése</h2>
-                <p className="admin-text">
+        <div className="admin-gravesites-page">
+            <div className="admin-gravesites-header">
+                <h2 className="admin-gravesites-section-title" style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>
+                    Sírhelyek kezelése
+                </h2>
+                <p style={{ color: "#6b7280", fontSize: "0.95rem" }}>
                     Itt hozhatsz létre, módosíthatsz vagy törölhetsz sírhelyeket.
                 </p>
             </div>
 
-            <div className="graves-grid">
-                <div className="graves-card">
-                    <h3 className="section-title">{isEditing ? "Szerkesztés" : "Új sírhely"}</h3>
-                    {error && <div className="alert alert-error">{error}</div>}
-                    <form className="graves-form" onSubmit={handleSubmit}>
+            <div className="admin-gravesites-grid">
+                <div className="admin-gravesites-card">
+                    <h3 className="admin-gravesites-section-title">
+                        {isEditing ? "Szerkesztés" : "Új sírhely"}
+                    </h3>
+                    {error && (
+                        <div className="admin-gravesites-alert admin-gravesites-alert--error">
+                            {error}
+                        </div>
+                    )}
+                    <form className="admin-gravesites-form" onSubmit={handleSubmit}>
                         <label>
                             Sor
                             <select
@@ -171,7 +178,11 @@ export default function AdminGraveSites() {
                                     </option>
                                 ))}
                             </select>
-                            {fieldErrors.sor_id && <div className="field-error">{fieldErrors.sor_id}</div>}
+                            {fieldErrors.sor_id && (
+                                <div className="admin-gravesites-field-error">
+                                    {fieldErrors.sor_id}
+                                </div>
+                            )}
                         </label>
 
                         <label>
@@ -182,7 +193,11 @@ export default function AdminGraveSites() {
                                 onChange={handleChange}
                                 placeholder="pl. S011"
                             />
-                            {fieldErrors.sirkod && <div className="field-error">{fieldErrors.sirkod}</div>}
+                            {fieldErrors.sirkod && (
+                                <div className="admin-gravesites-field-error">
+                                    {fieldErrors.sirkod}
+                                </div>
+                            )}
                         </label>
 
                         <label>
@@ -193,7 +208,11 @@ export default function AdminGraveSites() {
                                 onChange={handleChange}
                                 placeholder="szabad / foglalva / stb."
                             />
-                            {fieldErrors.allapot && <div className="field-error">{fieldErrors.allapot}</div>}
+                            {fieldErrors.allapot && (
+                                <div className="admin-gravesites-field-error">
+                                    {fieldErrors.allapot}
+                                </div>
+                            )}
                         </label>
 
                         <label>
@@ -204,7 +223,11 @@ export default function AdminGraveSites() {
                                 onChange={handleChange}
                                 placeholder="pl. /uploads/sirhely.jpg"
                             />
-                            {fieldErrors.foto && <div className="field-error">{fieldErrors.foto}</div>}
+                            {fieldErrors.foto && (
+                                <div className="admin-gravesites-field-error">
+                                    {fieldErrors.foto}
+                                </div>
+                            )}
                         </label>
 
                         <label>
@@ -222,18 +245,20 @@ export default function AdminGraveSites() {
                                 ))}
                             </select>
                             {fieldErrors.sirberlo_id && (
-                                <div className="field-error">{fieldErrors.sirberlo_id}</div>
+                                <div className="admin-gravesites-field-error">
+                                    {fieldErrors.sirberlo_id}
+                                </div>
                             )}
                         </label>
 
-                        <div className="form-actions">
+                        <div className="admin-gravesites-form-actions">
                             <button type="submit" disabled={saving}>
                                 {isEditing ? "Mentés" : "Hozzáadás"}
                             </button>
                             {isEditing && (
                                 <button
                                     type="button"
-                                    className="ghost"
+                                    className="admin-gravesites-btn--ghost"
                                     onClick={() => {
                                         setForm(emptyForm);
                                         setFieldErrors({});
@@ -248,18 +273,23 @@ export default function AdminGraveSites() {
                     </form>
                 </div>
 
-                <div className="graves-card">
-                    <div className="list-header">
-                        <h3 className="section-title">Sírhelyek listája</h3>
-                        <button onClick={loadData} disabled={loading || saving}>
+                <div className="admin-gravesites-card">
+                    <div className="admin-gravesites-list-header">
+                        <h3 className="admin-gravesites-section-title">
+                            Sírhelyek listája
+                        </h3>
+                        <button
+                            onClick={loadData}
+                            disabled={loading || saving}
+                        >
                             Frissítés
                         </button>
                     </div>
                     {loading ? (
-                        <div className="alert">Betöltés…</div>
+                        <div className="admin-gravesites-alert">Betöltés…</div>
                     ) : (
-                        <div className="table-wrapper">
-                            <table className="graves-table">
+                        <div className="admin-gravesites-table-wrapper">
+                            <table className="admin-gravesites-table">
                                 <thead>
                                     <tr>
                                         <th>ID</th>
@@ -287,10 +317,12 @@ export default function AdminGraveSites() {
                                             <td>{g.allapot ?? "—"}</td>
                                             <td className="mono">{g.foto ?? "—"}</td>
                                             <td>{g.sirberlo_id ?? "—"}</td>
-                                            <td className="actions">
-                                                <button onClick={() => handleEdit(g)}>Szerk.</button>
+                                            <td className="admin-gravesites-actions">
+                                                <button onClick={() => handleEdit(g)}>
+                                                    Szerk.
+                                                </button>
                                                 <button
-                                                    className="danger"
+                                                    className="admin-gravesites-btn--danger"
                                                     onClick={() => handleDelete(g.id)}
                                                     disabled={saving}
                                                 >

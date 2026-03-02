@@ -1,173 +1,243 @@
-.graves-page {
-    padding: 2rem 1rem;
-    max-width: 1200px;
-    margin: 0 auto;
+/* Admin Grave Sites - Sírhelyek kezelés oldalspecifikus CSS */
+
+:root {
+  --agr-bg: #ffffff;
+  --agr-border: #e5e7eb;
+  --agr-border-focus: #818cf8;
+  --agr-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --agr-text-dark: #111827;
+  --agr-text-light: #374151;
+  --agr-text-muted: #6b7280;
+  --agr-danger: #dc2626;
+  --agr-danger-light: #b91c1c;
+  --agr-primary: #4f46e5;
+  --agr-primary-light: #818cf8;
+  --agr-secondary: #e5e7eb;
+  --agr-secondary-hover: #d1d5db;
+  --agr-focus-shadow: 0 0 0 3px rgba(129, 140, 248, 0.18);
+  --agr-btn-hover-shadow: 0 4px 10px rgba(79, 70, 229, 0.25);
+  --agr-mono-font: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-.graves-header {
-    margin-bottom: 1.25rem;
+/* ===== MAIN PAGE ===== */
+.admin-gravesites-page {
+  padding: 2rem 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-.graves-grid {
-    display: grid;
-    grid-template-columns: 420px 1fr;
-    gap: 1rem;
+.admin-gravesites-header {
+  margin-bottom: 1.25rem;
+}
+
+/* ===== GRID LAYOUT ===== */
+.admin-gravesites-grid {
+  display: grid;
+  grid-template-columns: 420px 1fr;
+  gap: 1rem;
 }
 
 @media (max-width: 980px) {
-    .graves-grid {
-        grid-template-columns: 1fr;
-    }
+  .admin-gravesites-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.graves-card {
-    background: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-    padding: 1.25rem;
+/* ===== CARD ===== */
+.admin-gravesites-card {
+  background: var(--agr-bg);
+  border: 1px solid var(--agr-border);
+  border-radius: 12px;
+  box-shadow: var(--agr-shadow);
+  padding: 1.25rem;
 }
 
-.section-title {
-    margin: 0 0 0.75rem;
-    font-size: 1.05rem;
-    font-weight: 600;
-    color: #111827;
+.admin-gravesites-section-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--agr-text-dark);
 }
 
-.alert {
-    padding: 10px 12px;
-    border-radius: 8px;
-    background: #f3f4f6;
-    color: #374151;
-    margin-bottom: 10px;
+/* ===== ALERT STYLES ===== */
+.admin-gravesites-alert {
+  padding: 10px 12px;
+  border-radius: 8px;
+  background: #f3f4f6;
+  color: #374151;
+  margin-bottom: 10px;
 }
 
-.alert-error {
-    background: #fef2f2;
-    border: 1px solid #fecaca;
-    color: #b91c1c;
+.admin-gravesites-alert--error {
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: var(--agr-danger-light);
 }
 
-.graves-form {
-    display: flex;
+/* ===== FORM STYLES ===== */
+.admin-gravesites-form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-gravesites-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.95rem;
+  color: var(--agr-text-light);
+}
+
+.admin-gravesites-form input,
+.admin-gravesites-form select {
+  border: 1px solid var(--agr-border);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font-size: 0.95rem;
+  background: #fff;
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+  font-family: inherit;
+}
+
+.admin-gravesites-form input:focus,
+.admin-gravesites-form select:focus {
+  border-color: var(--agr-border-focus);
+  box-shadow: var(--agr-focus-shadow);
+  outline: none;
+}
+
+.admin-gravesites-field-error {
+  color: var(--agr-danger-light);
+  font-size: 0.85rem;
+}
+
+/* ===== BUTTON STYLES ===== */
+.admin-gravesites-form-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.admin-gravesites-form-actions button,
+.admin-gravesites-list-header button,
+.admin-gravesites-actions button {
+  border: none;
+  border-radius: 8px;
+  padding: 9px 12px;
+  cursor: pointer;
+  font-weight: 600;
+  background: var(--agr-primary);
+  color: #fff;
+  transition: transform 80ms ease, box-shadow 120ms ease;
+  font-family: inherit;
+  font-size: 0.95rem;
+}
+
+.admin-gravesites-form-actions button:hover,
+.admin-gravesites-list-header button:hover,
+.admin-gravesites-actions button:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--agr-btn-hover-shadow);
+}
+
+.admin-gravesites-form-actions button:disabled,
+.admin-gravesites-list-header button:disabled,
+.admin-gravesites-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.admin-gravesites-form-actions .admin-gravesites-btn--ghost,
+.admin-gravesites-list-header .admin-gravesites-btn--ghost {
+  background: var(--agr-secondary);
+  color: var(--agr-text-dark);
+}
+
+.admin-gravesites-form-actions .admin-gravesites-btn--ghost:hover,
+.admin-gravesites-list-header .admin-gravesites-btn--ghost:hover {
+  background: var(--agr-secondary-hover);
+}
+
+.admin-gravesites-actions .admin-gravesites-btn--danger {
+  background: var(--agr-danger);
+}
+
+.admin-gravesites-actions .admin-gravesites-btn--danger:hover:not(:disabled) {
+  background: var(--agr-danger-light);
+}
+
+/* ===== LIST HEADER ===== */
+.admin-gravesites-list-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+/* ===== TABLE STYLES ===== */
+.admin-gravesites-table-wrapper {
+  overflow-x: auto;
+}
+
+.admin-gravesites-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.admin-gravesites-table th,
+.admin-gravesites-table td {
+  border-bottom: 1px solid var(--agr-border);
+  padding: 10px 8px;
+  text-align: left;
+  font-size: 0.95rem;
+}
+
+.admin-gravesites-table th {
+  font-weight: 700;
+  color: var(--agr-text-dark);
+  background: #f9fafb;
+}
+
+.admin-gravesites-table td.empty {
+  text-align: center;
+  color: var(--agr-text-muted);
+}
+
+.admin-gravesites-table td.mono {
+  font-family: var(--agr-mono-font);
+  font-size: 0.9rem;
+  color: var(--agr-text-light);
+  word-break: break-all;
+}
+
+/* ===== ACTIONS ===== */
+.admin-gravesites-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-gravesites-actions button {
+  padding: 6px 10px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 768px) {
+  .admin-gravesites-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .admin-gravesites-form-actions {
     flex-direction: column;
-    gap: 12px;
-}
+  }
 
-.graves-form label {
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    font-size: 0.95rem;
-    color: #374151;
-}
-
-.graves-form input,
-.graves-form select {
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 10px 12px;
-    font-size: 0.95rem;
-    background: #fff;
-    transition: border-color 120ms ease, box-shadow 120ms ease;
-}
-
-.graves-form input:focus,
-.graves-form select:focus {
-    border-color: #818cf8;
-    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.18);
-    outline: none;
-}
-
-.field-error {
-    color: #b91c1c;
-    font-size: 0.85rem;
-}
-
-.form-actions {
-    display: flex;
-    gap: 10px;
-    margin-top: 4px;
-}
-
-.form-actions button,
-.list-header button,
-.actions button {
-    border: none;
-    border-radius: 8px;
-    padding: 9px 12px;
-    cursor: pointer;
-    font-weight: 600;
-    background: #4f46e5;
-    color: #fff;
-    transition: transform 80ms ease, box-shadow 120ms ease;
-}
-
-.form-actions button:hover,
-.list-header button:hover,
-.actions button:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.25);
-}
-
-.form-actions .ghost {
-    background: #e5e7eb;
-    color: #111827;
-}
-
-.actions .danger {
-    background: #dc2626;
-}
-
-.list-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 0.75rem;
-}
-
-.table-wrapper {
-    overflow-x: auto;
-}
-
-.graves-table {
+  .admin-gravesites-form-actions button,
+  .admin-gravesites-form-actions .admin-gravesites-btn--ghost {
     width: 100%;
-    border-collapse: collapse;
-    min-width: 720px;
-}
+  }
 
-.graves-table th,
-.graves-table td {
-    border-bottom: 1px solid #e5e7eb;
-    padding: 10px 8px;
-    text-align: left;
-    font-size: 0.95rem;
-}
-
-.graves-table th {
-    font-weight: 700;
-    color: #111827;
-    background: #f9fafb;
-}
-
-.graves-table td.empty {
-    text-align: center;
-    color: #6b7280;
-}
-
-.graves-table td.mono {
-    font-family: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    font-size: 0.9rem;
-    color: #374151;
-    word-break: break-all;
-}
-
-.actions {
-    display: flex;
-    gap: 8px;
-}
-
-.actions button {
-    padding: 6px 10px;
+  .admin-gravesites-table {
+    min-width: unset;
+  }
 }

@@ -179,21 +179,21 @@ export default function AdminDocument() {
     const documentTypes = [...new Set(documents.map((d) => d.fajl_tipo))];
 
     return (
-        <div className="admin-document">
-            <h1 className="admin-title">Dokumentumok kezelése</h1>
-            <p className="admin-text">Sírbérlőkhöz tartozó dokumentumok feltöltése és kezelése</p>
+        <div className="admin-document-page">
+            <h1 className="admin-document-title">Dokumentumok kezelése</h1>
+            <p className="admin-document-subtitle">Sírbérlőkhöz tartozó dokumentumok feltöltése és kezelése</p>
 
-            <div className="document-container">
+            <div className="admin-document-container">
                 {/* FORM SECTION */}
-                <div className="document-form-section">
-                    <h2 className="section-title">
+                <div className="admin-document-form-section">
+                    <h2 className="admin-document-section-title">
                         {form.id ? "Dokumentum szerkesztése" : "Új dokumentum"}
                     </h2>
 
-                    {error && <div className="alert alert-error">{error}</div>}
+                    {error && <div className="admin-document-alert admin-document-alert--error">{error}</div>}
 
-                    <form onSubmit={handleSubmit} className="document-form">
-                        <div className="form-group">
+                    <form onSubmit={handleSubmit} className="admin-document-form">
+                        <div className="admin-document-form-group">
                             <label htmlFor="nev">Dokumentum neve *</label>
                             <input
                                 id="nev"
@@ -205,11 +205,11 @@ export default function AdminDocument() {
                                 className={fieldErrors.nev ? "error" : ""}
                             />
                             {fieldErrors.nev && (
-                                <div className="field-error">{fieldErrors.nev}</div>
+                                <div className="admin-document-field-error">{fieldErrors.nev}</div>
                             )}
                         </div>
 
-                        <div className="form-group">
+                        <div className="admin-document-form-group">
                             <label htmlFor="sirberlo_id">Sírbérlő *</label>
                             <select
                                 id="sirberlo_id"
@@ -226,13 +226,13 @@ export default function AdminDocument() {
                                 ))}
                             </select>
                             {fieldErrors.sirberlo_id && (
-                                <div className="field-error">{fieldErrors.sirberlo_id}</div>
+                                <div className="admin-document-field-error">{fieldErrors.sirberlo_id}</div>
                             )}
                         </div>
 
-                        <div className="form-group">
+                        <div className="admin-document-form-group">
                             <label htmlFor="file">Fájl feltöltése *</label>
-                            <div className="file-input-wrapper">
+                            <div className="admin-document-file-wrapper">
                                 <input
                                     id="file"
                                     type="file"
@@ -241,16 +241,16 @@ export default function AdminDocument() {
                                     accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xlsx,.xls"
                                     className={fieldErrors.fajl_tipo ? "error" : ""}
                                 />
-                                <span className="file-label">
+                                <span className="admin-document-file-label">
                                     {file ? file.name : "Fájl kiválasztása..."}
                                 </span>
                             </div>
                             {fieldErrors.fajl_tipo && (
-                                <div className="field-error">{fieldErrors.fajl_tipo}</div>
+                                <div className="admin-document-field-error">{fieldErrors.fajl_tipo}</div>
                             )}
                         </div>
 
-                        <div className="form-group">
+                        <div className="admin-document-form-group">
                             <label htmlFor="leiras">Leírás</label>
                             <textarea
                                 id="leiras"
@@ -262,7 +262,7 @@ export default function AdminDocument() {
                             />
                         </div>
 
-                        <div className="form-group">
+                        <div className="admin-document-form-group">
                             <label htmlFor="feltoltve">Feltöltés dátuma</label>
                             <input
                                 id="feltoltve"
@@ -273,8 +273,8 @@ export default function AdminDocument() {
                             />
                         </div>
 
-                        <div className="button-group">
-                            <button type="submit" className="btn btn-primary" disabled={saving}>
+                        <div className="admin-document-button-group">
+                            <button type="submit" className="admin-document-btn admin-document-btn--primary" disabled={saving}>
                                 {saving
                                     ? "Mentés..."
                                     : form.id
@@ -283,7 +283,7 @@ export default function AdminDocument() {
                             </button>
                             <button
                                 type="button"
-                                className="btn btn-secondary"
+                                className="admin-document-btn admin-document-btn--secondary"
                                 onClick={handleClear}
                                 disabled={saving}
                             >
@@ -294,21 +294,21 @@ export default function AdminDocument() {
                 </div>
 
                 {/* LIST SECTION */}
-                <div className="document-list-section">
-                    <h2 className="section-title">Dokumentumok ({filteredDocuments.length})</h2>
+                <div className="admin-document-list-section">
+                    <h2 className="admin-document-section-title">Dokumentumok ({filteredDocuments.length})</h2>
 
-                    <div className="filter-bar">
+                    <div className="admin-document-filter-bar">
                         <input
                             type="text"
                             placeholder="Keresés név vagy sírbérlő alapján..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            className="search-input"
+                            className="admin-document-search-input"
                         />
                         <select
                             value={filterType}
                             onChange={(e) => setFilterType(e.target.value)}
-                            className="filter-select"
+                            className="admin-document-filter-select"
                         >
                             <option value="all">Összes típus</option>
                             {documentTypes.map((type) => (
@@ -320,38 +320,38 @@ export default function AdminDocument() {
                     </div>
 
                     {loading ? (
-                        <div className="loading">Betöltés...</div>
+                        <div className="admin-document-loading">Betöltés...</div>
                     ) : filteredDocuments.length === 0 ? (
-                        <div className="no-data">Nincsenek dokumentumok.</div>
+                        <div className="admin-document-no-data">Nincsenek dokumentumok.</div>
                     ) : (
-                        <div className="documents-grid">
+                        <div className="admin-document-grid">
                             {filteredDocuments.map((doc) => (
-                                <div key={doc.id} className="document-card">
-                                    <div className="card-header">
-                                        <h3 className="card-title">{doc.nev}</h3>
-                                        <span className="card-type">{doc.fajl_tipo}</span>
+                                <div key={doc.id} className="admin-document-card">
+                                    <div className="admin-document-card-header">
+                                        <h3 className="admin-document-card-title">{doc.nev}</h3>
+                                        <span className="admin-document-card-type">{doc.fajl_tipo}</span>
                                     </div>
-                                    <div className="card-body">
-                                        <p className="card-tenant">
+                                    <div className="admin-document-card-body">
+                                        <p className="admin-document-card-tenant">
                                             <strong>Sírbérlő:</strong> {getTenantName(doc.sirberlo_id)}
                                         </p>
                                         {doc.leiras && (
-                                            <p className="card-description">{doc.leiras}</p>
+                                            <p className="admin-document-card-description">{doc.leiras}</p>
                                         )}
-                                        <p className="card-date">
+                                        <p className="admin-document-card-date">
                                             <strong>Feltöltve:</strong> {doc.feltoltve}
                                         </p>
                                     </div>
-                                    <div className="card-actions">
+                                    <div className="admin-document-card-actions">
                                         <button
                                             onClick={() => handleEdit(doc)}
-                                            className="btn btn-sm btn-edit"
+                                            className="admin-document-btn admin-document-btn--small admin-document-btn--edit"
                                         >
                                             Szerkesztés
                                         </button>
                                         <button
                                             onClick={() => handleDelete(doc.id)}
-                                            className="btn btn-sm btn-delete"
+                                            className="admin-document-btn admin-document-btn--small admin-document-btn--delete"
                                             disabled={saving}
                                         >
                                             Törlés

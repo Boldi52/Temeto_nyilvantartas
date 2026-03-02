@@ -12,7 +12,6 @@ export default function DeceasedPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
- 
   const safeFetch = async (label, path) => {
     try {
       return await apiFetch(path);
@@ -75,7 +74,7 @@ export default function DeceasedPage() {
               id: item.id,
               name: item.nev || "",
               birthDate: item.szul_datum || "",
-              deathDate:item.halal_datuma || "",
+              deathDate: item.halal_datuma || "",
               parcellaId: item.id,
               sorId: item.id,
               sirhelyId: item.sirhely_id,
@@ -85,96 +84,119 @@ export default function DeceasedPage() {
             }))
           : [];
         setDeceasedList(normalized);
-      } catch (e) {
-        setError(e.message || "Hiba történt az adatok betöltésekor.");
+      } catch (err) {
+        setError(err.message || "Ismeretlen hiba");
       } finally {
         setLoading(false);
       }
     };
-
     loadAll();
   }, []);
 
-  const handleChange = (e) => {
+  const handleFilterChange = (e) => {
     const { name, value } = e.target;
-    setFilters((prev) => ({ ...prev, [name]: value }));
+    setFilters((f) => ({ ...f, [name]: value }));
   };
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    
-  };
-
-  const filteredList = useMemo(() => {
-    const normalize = (s = "") => s.toString().toLowerCase().trim();
-    return deceasedList.filter((d) => {
-      const displayParcella = d.parcella || parcellaMap[d.parcellaId] || "";
-      const displaySor = d.sor || sorMap[d.sorId] || "";
-      const displaySirhely = d.sirhely || sirhelyMap[d.sirhelyId] || "";
-
-      if (filters.name && !normalize(d.name).includes(normalize(filters.name))) return false;
-      if (filters.parcella && !normalize(displayParcella).includes(normalize(filters.parcella))) return false;
-      if (filters.sor && !normalize(displaySor).includes(normalize(filters.sor))) return false;
-      if (filters.sirhely && !normalize(displaySirhely).includes(normalize(filters.sirhely))) return false;
-      return true;
+  const filtered = useMemo(() => {
+    return deceasedList.filter((item) => {
+      const nameMatch = item.name.toLowerCase().includes(filters.name.toLowerCase());
+      const parcellaMatch = !filters.parcella || String(item.parcella).includes(filters.parcella);
+      const sorMatch = !filters.sor || String(item.sor).includes(filters.sor);
+      const sirhelyMatch = !filters.sirhely || String(item.sirhely).includes(filters.sirhely);
+      return nameMatch && parcellaMatch && sorMatch && sirhelyMatch;
     });
-  }, [deceasedList, filters, parcellaMap, sorMap, sirhelyMap]);
+  }, [deceasedList, filters]);
 
-  if (loading) return <div className="deceased-page">Betöltés...</div>;
-  if (error) return <div className="deceased-page">Hiba: {error}</div>;
+  if (loading) return <div className="deceasedpage-wrapper">Betöltés...</div>;
+  if (error) return <div className="deceasedpage-wrapper">Hiba: {error}</div>;
 
   return (
-    <div className="deceased-page">
-      <div className="deceased-header">
-        <h1 className="title">Elhunytak</h1>
-        <p className="subtitle">Nyilvántartott elhunytak listája</p>
+    <div className="deceasedpage-wrapper">
+      <div className="deceasedpage-header">
+        <h1 className="deceasedpage-header__title">Elhunytak</h1>
+        <p className="deceasedpage-header__subtitle">Az összes elhunyt személy nyilvántartása és keresése</p>
       </div>
 
-      <form className="search-bar" onSubmit={handleSearch}>
-        <input className="search-input" name="name" placeholder="Név" value={filters.name} onChange={handleChange} />
-        <input className="search-input" name="parcella" placeholder="Parcella" value={filters.parcella} onChange={handleChange} />
-        <input className="search-input" name="sor" placeholder="Sor" value={filters.sor} onChange={handleChange} />
-        <input className="search-input" name="sirhely" placeholder="Sírhely" value={filters.sirhely} onChange={handleChange} />
-        <button className="search-button" type="submit">Keresés</button>
-      </form>
+      <div className="deceasedpage-search-bar">
+        <input
+          type="text"
+          name="name"
+          placeholder="Keresés név szerint..."
+          value={filters.name}
+          onChange={handleFilterChange}
+          className="deceasedpage-search-input"
+        />
+        <input
+          type="text"
+          name="parcella"
+          placeholder="Parcella..."
+          value={filters.parcella}
+          onChange={handleFilterChange}
+          className="deceasedpage-search-input"
+        />
+        <input
+          type="text"
+          name="sor"
+          placeholder="Sor..."
+          value={filters.sor}
+          onChange={handleFilterChange}
+          className="deceasedpage-search-input"
+        />
+        <input
+          type="text"
+          name="sirhely"
+          placeholder="Sírhely..."
+          value={filters.sirhely}
+          onChange={handleFilterChange}
+          className="deceasedpage-search-input"
+        />
+      </div>
 
-         <div className="table-wrapper">
-        <table className="deceased-table" cellSpacing="0">
+      <div className="deceasedpage-table-wrapper">
+        <table className="deceasedpage-table">
           <thead>
             <tr>
-              <th className="col-name">Név</th>
-              <th className="col-birth">Születési<br />dátum</th>
-              <th className="col-death">Halálozási<br />dátum</th>
-              <th className="col-parcella">Parcella</th>
-              <th className="col-sor">Sor</th>
-              <th className="col-sirhely">Sírhely</th>
+              <th className="deceasedpage-col-name">Név</th>
+              <th className="deceasedpage-col-birth">Születési dátum</th>
+              <th className="deceasedpage-col-death">Halál dátuma</th>
+              <th className="deceasedpage-col-parcella">Parcella</th>
+              <th className="deceasedpage-col-sor">Sor</th>
+              <th className="deceasedpage-col-sirhely">Sírhely</th>
             </tr>
           </thead>
           <tbody>
-            {filteredList.length === 0 ? (
-              <tr className="empty-row">
+            {filtered.length > 0 ? (
+              filtered.map((item) => (
+                <tr key={item.id}>
+                  <td className="deceasedpage-col-name" data-label="Név">
+                    {item.name}
+                  </td>
+                  <td className="deceasedpage-col-birth" data-label="Születési dátum">
+                    {item.birthDate}
+                  </td>
+                  <td className="deceasedpage-col-death" data-label="Halál dátuma">
+                    {item.deathDate}
+                  </td>
+                  <td className="deceasedpage-col-parcella" data-label="Parcella">
+                    {parcellaMap[item.parcella] || item.parcella || "—"}
+                  </td>
+                  <td className="deceasedpage-col-sor" data-label="Sor">
+                    {sorMap[item.sorId] || item.sor || "—"}
+                  </td>
+                  <td className="deceasedpage-col-sirhely" data-label="Sírhely">
+                    {sirhelyMap[item.sirhelyId] || "—"}
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr className="deceasedpage-empty-row">
                 <td colSpan="6">Nincs találat</td>
               </tr>
-            ) : (
-              filteredList.map((d) => {
-                const displayParcella = d.parcella || parcellaMap[d.parcellaId] || "—";
-                const displaySor = d.sor || sorMap[d.sorId] || "—";
-                const displaySirhely = d.sirhely || sirhelyMap[d.sirhelyId] || "—";
-                return (
-                  <tr key={d.id}>
-                    <td data-label="Név">{d.name || "—"}</td>
-                    <td data-label="Születési dátum">{d.birthDate || "—"}</td>
-                    <td data-label="Halálozási dátum">{d.deathDate || "—"}</td>
-                    <td data-label="Parcella">{displayParcella}</td>
-                    <td data-label="Sor">{displaySor}</td>
-                    <td data-label="Sírhely">{displaySirhely}</td>
-                  </tr>
-                );
-              })
             )}
           </tbody>
         </table>
       </div>
-    </div> 
+    </div>
   );
 }

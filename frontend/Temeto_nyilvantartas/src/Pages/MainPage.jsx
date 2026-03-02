@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "../CSS-ek/MainPage.css";
 
-const API_BASE = "http://localhost:8000"; // állítsd a saját backend host/portra
+const API_BASE = "http://localhost:8000";
 
 const MainPage = () => {
   const [stats, setStats] = useState({ dead: 0, graves: 0, free: 5 });
@@ -41,53 +41,53 @@ const MainPage = () => {
     loadData();
   }, []);
 
-  if (loading) return <div className="page-wrapper">Betöltés...</div>;
-  if (error) return <div className="page-wrapper">Hiba: {error}</div>;
+  if (loading) return <div className="mainpage-wrapper">Betöltés...</div>;
+  if (error) return <div className="mainpage-wrapper">Hiba: {error}</div>;
 
   return (
-    <div className="page-wrapper">
-      <header className="site-header">
-        <div className="header-inner">
+    <div className="mainpage-wrapper">
+      <header className="mainpage-header">
+        <div className="mainpage-header__inner">
           <h1>Zala temető - nyilvántartási rendszere</h1>
-          <p className="subtitle">Sirhelyek, elhunytak és temetői adatok áttekintése</p>
+          <p className="mainpage-header__subtitle">Sirhelyek, elhunytak és temetői adatok áttekintése</p>
         </div>
       </header>
 
       <main className="mainpage">
-        <section className="stats">
+        <section className="mainpage-stats">
           <h2>Statisztika</h2>
-          <div className="stat-cards">
-            <div className="card">
-              <div className="card-label">Elhunytak:</div>
-              <div className="card-num">{stats.dead}</div>
+          <div className="mainpage-stat-cards">
+            <div className="mainpage-stat-card">
+              <div className="mainpage-stat-card__label">Elhunytak:</div>
+              <div className="mainpage-stat-card__number">{stats.dead}</div>
             </div>
-            <div className="card">
-              <div className="card-label">Sírhelyek:</div>
-              <div className="card-num">{stats.graves}</div>
+            <div className="mainpage-stat-card">
+              <div className="mainpage-stat-card__label">Sírhelyek:</div>
+              <div className="mainpage-stat-card__number">{stats.graves}</div>
             </div>
-            <div className="card">
-              <div className="card-label">Szabad sírhely:</div>
-              <div className="card-num">{stats.free}</div>
+            <div className="mainpage-stat-card">
+              <div className="mainpage-stat-card__label">Szabad sírhely:</div>
+              <div className="mainpage-stat-card__number">{stats.free}</div>
             </div>
           </div>
         </section>
 
-        <section className="content-row">
-          <div className="left panel">
+        <section className="mainpage-content-row">
+          <div className="mainpage-panel mainpage-panel--left">
             <h3>Legutóbbi elhunytak</h3>
-            <ul className="recent-list">
+            <ul className="mainpage-recent-list">
               {recent.map((r) => (
                 <li key={r.id}>
-                  <span className="name">{r.name}</span>
-                  <span className="date">{r.date}</span>
+                  <span className="mainpage-recent-list__name">{r.name}</span>
+                  <span className="mainpage-recent-list__date">{r.date}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <aside className="right panel">
+          <aside className="mainpage-panel mainpage-panel--right">
             <h3>Elérhetőségek</h3>
-            <div className="contact">
+            <div className="mainpage-contact">
               <strong>Ügyfélszolgálat</strong>
               <ul>
                 <li>Telefon: +36 1 234 5678</li>
@@ -96,7 +96,7 @@ const MainPage = () => {
               </ul>
             </div>
 
-            <div className="docs">
+            <div className="mainpage-docs">
               <strong>Dokumentumok és letöltések</strong>
               <ul>
                 <li>GYIK</li>

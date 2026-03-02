@@ -1,195 +1,203 @@
 :root {
-    --bg: #e6e1db;
-    /* halvány háttér */
-    --card-bg: #ffffff;
-    --text: #1f1f1f;
-    --muted: #555;
-    --btn: #9b612c;
-    --btn-hover: #835227;
-    --shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
-    --frame: #c5c5c5;
+    --lp-bg: #e6e1db;
+    --lp-card-bg: #ffffff;
+    --lp-text: #1f1f1f;
+    --lp-muted: #555;
+    --lp-btn: #9b612c;
+    --lp-btn-hover: #835227;
+    --lp-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+    --lp-frame: #c5c5c5;
 }
 
-/* Reset */
+
 * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    
 }
 
-/* Alap: blokkszerű, ne flexelje felül a szülő */
 html,
 body,
 #root,
 .app {
     width: 100%;
     min-height: 100vh;
-    background: var(--bg);
+    background: var(--lp-bg);
     font-family: "Segoe UI", Arial, sans-serif;
     display: block;
-    
 }
 
-/* Wrapper: teljes viewport, grid-középre, nagyobb padding */
-.login-wrapper {
+
+.loginpage-wrapper {
     margin: auto;
     width: 100%;
     display: grid;
     place-items: center;
     padding: 32px;
-    /* nagyobb külső tér */
-    background: var(--bg);
+    background: var(--lp-bg);
+    min-height: 100vh;
 }
 
-/* Kártya kerettel, árnyékkal, nagyobb belső padding */
-.login-frame {
+
+.loginpage-frame {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: center;
     gap: 22px 32px;
     padding: 80px;
-    background: var(--card-bg);
-    border: 2px solid var(--frame);
+    background: var(--lp-card-bg);
+    border: 2px solid var(--lp-frame);
     border-radius: 16px;
-    box-shadow: var(--shadow);
+    box-shadow: var(--lp-shadow);
     width: min(720px, 100%);
 }
 
-/* Bal hasáb */
-.login-panel {
+
+.loginpage-panel {
     display: flex;
     flex-direction: column;
     gap: 16px;
-    color: var(--text);
+    color: var(--lp-text);
 }
 
-.login-panel h2 {
+.loginpage-panel__title {
     font-size: 22px;
     font-weight: 600;
     margin-bottom: 6px;
     text-align: left;
 }
 
-/* Form */
-form {
+
+.loginpage-form {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.form-group {
+.loginpage-form-group {
     display: flex;
     flex-direction: column;
     gap: 6px;
     text-align: left;
 }
 
-/* Címkék: nagyobb és erősebb */
-.form-group label {
+
+.loginpage-form-group__label {
     font-size: 13px;
-    /* nagyobb */
     font-weight: 600;
-    /* erősebb */
-    color: var(--muted);
+    color: var(--lp-muted);
     text-align: left;
 }
 
-.form-group input {
+.loginpage-form-group__input {
     padding: 10px 12px;
     border: none;
     border-radius: 10px;
     font-size: 14px;
     color: #000;
-    /* beírt szöveg fekete */
     background: #fff;
-    box-shadow: var(--shadow);
+    box-shadow: var(--lp-shadow);
 }
 
-.form-group input::placeholder {
+.loginpage-form-group__input::placeholder {
     color: #888;
 }
 
-.form-group input:focus {
+.loginpage-form-group__input:focus {
     outline: none;
-    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2), var(--shadow);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2), var(--lp-shadow);
 }
 
-/* Gomb */
-.login-btn {
+
+.loginpage-btn {
     margin-top: 6px;
     padding: 11px;
     border: none;
     border-radius: 10px;
-    background: var(--btn);
+    background: var(--lp-btn);
     color: #fff;
     font-size: 15px;
     font-weight: 500;
     cursor: pointer;
-    box-shadow: var(--shadow);
+    box-shadow: var(--lp-shadow);
     transition: background 0.2s ease, transform 0.1s ease, opacity 0.2s ease;
 }
 
-.login-btn:hover {
-    background: var(--btn-hover);
+.loginpage-btn:hover {
+    background: var(--lp-btn-hover);
 }
 
-.login-btn:active {
+.loginpage-btn:active {
     transform: translateY(1px);
 }
 
-.login-btn:disabled {
+.loginpage-btn:disabled {
     opacity: 0.7;
     cursor: not-allowed;
 }
 
-/* Jobb hasáb (logó) */
-.logo-panel {
+
+.loginpage-message {
+    margin-top: 0.5rem;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.loginpage-message--error {
+    color: #e74c3c;
+}
+
+.loginpage-message--success {
+    color: #27ae60;
+}
+
+
+.loginpage-logo-panel {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.logo-panel img {
+.loginpage-logo-panel__img {
     width: 220px;
     height: 220px;
     object-fit: cover;
     border-radius: 10px;
-    box-shadow: var(--shadow);
+    box-shadow: var(--lp-shadow);
     margin: auto;
 }
 
-/* Tablet/mobil */
+
 @media (max-width: 768px) {
-    .login-wrapper {
+    .loginpage-wrapper {
         padding: 24px;
     }
 
-    .login-frame {
+    .loginpage-frame {
         grid-template-columns: 1fr;
         width: 100%;
         padding: 24px;
     }
 
-    .logo-panel {
+    .loginpage-logo-panel {
         justify-content: flex-start;
         margin: auto;
     }
 }
 
-/* Extra kis kijelző */
+
 @media (max-width: 480px) {
-    .login-wrapper {
+    .loginpage-wrapper {
         padding: 16px;
         margin: auto;
     }
 
-    .login-frame {
+    .loginpage-frame {
         padding: 20px;
         gap: 18px;
     }
 
-    .logo-panel img {
+    .loginpage-logo-panel__img {
         width: 200px;
         height: 200px;
         margin: auto;
