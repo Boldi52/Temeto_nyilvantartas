@@ -1,0 +1,308 @@
+:root {
+    --adm-text-primary: #111827;
+    --adm-text-secondary: #1f2937;
+    --adm-text-muted: #4b5563;
+    --adm-border-default: #e5e7eb;
+    --adm-border-hover: #818cf8;
+    --adm-bg-primary: #ffffff;
+}
+
+.admin-deceades-page {
+    padding: 2rem 1rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+.admin-deceades-header {
+    margin-bottom: 1.5rem;
+}
+
+.admin-deceades-title {
+    font-size: 1.4rem;
+    color: var(--adm-text-secondary);
+    margin-bottom: 0.25rem;
+}
+
+.admin-deceades-subtitle {
+    font-size: 0.95rem;
+    color: var(--adm-text-muted);
+}
+
+.admin-deceades-grid {
+    display: grid;
+    grid-template-columns: minmax(320px, 1fr) minmax(520px, 2fr);
+    gap: 1.25rem;
+    align-items: start;
+}
+
+.admin-deceades-card {
+    background: var(--adm-bg-primary);
+    border: 1px solid var(--adm-border-default);
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+}
+
+.admin-deceades-section-title {
+    font-size: 1.05rem;
+    margin-bottom: 0.75rem;
+    color: var(--adm-text-primary);
+}
+
+.admin-deceades-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.admin-deceades-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.85rem;
+    color: var(--adm-text-muted);
+}
+
+.admin-deceades-form input,
+.admin-deceades-form select {
+    padding: 0.7rem 0.9rem;
+    border-radius: 10px;
+    border: 1px solid var(--adm-border-default);
+    font-size: 0.95rem;
+    outline: none;
+}
+
+.admin-deceades-form input:focus,
+.admin-deceades-form select:focus {
+    border-color: var(--adm-border-hover);
+    box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.15);
+}
+
+.admin-deceades-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+}
+
+.admin-deceades-form-actions button {
+    border: none;
+    border-radius: 8px;
+    padding: 0.7rem 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    background: #6366f1;
+    color: #fff;
+}
+
+.admin-deceades-form-actions .ghost {
+    background: #e5e7eb;
+    color: #111827;
+}
+
+.admin-deceades-message {
+    margin-top: 0.5rem;
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    background: #f3f4f6;
+}
+
+.admin-deceades-message.error {
+    background: #fff5f5;
+    border: 1px solid #feb2b2;
+    color: #c53030;
+}
+
+.admin-deceades-message.success {
+    background: #f0fff4;
+    border: 1px solid #9ae6b4;
+    color: #2f855a;
+}
+
+.admin-deceades-error {
+    color: #c53030;
+    font-size: 0.75rem;
+}
+
+.admin-deceades-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.admin-deceades-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.admin-deceades-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.92rem;
+    table-layout: fixed;
+}
+
+.admin-deceades-table th,
+.admin-deceades-table td {
+    border-bottom: 1px solid var(--adm-border-default);
+    padding: 0.75rem 0.55rem;
+    text-align: left;
+    vertical-align: middle;
+    word-wrap: break-word;
+}
+
+.admin-deceades-table th:nth-child(1),
+.admin-deceades-table td:nth-child(1) {
+    width: 40px;
+}
+
+.admin-deceades-table th:nth-child(2),
+.admin-deceades-table td:nth-child(2) {
+    width: 120px;
+}
+
+.admin-deceades-table th:nth-child(3),
+.admin-deceades-table td:nth-child(3),
+.admin-deceades-table th:nth-child(4),
+.admin-deceades-table td:nth-child(4) {
+    width: 95px;
+}
+
+.admin-deceades-table th:nth-child(5),
+.admin-deceades-table td:nth-child(5) {
+    width: 110px;
+}
+
+.admin-deceades-table th:nth-child(6),
+.admin-deceades-table td:nth-child(6) {
+    width: 65px;
+}
+
+.admin-deceades-table th:nth-child(7),
+.admin-deceades-table td:nth-child(7) {
+    width: 120px;
+}
+
+.admin-deceades-table .empty {
+    text-align: center;
+    color: var(--adm-text-muted);
+}
+
+.admin-deceades-actions {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+}
+
+.admin-deceades-actions button {
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    background: #6366f1;
+    color: #fff;
+}
+
+.admin-deceades-actions .danger {
+    background: #e53e3e;
+}
+
+@media (max-width: 1200px) {
+    .admin-deceades-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .admin-deceades-table {
+        font-size: 0.88rem;
+    }
+
+    .admin-deceades-table th,
+    .admin-deceades-table td {
+        padding: 0.65rem 0.45rem;
+    }
+}
+
+@media (max-width: 900px) {
+    .admin-deceades-table {
+        table-layout: auto;
+    }
+
+    .admin-deceades-table th,
+    .admin-deceades-table td {
+        white-space: normal;
+    }
+}
+
+@media (max-width: 768px) {
+    .admin-deceades-page {
+        padding: 1rem 0.75rem;
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+
+    .admin-deceades-grid {
+        grid-template-columns: 1fr;
+        width: 100%;
+        min-width: 0;
+    }
+
+    .admin-deceades-card {
+        width: 100%;
+        min-width: 0;
+        padding: 1rem;
+    }
+
+    .admin-deceades-table-wrapper {
+        width: 100%;
+        overflow-x: hidden;
+    }
+
+    .admin-deceades-table thead {
+        display: none;
+    }
+
+    .admin-deceades-table tr {
+        display: block;
+        border: 1px solid var(--adm-border-default);
+        border-radius: 10px;
+        margin-bottom: 0.85rem;
+        padding: 0.65rem;
+    }
+
+    .admin-deceades-table td {
+        display: block;
+        width: 100%;
+        border: none;
+        padding: 0.35rem 0;
+        word-break: break-word;
+        overflow-wrap: anywhere;
+    }
+
+    .admin-deceades-table td::before {
+        content: attr(data-label);
+        display: block;
+        font-weight: 600;
+        color: var(--adm-text-secondary);
+        margin-bottom: 0.15rem;
+    }
+
+    .admin-deceades-actions {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .admin-deceades-actions button {
+        width: 100%;
+    }
+}
+
+@media (max-width: 420px) {
+    .admin-deceades-page {
+        padding: 0.75rem 0.5rem;
+    }
+}

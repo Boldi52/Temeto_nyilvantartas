@@ -1,8 +1,11 @@
-/* Alap layout */
 .page-wrapper.map-page {
   display: grid;
   grid-template-columns: 1fr;
   gap: 28px;
+  justify-items: center;
+  align-items: start;
+  text-align: center;
+  width: 100%;
 }
 
 .map-page h1 {
@@ -14,23 +17,29 @@
   letter-spacing: -0.5px;
   grid-column: 1 / -1;
   margin-bottom: 12px;
+  width: 100%;
 }
 
-/* Maps container - két kép */
 .maps-container {
   display: grid;
   grid-template-columns: 1fr;
   gap: 28px;
-  align-items: start;
+  align-items: center;
+  justify-items: center;
   grid-column: 1 / -1;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* Két kép középre és egymás mellett */
+
 .map-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   justify-items: center;
+  align-items: center;
+  width: 100%;
 }
 
 .map-wrapper {
@@ -47,9 +56,10 @@
   color: #2d3748;
   font-weight: 600;
   letter-spacing: 0.3px;
+  text-align: center;
 }
 
-/* mobil: egy oszlop */
+
 @media (max-width: 1200px) {
   .page-wrapper.map-page {
     grid-template-columns: 1fr;
@@ -68,7 +78,6 @@
   }
 }
 
-/* SVG konténer - KISEBB méret */
 .svg-container {
   width: 100%;
   max-width: 450px;
@@ -109,15 +118,15 @@
   opacity: 1;
 }
 
-/* svg maga rugalmasan igazodik */
+
 .map-svg {
   display: block;
   width: 100%;
   height: 100%;
 }
 
-/* pin stílusok */
-.map-pin { 
+
+.map-pin {
   cursor: pointer;
   filter: drop-shadow(0 1px 3px rgba(26, 54, 93, 0.2));
 }
@@ -133,25 +142,30 @@
   stroke-width: 0.35;
   transition: r 150ms ease, fill 150ms ease, filter 150ms ease;
 }
+
 .pin-circle.selected {
   fill: #e53e3e;
   stroke-width: 0.5;
 }
 
-/* nagyobb, átlátszó hitbox a könnyebb kattintáshoz (érintőképernyő) */
+
 .pin-hitbox {
   fill: transparent;
   pointer-events: all;
 }
 
-/* Info panel - mostmár teljes szélesség */
+
 .info-panel {
   width: 100%;
-  min-height: 240px;
+
   position: relative;
+  display: flex;
+  justify-content: center;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
-/* üres állapotok */
+
 .info-empty {
   padding: 24px;
   background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
@@ -161,14 +175,18 @@
   font-size: 0.95rem;
   line-height: 1.6;
   text-align: center;
+  max-width: 900px;
+  width: 100%;
+  margin: 0 auto;
 }
-.info-empty.error { 
-  color: #c53030; 
+
+.info-empty.error {
+  color: #c53030;
   border-color: #feb2b2;
   background: linear-gradient(135deg, #fff5f5 0%, #fed7d7 100%);
 }
 
-/* info card */
+
 .info-card {
   background: linear-gradient(to bottom, #fff 0%, #f9fafb 100%);
   border: 2px solid #cbd5e0;
@@ -178,36 +196,47 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
 }
 
-/* header */
+
 .info-header {
   grid-column: 1 / -1;
   display: flex;
-  justify-content: space-between;
-  align-items: start;
+  justify-content: center;
+  align-items: center;
   padding-bottom: 16px;
   border-bottom: 2px solid #e2e8f0;
+  flex-direction: column;
+  gap: 10px;
+  text-align: center;
 }
+
 .sirkod {
   margin: 0;
   font-size: 1.3rem;
   color: #1a365d;
   font-weight: 700;
 }
+
 .meta {
   display: flex;
   gap: 8px;
   margin-top: 8px;
   align-items: center;
   flex-wrap: wrap;
+  justify-content: center;
 }
-.muted { 
-  color: #718096; 
+
+.muted {
+  color: #718096;
   font-size: 0.85rem;
 }
 
-/* státusz badge */
+
 .status-badge {
   display: inline-block;
   padding: 6px 12px;
@@ -219,19 +248,21 @@
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
-.status-badge.szabad { 
+
+.status-badge.szabad {
   background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
   box-shadow: 0 2px 4px rgba(72, 187, 120, 0.3);
 }
-.status-badge.foglalt { 
+
+.status-badge.foglalt {
   background: linear-gradient(135deg, #f56565 0%, #e53e3e 100%);
   box-shadow: 0 2px 4px rgba(245, 101, 101, 0.3);
 }
 
-/* koordináták */
-.coords { 
-  text-align: right; 
-  font-size: 0.85rem; 
+
+.coords {
+  text-align: center;
+  font-size: 0.85rem;
   color: #4a5568;
 }
 
@@ -240,7 +271,6 @@
   line-height: 1.4;
 }
 
-/* Details grid */
 .details-grid {
   grid-column: 1 / -1;
   display: grid;
@@ -253,6 +283,7 @@
   background: #f7fafc;
   border-radius: 8px;
   border-left: 4px solid #3182ce;
+  text-align: center;
 }
 
 .detail.full {
@@ -291,6 +322,7 @@
   background: #fff;
   border-radius: 8px;
   border: 1px solid #e2e8f0;
+  justify-content: center;
 }
 
 .elhunyt-avatar {
@@ -311,6 +343,7 @@
 .elhunyt-meta {
   flex: 1;
   min-width: 0;
+  text-align: left;
 }
 
 .elhunyt-name {
@@ -328,13 +361,14 @@
   margin-top: 2px;
 }
 
-/* Info actions */
+
 .info-actions {
   grid-column: 1 / -1;
   display: flex;
   gap: 10px;
   padding-top: 12px;
   border-top: 2px solid #e2e8f0;
+  justify-content: center;
 }
 
 .btn {
@@ -349,6 +383,7 @@
   font-size: 0.9rem;
   transition: all 200ms ease;
   box-shadow: 0 4px 8px rgba(49, 130, 206, 0.3);
+  max-width: 240px;
 }
 
 .btn:hover {
@@ -372,7 +407,7 @@
   box-shadow: 0 4px 8px rgba(49, 130, 206, 0.2);
 }
 
-/* ===================== ZOOM MODAL ===================== */
+
 .zoom-modal {
   position: fixed;
   top: 0;
@@ -390,8 +425,13 @@
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .zoom-container {
@@ -412,6 +452,7 @@
     transform: translateY(30px);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;
@@ -463,6 +504,7 @@
   padding: 16px 24px;
   background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
   border-bottom: 2px solid #cbd5e0;
+  justify-content: center;
 }
 
 .zoom-btn {
@@ -540,7 +582,7 @@
   font-weight: 500;
 }
 
-/* Zoom Selected Info */
+
 .zoom-selected-info {
   padding: 12px 24px;
   background: linear-gradient(135deg, #ebf8ff 0%, #e6fffa 100%);
@@ -562,7 +604,7 @@
   font-weight: 500;
 }
 
-/* Mobil: fullscreen modal */
+
 @media (max-width: 600px) {
   .page-wrapper.map-page {
     grid-template-columns: 1fr;

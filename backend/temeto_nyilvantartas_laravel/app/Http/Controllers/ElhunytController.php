@@ -90,20 +90,10 @@ class ElhunytController extends Controller
 
         $data = $validator->validated();
 
-        // Ha van fájl, mentsd és hozz létre dokumentum rekordot, majd állítsd be az FK-t
-        $dokumentumId = null;
+        $path = null;
         if ($request->hasFile('halotti_anyakonyvi_kiv')) {
-            $path = $request->file('halotti_anyakonyvi_kiv')->store('halotti_anyakonyvi_kiv', 'public');
-
-
-            $doc = new Dokumentum();
-            $doc->nev      = $request->file('halotti_anyakonyvi_kiv')->getClientOriginalName();
-            $doc->path     = $path;
-            $doc->mime     = $request->file('halotti_anyakonyvi_kiv')->getClientMimeType();
-            $doc->meret    = $request->file('halotti_anyakonyvi_kiv')->getSize();
-            $doc->save();
-
-            $dokumentumId = $doc->id;
+            $path = $request->file('halotti_anyakonyvi_kiv')
+                ->store('halotti_anyakonyvi_kiv', 'public');
         }
 
         $elhunyt = new Elhunyt();
@@ -112,7 +102,7 @@ class ElhunytController extends Controller
         $elhunyt->halal_datuma           = $data['halal_datuma'] ?? null;
         $elhunyt->anyja_neve             = $data['anyja_neve'] ?? null;
         $elhunyt->sirhely_id             = $data['sirhely_id'] ?? null;
-        $elhunyt->halotti_anyakonyvi_kiv = $dokumentumId;
+        $elhunyt->halotti_anyakonyvi_kiv = $path;
         $elhunyt->save();
 
         return response()->json([
@@ -121,7 +111,6 @@ class ElhunytController extends Controller
             'data'    => $elhunyt,
         ], 201);
     }
-
     /**
      * Display the specified resource.
      */
@@ -152,7 +141,7 @@ class ElhunytController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Elhunyt $id)
+    public function update(Request $request, string $id)
     {
         $elhunytValidator = Validator::make(
             $request->all(),
@@ -215,7 +204,7 @@ class ElhunytController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Elhunyt $id)
+    public function destroy(string $id)
     {
         $elhunytTorles = Elhunyt::find($id);
         if (!empty($elhunytTorles)) {

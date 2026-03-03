@@ -13,41 +13,35 @@ export default function AdminDashboard({ stats = {} }) {
                 </p>
 
                 <div className="admin-dashboard-grid">
-                    <DashboardCard 
-                        title="Sírbérlők" 
-                        value={stats.tenants ?? '—'} 
-                        to="/admin/sirberlok" 
-                        desc="Sírbérlők kezelése" 
+                    <DashboardCard
+                        title="Sírbérlők"
+                        value={stats.tenants ?? '—'}
+                        to="/admin/sirberlok"
+                        desc="Sírbérlők kezelése"
                     />
-                    <DashboardCard 
-                        title="Sírhelyek" 
-                        value={stats.graves ?? '—'} 
-                        to="/admin/sirhelyek" 
-                        desc="Sírhelyek kezelése" 
+                    <DashboardCard
+                        title="Sírhelyek"
+                        value={stats.graves ?? '—'}
+                        to="/admin/sirhelyek"
+                        desc="Sírhelyek kezelése"
                     />
-                    <DashboardCard 
-                        title="Befizetések" 
-                        value={stats.payments ?? '—'} 
-                        to="/admin/befizetesek" 
-                        desc="Befizetések áttekintése" 
+                    <DashboardCard
+                        title="Befizetések"
+                        value={stats.payments ?? '—'}
+                        to="/admin/befizetesek"
+                        desc="Befizetések áttekintése"
                     />
-                    <DashboardCard 
-                        title="Dokumentumok" 
-                        value={stats.documents ?? '—'} 
-                        to="/admin/dokumentumok" 
-                        desc="Dokumentumkezelés" 
+                    <DashboardCard
+                        title="Dokumentumok"
+                        value={stats.documents ?? '—'}
+                        to="/admin/dokumentumok"
+                        desc="Dokumentumkezelés"
                     />
-                    <DashboardCard 
-                        title="Felhasználók" 
-                        value={stats.users ?? '—'} 
-                        to="/admin/users" 
-                        desc="Felhasználói jogosultságok" 
-                    />
-                    <DashboardCard 
-                        title="Napló / Audit" 
-                        value={stats.logs ?? '—'} 
-                        to="/admin/logs" 
-                        desc="Eseménynapló megtekintése" 
+                    <DashboardCard
+                        title="Elhunytak"
+                        value={stats.deceased ?? stats.dead ?? '—'}
+                        to="/admin/elhunytak"
+                        desc="Elhunytak kezelése"
                     />
                 </div>
             </div>

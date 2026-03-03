@@ -19,8 +19,7 @@ export default function MapPage() {
   const [selected, setSelected] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
-  // Zoom state para image 1
+
   const [zoomOpen1, setZoomOpen1] = useState(false);
   const [zoomLevel1, setZoomLevel1] = useState(1);
   const [offset1, setOffset1] = useState({ x: 0, y: 0 });
@@ -30,7 +29,7 @@ export default function MapPage() {
   const zoomWrapperRef1 = useRef(null);
   const zoomImageRef1 = useRef(null);
 
-  // Zoom state para image 2
+
   const [zoomOpen2, setZoomOpen2] = useState(false);
   const [zoomLevel2, setZoomLevel2] = useState(1);
   const [offset2, setOffset2] = useState({ x: 0, y: 0 });
@@ -57,7 +56,7 @@ export default function MapPage() {
     load();
   }, []);
 
-  // ============ IMAGE 1 HANDLERS ============
+
   const handleZoomIn1 = () => {
     setZoomLevel1((prev) => {
       const newZoom = Math.min(prev + 0.2, 4);
@@ -84,7 +83,7 @@ export default function MapPage() {
 
     const wrapper = zoomWrapperRef1.current;
     const wrapperRect = wrapper.getBoundingClientRect();
-    
+
     const cursorX = mousePos1.x - wrapperRect.left;
     const cursorY = mousePos1.y - wrapperRect.top;
 
@@ -139,7 +138,7 @@ export default function MapPage() {
 
   const handleZoomImageClick1 = (e) => {
     if (isDragging1) return;
-    
+
     const wrapper = zoomWrapperRef1.current;
     const rect = wrapper.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
@@ -164,7 +163,7 @@ export default function MapPage() {
     }
   };
 
-  // ============ IMAGE 2 HANDLERS ============
+
   const handleZoomIn2 = () => {
     setZoomLevel2((prev) => {
       const newZoom = Math.min(prev + 0.2, 4);
@@ -191,7 +190,7 @@ export default function MapPage() {
 
     const wrapper = zoomWrapperRef2.current;
     const wrapperRect = wrapper.getBoundingClientRect();
-    
+
     const cursorX = mousePos2.x - wrapperRect.left;
     const cursorY = mousePos2.y - wrapperRect.top;
 
@@ -246,7 +245,7 @@ export default function MapPage() {
 
   const handleZoomImageClick2 = (e) => {
     if (isDragging2) return;
-    
+
     const wrapper = zoomWrapperRef2.current;
     const rect = wrapper.getBoundingClientRect();
     const clickX = e.clientX - rect.left;
@@ -281,19 +280,19 @@ export default function MapPage() {
           <div className="map-wrapper">
             <h2>Térképnézet 1</h2>
             <div className="svg-container" role="img" aria-label="Temető drónkép 1">
-              <svg 
-                viewBox="0 0 100 100" 
-                preserveAspectRatio="xMidYMid meet" 
+              <svg
+                viewBox="0 0 100 100"
+                preserveAspectRatio="xMidYMid meet"
                 className="map-svg"
                 onClick={() => setZoomOpen1(true)}
                 style={{ cursor: "zoom-in" }}
               >
-                <image 
-                  href={droneImg1} 
-                  x="0" 
-                  y="0" 
-                  width="100" 
-                  height="100" 
+                <image
+                  href={droneImg1}
+                  x="0"
+                  y="0"
+                  width="100"
+                  height="100"
                   preserveAspectRatio="xMidYMid slice"
                   style={{ opacity: 0.9 }}
                 />
@@ -305,19 +304,19 @@ export default function MapPage() {
           <div className="map-wrapper">
             <h2>Térképnézet 2</h2>
             <div className="svg-container" role="img" aria-label="Temető drónkép 2">
-              <svg 
-                viewBox="0 0 100 100" 
-                preserveAspectRatio="xMidYMid meet" 
+              <svg
+                viewBox="0 0 100 100"
+                preserveAspectRatio="xMidYMid meet"
                 className="map-svg"
                 onClick={() => setZoomOpen2(true)}
                 style={{ cursor: "zoom-in" }}
               >
-                <image 
-                  href={droneImg2} 
-                  x="0" 
-                  y="0" 
-                  width="100" 
-                  height="100" 
+                <image
+                  href={droneImg2}
+                  x="0"
+                  y="0"
+                  width="100"
+                  height="100"
                   preserveAspectRatio="xMidYMid slice"
                   style={{ opacity: 0.9 }}
                 />
@@ -368,7 +367,7 @@ export default function MapPage() {
                       <ul className="elhunyt-list">
                         {selected.elhunytak.map((e) => (
                           <li key={e.id} className="elhunyt-item">
-                            <div className="elhunyt-avatar">{(e.nev || " ? ").split(" ").map(n => n[0]).join("").slice(0,2).toUpperCase()}</div>
+                            <div className="elhunyt-avatar">{(e.nev || " ? ").split(" ").map(n => n[0]).join("").slice(0, 2).toUpperCase()}</div>
                             <div className="elhunyt-meta">
                               <div className="elhunyt-name">{e.nev}</div>
                               <div className="elhunyt-date">{formatDate(e.halal_datuma)}</div>
@@ -400,7 +399,7 @@ export default function MapPage() {
               <h2>Temető térkép 1 - Nagyítás</h2>
               <button className="zoom-close" onClick={() => setZoomOpen1(false)}>✕</button>
             </div>
-            
+
             <div className="zoom-controls">
               <button onClick={handleZoomOut1} className="zoom-btn">−</button>
               <span className="zoom-level">{(zoomLevel1 * 100).toFixed(0)}%</span>
@@ -408,7 +407,7 @@ export default function MapPage() {
               <button onClick={handleReset1} className="zoom-btn reset">Alaphelyzet</button>
             </div>
 
-            <div 
+            <div
               className="zoom-image-wrapper"
               ref={zoomWrapperRef1}
               onWheel={handleWheel1}
@@ -419,12 +418,12 @@ export default function MapPage() {
               onClick={handleZoomImageClick1}
               style={{ cursor: isDragging1 ? "grabbing" : zoomLevel1 > 1 ? "grab" : "crosshair" }}
             >
-              <img 
+              <img
                 ref={zoomImageRef1}
-                src={droneImg1} 
+                src={droneImg1}
                 alt="Temető drónkép 1 - nagyítva"
                 className="zoom-image"
-                style={{ 
+                style={{
                   transform: `translate(${offset1.x}px, ${offset1.y}px) scale(${zoomLevel1})`,
                   cursor: isDragging1 ? "grabbing" : "grab"
                 }}
@@ -454,7 +453,7 @@ export default function MapPage() {
               <h2>Temető térkép 2 - Nagyítás</h2>
               <button className="zoom-close" onClick={() => setZoomOpen2(false)}>✕</button>
             </div>
-            
+
             <div className="zoom-controls">
               <button onClick={handleZoomOut2} className="zoom-btn">−</button>
               <span className="zoom-level">{(zoomLevel2 * 100).toFixed(0)}%</span>
@@ -462,7 +461,7 @@ export default function MapPage() {
               <button onClick={handleReset2} className="zoom-btn reset">Alaphelyzet</button>
             </div>
 
-            <div 
+            <div
               className="zoom-image-wrapper"
               ref={zoomWrapperRef2}
               onWheel={handleWheel2}
@@ -473,12 +472,12 @@ export default function MapPage() {
               onClick={handleZoomImageClick2}
               style={{ cursor: isDragging2 ? "grabbing" : zoomLevel2 > 1 ? "grab" : "crosshair" }}
             >
-              <img 
+              <img
                 ref={zoomImageRef2}
-                src={droneImg2} 
+                src={droneImg2}
                 alt="Temető drónkép 2 - nagyítva"
                 className="zoom-image"
-                style={{ 
+                style={{
                   transform: `translate(${offset2.x}px, ${offset2.y}px) scale(${zoomLevel2})`,
                   cursor: isDragging2 ? "grabbing" : "grab"
                 }}

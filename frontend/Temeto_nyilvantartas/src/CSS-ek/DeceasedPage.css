@@ -3,22 +3,22 @@
   --dp-text-secondary: #333;
   --dp-text-muted: #6a6a6a;
   --dp-text-light: #777;
-  --dp-bg-gradient-start: rgba(255,255,255,0.95);
-  --dp-bg-gradient-end: rgba(250,250,250,0.95);
-  --dp-bg-panel: rgba(255,255,255,0.7);
-  --dp-bg-header: rgba(255,255,255,0.85);
-  --dp-border-light: rgba(100,100,100,0.06);
-  --dp-border-focus: rgba(120,120,120,0.4);
-  --dp-shadow-input: 0 2px 0 rgba(0,0,0,0.02) inset;
-  --dp-shadow-button: 0 3px 0 rgba(0,0,0,0.08);
-  --dp-shadow-table: 0 6px 18px rgba(0,0,0,0.06);
-  --dp-shadow-focus: 0 4px 12px rgba(0,0,0,0.05);
+  --dp-bg-gradient-start: rgba(255, 255, 255, 0.95);
+  --dp-bg-gradient-end: rgba(250, 250, 250, 0.95);
+  --dp-bg-panel: rgba(255, 255, 255, 0.7);
+  --dp-bg-header: rgba(255, 255, 255, 0.85);
+  --dp-border-light: rgba(100, 100, 100, 0.06);
+  --dp-border-focus: rgba(120, 120, 120, 0.4);
+  --dp-shadow-input: 0 2px 0 rgba(0, 0, 0, 0.02) inset;
+  --dp-shadow-button: 0 3px 0 rgba(0, 0, 0, 0.08);
+  --dp-shadow-table: 0 6px 18px rgba(0, 0, 0, 0.06);
+  --dp-shadow-focus: 0 4px 12px rgba(0, 0, 0, 0.05);
   --dp-btn-bg: #5a3f2b;
   --dp-btn-hover: brightness(0.95);
-  --dp-input-border: 2px solid rgba(100,100,100,0.15);
-  --dp-input-bg: rgba(255,255,255,0.9);
-  --dp-hover-bg: rgba(0,0,0,0.02);
-  --dp-hover-bg-mobile: rgba(255,255,255,0.9);
+  --dp-input-border: 2px solid rgba(100, 100, 100, 0.15);
+  --dp-input-bg: rgba(255, 255, 255, 0.9);
+  --dp-hover-bg: rgba(0, 0, 0, 0.02);
+  --dp-hover-bg-mobile: rgba(255, 255, 255, 0.9);
 }
 
 
@@ -55,17 +55,17 @@
 
 .deceasedpage-search-bar {
   display: flex;
+  flex-direction: column;
   gap: 14px;
   align-items: center;
   margin-bottom: 22px;
-  flex-wrap: wrap;
 }
 
 .deceasedpage-search-input {
   padding: 10px 14px;
   border-radius: 10px;
   border: var(--dp-input-border);
-  min-width: 180px;
+  width: min(100%, 360px);
   background: var(--dp-input-bg);
   box-shadow: var(--dp-shadow-input);
   font-size: 15px;
@@ -136,12 +136,29 @@
 }
 
 
-.deceasedpage-col-name { width: 30%; }
-.deceasedpage-col-birth { width: 14%; }
-.deceasedpage-col-death { width: 14%; }
-.deceasedpage-col-parcella { width: 12%; }
-.deceasedpage-col-sor { width: 10%; }
-.deceasedpage-col-sirhely { width: 10%; }
+.deceasedpage-col-name {
+  width: 30%;
+}
+
+.deceasedpage-col-birth {
+  width: 14%;
+}
+
+.deceasedpage-col-death {
+  width: 14%;
+}
+
+.deceasedpage-col-parcella {
+  width: 12%;
+}
+
+.deceasedpage-col-sor {
+  width: 10%;
+}
+
+.deceasedpage-col-sirhely {
+  width: 10%;
+}
 
 .deceasedpage-table tbody td {
   padding: 18px 12px;
@@ -164,7 +181,7 @@
 
 @media (max-width: 900px) {
   .deceasedpage-search-input {
-    min-width: 140px;
+    width: min(100%, 320px);
   }
 
   .deceasedpage-header__title {
@@ -204,10 +221,10 @@
   .deceasedpage-table tbody tr {
     display: block;
     margin-bottom: 12px;
-    border: 1px solid rgba(0,0,0,0.06);
+    border: 1px solid rgba(0, 0, 0, 0.06);
     border-radius: 10px;
     background: var(--dp-hover-bg-mobile);
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     overflow: hidden;
   }
 
@@ -217,7 +234,7 @@
     gap: 6px;
     padding: 10px 12px;
     border: none;
-    border-bottom: 1px solid rgba(0,0,0,0.04);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
   }
 
   .deceasedpage-table tbody tr:last-child td:last-child {

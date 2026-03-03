@@ -21,6 +21,9 @@ Route::get('/elhunytMindenAdata', [ElhunytController::class, 'index']); // ez a 
 Route::post('/elhunytak', [ElhunytController::class, 'store']); //elhunyt hozzáadása
 Route::get('/elhunytak/count', [ElhunytController::class, 'count']); // ez a route az elhunytak számát adja vissza.
 Route::get('/elhunytak/recent', [ElhunytController::class, 'recent']);  // ez a route a legutóbbi 7 elhunytat adja vissza.
+Route::put('/elhunytak/{id}', [ElhunytController::class, 'update']); // elhunyt adatainak frissítése id alapján
+Route::delete('/elhunytak/{id}', [ElhunytController::class, 'destroy']); // elhunyt törlése id alapján
+
 
 Route::get('/sirhelyek/count', [SirhelyController::class, 'count']); // ez a route a sirhelyek számát adja vissza.
 Route::get('/sirhelyek', [SirhelyController::class, 'index']); //ez lesz az egyik szűrési lehetőség.
