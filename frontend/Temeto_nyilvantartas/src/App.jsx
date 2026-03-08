@@ -12,6 +12,7 @@ import AdminGraveTenant from "./Pages/Admin/AdminGraveTenant.jsx";
 import AdminPayment from './Pages/Admin/AdminPayment.jsx';
 import AdminDocument from './Pages/Admin/AdminDocument.jsx';
 import AdminDeceades from './Pages/Admin/AdminDeceades.jsx';
+import RequireAdmin from "./RequireAdmin.jsx";
 
 export default function App() {
   return (
@@ -22,12 +23,56 @@ export default function App() {
         <Route path="sirhelyek" element={<GraveSitesPage />} />
         <Route path="terkep" element={<MapPage />} />
         <Route path="admin" element={<AdminPage />} />
-        <Route path="admin/dashboard" element={<AdminDashboard />} />
-        <Route path="admin/sirhelyek" element={<AdminGraveSites />} />
-        <Route path="admin/sirberlok" element={<AdminGraveTenant />} />
-        <Route path='admin/befizetesek' element={<AdminPayment />} />
-        <Route path='admin/dokumentumok' element={<AdminDocument />} />
-        <Route path='admin/elhunytak' element={<AdminDeceades />} />
+
+        {/* VÉDETT ADMIN ÚTVONALAK */}
+        <Route
+          path="admin/dashboard"
+          element={
+            <RequireAdmin>
+              <AdminDashboard />
+            </RequireAdmin>
+          }
+        />
+        <Route
+          path="admin/sirhelyek"
+          element={
+            <RequireAdmin>
+              <AdminGraveSites />
+            </RequireAdmin>
+          }
+        />
+        <Route
+          path="admin/sirberlok"
+          element={
+            <RequireAdmin>
+              <AdminGraveTenant />
+            </RequireAdmin>
+          }
+        />
+        <Route
+          path="admin/befizetesek"
+          element={
+            <RequireAdmin>
+              <AdminPayment />
+            </RequireAdmin>
+          }
+        />
+        <Route
+          path="admin/dokumentumok"
+          element={
+            <RequireAdmin>
+              <AdminDocument />
+            </RequireAdmin>
+          }
+        />
+        <Route
+          path="admin/elhunytak"
+          element={
+            <RequireAdmin>
+              <AdminDeceades />
+            </RequireAdmin>
+          }
+        />
       </Route>
     </Routes>
   );

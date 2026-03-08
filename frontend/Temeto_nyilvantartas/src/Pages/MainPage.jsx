@@ -95,15 +95,6 @@ const MainPage = () => {
                 <li>Ügyfélfogadási idő: Hétfő-Péntek: 08:00-16:00</li>
               </ul>
             </div>
-
-            <div className="mainpage-docs">
-              <strong>Dokumentumok és letöltések</strong>
-              <ul>
-                <li>GYIK</li>
-                <li>Felhasználói kézikönyv PDF</li>
-                <li>Adatvédelmi tájékoztató</li>
-              </ul>
-            </div>
           </aside>
         </section>
       </main>

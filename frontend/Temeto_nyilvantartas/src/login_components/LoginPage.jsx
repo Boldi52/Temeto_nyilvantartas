@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./LoginPage.css";
 import { API_BASE } from "../api";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -8,6 +9,16 @@ const LoginPage = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [info, setInfo] = useState("");
+    const navigate = useNavigate();
+
+    // Ha már bejelentkezett admin, menjen egyből a dashboardra
+    useEffect(() => {
+        const token = localStorage.getItem("token");
+        const role = localStorage.getItem("role");
+        if (token && role === "admin") {
+            navigate("/admin/dashboard", { replace: true });
+        }
+    }, [navigate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,23 +42,24 @@ const LoginPage = () => {
 
             if (data.token) {
                 localStorage.setItem("token", data.token);
-                if (data.user?.role) {
-                    localStorage.setItem("role", data.user.role);
-                } else {
-                    localStorage.removeItem("role");
-                }
-
-                const role = data.user?.role;
-                if (role === "admin") {
-                    window.location.replace("/admin/dashboard");
-                } else if (role === "user") {
-                    window.location.replace("/");
-                } else {
-                    window.location.replace("/admin/dashboard");
-                }
-
-                setInfo("Sikeres bejelentkezés!");
             }
+
+            if (data.user?.role) {
+                localStorage.setItem("role", data.user.role);
+            } else {
+                localStorage.removeItem("role");
+            }
+
+            const role = data.user?.role;
+            if (role === "admin") {
+                window.location.replace("/admin/dashboard");
+            } else if (role === "user") {
+                window.location.replace("/");
+            } else {
+                window.location.replace("/admin/dashboard");
+            }
+
+            setInfo("Sikeres bejelentkezés!");
         } catch (err) {
             setError(err.message);
         } finally {
@@ -68,13 +80,13 @@ const LoginPage = () => {
                             <input
                                 id="email"
                                 type="email"
-                                placeholder="email@example.com"
-                                className="loginpage-form-group__input"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                placeholder="admin@example.com"
                             />
                         </div>
+
                         <div className="loginpage-form-group">
                             <label htmlFor="password" className="loginpage-form-group__label">
                                 jelszó
@@ -82,20 +94,17 @@ const LoginPage = () => {
                             <input
                                 id="password"
                                 type="password"
-                                placeholder="••••••••"
-                                className="loginpage-form-group__input"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                placeholder="••••••••"
                             />
                         </div>
-                        <button
-                            type="submit"
-                            className="loginpage-btn"
-                            disabled={loading}
-                        >
-                            {loading ? "Belépés..." : "Bejelentkezés"}
+
+                        <button className="loginpage-submit" type="submit" disabled={loading}>
+                            {loading ? "Bejelentkezés..." : "Belépés"}
                         </button>
+
                         {error && (
                             <div className="loginpage-message loginpage-message--error">
                                 {error}
