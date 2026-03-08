@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../CSS-ek/AdminDocument.css";
+import AdminBackLink from "../../AdminBackLink";
 
 const API_BASE = "http://localhost:8000";
 
@@ -180,6 +181,7 @@ export default function AdminDocument() {
 
     return (
         <div className="admin-document-page">
+            <AdminBackLink />
             <h1 className="admin-document-title">Dokumentumok kezelése</h1>
             <p className="admin-document-subtitle">Sírbérlőkhöz tartozó dokumentumok feltöltése és kezelése</p>
 

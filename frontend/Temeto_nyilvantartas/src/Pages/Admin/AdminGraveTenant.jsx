@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../CSS-ek/AdminGraveTenant.css";
+import AdminBackLink from "../../AdminBackLink";
 
 const API_BASE = "http://localhost:8000/api";
 
@@ -203,6 +204,7 @@ export default function AdminGraveTenant() {
 
     return (
         <div className="admin-gravetenant-page">
+            <AdminBackLink />
             <div className="admin-gravetenant-header">
                 <h2 className="admin-gravetenant-title">Sírbérlők kezelése</h2>
                 <p className="admin-gravetenant-subtitle">Itt kezelheted a sírbérlők adatait - hozzáadás, módosítás és törlés.</p>

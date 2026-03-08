@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../CSS-ek/AdminDeceades.css";
+import AdminBackLink from "../../AdminBackLink";
 
 const API_BASE = "http://localhost:8000";
 
@@ -135,7 +136,6 @@ export default function AdminDeceades() {
             ? `${API_BASE}/api/elhunytak/${form.id}`
             : `${API_BASE}/api/elhunytak`;
 
-        // Laravel: PUT + file helyett POST + _method=PUT
         if (isEditing) {
             formData.append("_method", "PUT");
         }
@@ -171,6 +171,7 @@ export default function AdminDeceades() {
 
     return (
         <div className="admin-deceades-page">
+            <AdminBackLink />
             <div className="admin-deceades-header">
                 <h2 className="admin-deceades-title">Elhunytak kezelése</h2>
                 <p className="admin-deceades-subtitle">Elhunyt hozzáadása, szerkesztése és törlése.</p>

@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import "../../CSS-ek/AdminPayment.css";
+import AdminBackLink from "../../AdminBackLink";
 
 const API_BASE = "http://localhost:8000";
 
@@ -134,6 +135,7 @@ export default function AdminPayment() {
 
   return (
     <div className="admin-payment">
+      <AdminBackLink />
       <h2 className="admin-title">Befizetések</h2>
 
       {error && <div className="admin-payment-alert admin-payment-alert--error">{error}</div>}

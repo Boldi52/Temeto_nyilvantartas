@@ -13,6 +13,58 @@
   --adm-accent-light: #818cf8;
 }
 
+/* ...a meglévő tartalom fölött vagy alatt hagyható... */
+
+/* Visszalépő link a dashboardra */
+.admin-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  color: #1f2937;
+  font-weight: 700;
+  font-size: 0.97rem;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(99, 102, 241, 0.18);
+  border: 1px solid rgba(99, 102, 241, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  margin-bottom: 1.25rem;
+}
+
+.admin-back-link:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(99, 102, 241, 0.26);
+  background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+}
+
+.admin-back-link:active {
+  transform: translateY(0);
+  box-shadow: 0 3px 10px rgba(99, 102, 241, 0.2);
+}
+
+.admin-back-link:focus-visible {
+  outline: 2px solid #818cf8;
+  outline-offset: 3px;
+}
+
+.admin-back-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  border-radius: 50%;
+  background: #fff;
+  color: #4f46e5;
+  font-size: 1rem;
+  box-shadow: inset 0 0 0 1px rgba(99, 102, 241, 0.18); 
+}
+
+.admin-back-text {
+  letter-spacing: -0.01em;
+}
 /* Admin Dashboard wrapper */
 .admin-dashboard-page {
   padding: 2rem 1rem;

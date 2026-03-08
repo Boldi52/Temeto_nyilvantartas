@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../../CSS-ek/AdminGraveSites.css";
+import AdminBackLink from "../../AdminBackLink";
 
 const API_BASE = "http://localhost:8000";
 
@@ -143,6 +144,7 @@ export default function AdminGraveSites() {
 
     return (
         <div className="admin-gravesites-page">
+            <AdminBackLink />
             <div className="admin-gravesites-header">
                 <h2 className="admin-gravesites-section-title" style={{ fontSize: "1.5rem", marginBottom: "0.5rem" }}>
                     Sírhelyek kezelése
