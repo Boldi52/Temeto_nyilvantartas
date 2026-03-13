@@ -14,6 +14,8 @@ return new class extends Migration
         Schema::create('sirhely', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sor_id')->constrained('sor')->restrictOnDelete();
+            $table->string('sirkod')->unique();
+            $table->string('tipus');
             $table->string('allapot')->nullable();
             $table->string('foto')->nullable();
             $table->foreignId('sirberlo_id')->nullable()

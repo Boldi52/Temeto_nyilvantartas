@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('nev');
             $table->date('szul_datum')->nullable();
             $table->date('halal_datuma')->nullable();
+            $table->date('temetes_datuma')->nullable();
             $table->string('anyja_neve')->nullable();
             $table->foreignId('sirhely_id')->nullable()
                   ->constrained('sirhely')->nullOnDelete();
