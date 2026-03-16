@@ -4,7 +4,7 @@ import { API_BASE } from "../api";
 import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
-    const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -29,8 +29,11 @@ const LoginPage = () => {
         try {
             const res = await fetch(`${API_BASE}/api/login`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ email, password }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json",
+                },
+                body: JSON.stringify({ username, password }),
             });
 
             if (!res.ok) {
@@ -74,16 +77,17 @@ const LoginPage = () => {
                     <h2 className="loginpage-panel__title">Bejelentkezés</h2>
                     <form className="loginpage-form" onSubmit={handleSubmit}>
                         <div className="loginpage-form-group">
-                            <label htmlFor="email" className="loginpage-form-group__label">
-                                e-mail cím
+                            <label htmlFor="username" className="loginpage-form-group__label">
+                                felhasználónév
                             </label>
                             <input
-                                id="email"
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
+                                id="username"
+                                type="text"
+                                className="loginpage-form-group__input"
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
                                 required
-                                placeholder="admin@example.com"
+                                placeholder="pl. admin"
                             />
                         </div>
 
@@ -94,6 +98,7 @@ const LoginPage = () => {
                             <input
                                 id="password"
                                 type="password"
+                                className="loginpage-form-group__input"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
@@ -101,7 +106,7 @@ const LoginPage = () => {
                             />
                         </div>
 
-                        <button className="loginpage-submit" type="submit" disabled={loading}>
+                        <button className="loginpage-btn" type="submit" disabled={loading}>
                             {loading ? "Bejelentkezés..." : "Belépés"}
                         </button>
 

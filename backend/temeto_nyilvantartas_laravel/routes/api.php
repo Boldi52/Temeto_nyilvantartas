@@ -95,7 +95,7 @@ Route::delete('/telepulesek/{ir_szam}', [\App\Http\Controllers\TelepulesControll
 
 Route::post('/login', function (Request $request) {
     $creds = $request->validate([
-        'email' => 'required|email',
+        'username' => 'required|string',
         'password' => 'required',
     ]);
 
@@ -103,7 +103,7 @@ Route::post('/login', function (Request $request) {
         return response()->json(['message' => 'Helytelen adatok!'], 401);
     }
 
-    $user = \App\Models\User::where('email', $request->email)->first();
+    $user = \App\Models\User::where('username', $request->username)->first();
     $token = $user->createToken('auth')->plainTextToken; // Sanctum token
     return response()->json(['token' => $token, 'user' => $user]);
 }); // ez a route a bejelentkezést csinálja.
