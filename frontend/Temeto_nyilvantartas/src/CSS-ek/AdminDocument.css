@@ -176,6 +176,12 @@
   display: none;
 }
 
+.admin-document-file-wrapper:focus {
+  outline: none;
+  border-color: var(--admDoc-primary);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
 .admin-document-file-label {
   font-size: 0.95rem;
   color: var(--admDoc-text-light);
