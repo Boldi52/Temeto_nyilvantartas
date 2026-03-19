@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import "../../CSS-ek/AdminDeceades.css";
+import "../../CSS-ek/AdminDocument.css";
 import AdminBackLink from "../../AdminBackLink";
 
 const API_BASE = "http://localhost:8000";
@@ -24,13 +25,22 @@ export default function AdminDeceades() {
     const [success, setSuccess] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
 
+    const fileInputRef = useRef(null);
+
+    const openFilePicker = () => {
+        // Biztosabb: natív click létrehozása (egyes böngészők / css-ek mellett stabilabb)
+        const input = fileInputRef.current;
+        if (!input) return;
+        input.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+    };
+
     const loadData = async () => {
         setLoading(true);
         setError("");
         try {
             const [sirhelyRes, elhunytRes] = await Promise.all([
                 fetch(`${API_BASE}/api/sirhelyek`),
-                fetch(`${API_BASE}/api/elhunytMindenAdata`)
+                fetch(`${API_BASE}/api/elhunytMindenAdata`),
             ]);
 
             if (!sirhelyRes.ok) throw new Error("Sírhelyek betöltése sikertelen.");
@@ -38,7 +48,7 @@ export default function AdminDeceades() {
 
             const [sirhelyData, elhunytData] = await Promise.all([
                 sirhelyRes.json(),
-                elhunytRes.json()
+                elhunytRes.json(),
             ]);
 
             setSirhelyek(Array.isArray(sirhelyData) ? sirhelyData : []);
@@ -77,6 +87,7 @@ export default function AdminDeceades() {
         setFieldErrors({});
         setError("");
         setSuccess("");
+        if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
     const handleEdit = (item) => {
@@ -92,6 +103,7 @@ export default function AdminDeceades() {
         setFieldErrors({});
         setError("");
         setSuccess("");
+        if (fileInputRef.current) fileInputRef.current.value = "";
         window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
@@ -132,9 +144,7 @@ export default function AdminDeceades() {
         if (file) formData.append("halotti_anyakonyvi_kiv", file);
 
         const isEditing = !!form.id;
-        const url = isEditing
-            ? `${API_BASE}/api/elhunytak/${form.id}`
-            : `${API_BASE}/api/elhunytak`;
+        const url = isEditing ? `${API_BASE}/api/elhunytak/${form.id}` : `${API_BASE}/api/elhunytak`;
 
         if (isEditing) {
             formData.append("_method", "PUT");
@@ -203,23 +213,13 @@ export default function AdminDeceades() {
 
                         <label>
                             Születési dátum
-                            <input
-                                type="date"
-                                name="szul_datum"
-                                value={form.szul_datum}
-                                onChange={handleChange}
-                            />
+                            <input type="date" name="szul_datum" value={form.szul_datum} onChange={handleChange} />
                             {fieldErrors.szul_datum && <div className="admin-deceades-error">{fieldErrors.szul_datum}</div>}
                         </label>
 
                         <label>
                             Halál dátuma
-                            <input
-                                type="date"
-                                name="halal_datuma"
-                                value={form.halal_datuma}
-                                onChange={handleChange}
-                            />
+                            <input type="date" name="halal_datuma" value={form.halal_datuma} onChange={handleChange} />
                             {fieldErrors.halal_datuma && <div className="admin-deceades-error">{fieldErrors.halal_datuma}</div>}
                         </label>
 
@@ -237,11 +237,7 @@ export default function AdminDeceades() {
 
                         <label>
                             Sírhely
-                            <select
-                                name="sirhely_id"
-                                value={form.sirhely_id}
-                                onChange={handleChange}
-                            >
+                            <select name="sirhely_id" value={form.sirhely_id} onChange={handleChange}>
                                 <option value="">Nincs megadva</option>
                                 {sirhelyek.map((s) => (
                                     <option key={s.id} value={s.id}>
@@ -254,12 +250,38 @@ export default function AdminDeceades() {
 
                         <label>
                             Halotti anyakönyvi kivonat
-                            <input
-                                type="file"
-                                name="halotti_anyakonyvi_kiv"
-                                onChange={handleFileChange}
-                                accept=".pdf,.png,.jpg,.jpeg"
-                            />
+                            <div
+                                className="admin-document-file-wrapper"
+                                role="button"
+                                tabIndex={0}
+                                onMouseDown={(e) => {
+                                    // fontos: mousedown-nál nyitjuk, így a böngésző biztosan user gesture-nek veszi
+                                    e.preventDefault();
+                                    e.stopPropagation();
+                                    openFilePicker();
+                                }}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter" || e.key === " ") {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        openFilePicker();
+                                    }
+                                }}
+                                aria-label="Fájl kiválasztása"
+                            >
+                                <input
+                                    ref={fileInputRef}
+                                    type="file"
+                                    name="halotti_anyakonyvi_kiv"
+                                    onChange={handleFileChange}
+                                    accept=".pdf,.png,.jpg,.jpeg"
+                                    className="admin-document-hidden-file-input"
+                                />
+                                <span className="admin-document-file-label">
+                                    {file ? file.name : "Fájl kiválasztása..."}
+                                </span>
+                            </div>
+
                             {fieldErrors.halotti_anyakonyvi_kiv && (
                                 <div className="admin-deceades-error">{fieldErrors.halotti_anyakonyvi_kiv}</div>
                             )}

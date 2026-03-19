@@ -15,6 +15,13 @@
   --agt-shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --agt-mono-font: Menlo, Monaco, "Courier New", monospace;
   --agt-input-focus: rgba(37, 99, 235, 0.12);
+
+  /* Kompakt spacing tokenek */
+  --agt-space-0: 0.35rem;
+  --agt-space-1: 0.5rem;
+  --agt-space-2: 0.75rem;
+  --agt-space-3: 1rem;
+  --agt-space-4: 1.25rem;
 }
 
 * {
@@ -23,7 +30,7 @@
 
 /* ===== MAIN PAGE ===== */
 .admin-gravetenant-page {
-  padding: 2rem 1.5rem;
+  padding: 1.25rem 1rem; /* kisebb */
   max-width: 1400px;
   margin: 0 auto;
   color: #111827;
@@ -32,35 +39,40 @@
 }
 
 .admin-gravetenant-header {
-  margin-bottom: 2rem;
+  margin-bottom: var(--agt-space-3); /* kisebb */
 }
 
 .admin-gravetenant-title {
   margin: 0;
-  font-size: 2rem;
+  font-size: 1.6rem; /* kisebb */
   font-weight: 700;
   color: #111827;
   letter-spacing: -0.025em;
 }
 
 .admin-gravetenant-subtitle {
-  margin: 0.5rem 0 0;
+  margin: var(--agt-space-1) 0 0; /* kisebb */
   color: var(--agt-muted);
-  font-size: 1.05rem;
-  line-height: 1.5;
+  font-size: 0.98rem; /* kisebb */
+  line-height: 1.45;
 }
 
 /* ===== GRID LAYOUT ===== */
 .admin-gravetenant-grid {
   display: grid;
-  grid-template-columns: 480px 1fr;
-  gap: 1.5rem;
+  grid-template-columns: 420px 1fr; /* keskenyebb bal oszlop */
+  gap: var(--agt-space-3); /* kisebb gap */
   align-items: start;
+}
+
+/* grid item overflow fix */
+.admin-gravetenant-grid > * {
+  min-width: 0;
 }
 
 @media (max-width: 1200px) {
   .admin-gravetenant-grid {
-    grid-template-columns: 420px 1fr;
+    grid-template-columns: 380px 1fr;
   }
 }
 
@@ -68,23 +80,35 @@
   .admin-gravetenant-grid {
     grid-template-columns: 1fr;
   }
+
+  .admin-gravetenant-page {
+    padding: 1rem 0.75rem;
+  }
+
+  .admin-gravetenant-title {
+    font-size: 1.45rem;
+  }
+
+  .admin-gravetenant-subtitle {
+    font-size: 0.92rem;
+  }
 }
 
 @media (max-width: 640px) {
   .admin-gravetenant-page {
     padding: 1rem;
   }
-  
+
   .admin-gravetenant-header {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
   }
-  
+
   .admin-gravetenant-title {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
   }
-  
+
   .admin-gravetenant-subtitle {
-    font-size: 0.95rem;
+    font-size: 0.9rem;
   }
 }
 
@@ -94,21 +118,24 @@
   border: 1px solid var(--agt-border);
   border-radius: var(--agt-card-radius);
   box-shadow: var(--agt-shadow-lg);
-  padding: 1.75rem;
+  padding: var(--agt-space-4); /* kisebb */
   animation: agtFadeIn 0.3s ease-out;
+
+  min-width: 0;
+  max-width: 100%;
 }
 
 @media (max-width: 640px) {
   .admin-gravetenant-card {
-    padding: 1.25rem;
+    padding: 1rem;
     border-radius: 12px;
   }
 }
 
 /* ===== SECTION TITLE ===== */
 .admin-gravetenant-section-title {
-  margin: 0 0 1.25rem 0;
-  font-size: 1.2rem;
+  margin: 0 0 var(--agt-space-2) 0; /* kisebb */
+  font-size: 1.05rem; /* kisebb */
   font-weight: 600;
   color: #111827;
   letter-spacing: -0.015em;
@@ -116,8 +143,8 @@
 
 @media (max-width: 640px) {
   .admin-gravetenant-section-title {
-    font-size: 1.1rem;
-    margin-bottom: 1rem;
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
   }
 }
 
@@ -126,22 +153,26 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 1.25rem;
-  gap: 1rem;
+  margin-bottom: var(--agt-space-2); /* kisebb */
+  gap: var(--agt-space-2);
   flex-wrap: wrap;
+
+  min-width: 0;
 }
 
 .admin-gravetenant-list-header button {
   background: #fff;
   border: 2px solid var(--agt-border);
-  padding: 0.6rem 0.9rem;
+  padding: 0.5rem 0.75rem; /* kisebb */
   border-radius: 9px;
   cursor: pointer;
   color: #111827;
-  font-size: 0.9rem;
+  font-size: 0.85rem; /* kisebb */
   font-weight: 500;
   transition: all 0.2s ease;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  max-width: 100%;
 }
 
 .admin-gravetenant-list-header button:hover:not(:disabled) {
@@ -158,8 +189,8 @@
 
 @media (max-width: 640px) {
   .admin-gravetenant-list-header button {
-    padding: 0.55rem 0.8rem;
-    font-size: 0.85rem;
+    padding: 0.5rem 0.7rem;
+    font-size: 0.82rem;
   }
 }
 
@@ -167,27 +198,24 @@
 .admin-gravetenant-form {
   display: flex;
   flex-direction: column;
-  gap: 1.4rem;
+  gap: var(--agt-space-3); /* kisebb */
 }
 
 @media (max-width: 640px) {
   .admin-gravetenant-form {
-    gap: 1.25rem;
+    gap: var(--agt-space-2);
   }
 }
 
 .admin-gravetenant-form label {
   display: block;
-  font-size: 0.95rem;
+  font-size: 0.9rem; /* kisebb */
   font-weight: 600;
   color: #374151;
   margin-bottom: 0;
-}
 
-@media (max-width: 640px) {
-  .admin-gravetenant-form label {
-    font-size: 0.9rem;
-  }
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* ===== FORM INPUTS ===== */
@@ -199,18 +227,19 @@
 .admin-gravetenant-form input[name="email_cim"],
 .admin-gravetenant-form select {
   width: 100% !important;
-  padding: 0.75rem 1rem !important;
+  max-width: 100% !important;
+  padding: 0.6rem 0.85rem !important; /* kisebb */
   border: 2px solid var(--agt-border) !important;
   border-radius: var(--agt-input-radius) !important;
   background: #fff !important;
   box-sizing: border-box !important;
-  font-size: 0.95rem !important;
+  font-size: 0.92rem !important; /* kisebb */
   color: #111827 !important;
-  margin-top: 0.5rem !important;
+  margin-top: var(--agt-space-0) !important; /* kisebb */
   transition: all 0.2s ease !important;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
-  line-height: 1.5 !important;
-  min-height: 44px !important;
+  line-height: 1.45 !important;
+  min-height: 40px !important; /* kisebb */
 }
 
 @media (max-width: 640px) {
@@ -221,16 +250,16 @@
   .admin-gravetenant-form input[name="kozterulet_neve"],
   .admin-gravetenant-form input[name="email_cim"],
   .admin-gravetenant-form select {
-    padding: 0.7rem 0.9rem !important;
+    padding: 0.55rem 0.75rem !important;
     font-size: 0.9rem !important;
-    min-height: 42px !important;
+    min-height: 38px !important;
     border-radius: 9px !important;
   }
 }
 
 .admin-gravetenant-form input::placeholder {
   color: #9ca3af !important;
-  font-size: 0.9rem !important;
+  font-size: 0.88rem !important;
 }
 
 @media (max-width: 640px) {
@@ -261,55 +290,48 @@
   cursor: pointer !important;
   appearance: none !important;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M6 8l4 4 4-4'/%3E%3C/svg%3E") !important;
-  background-position: right 0.85rem center !important;
+  background-position: right 0.7rem center !important;
   background-repeat: no-repeat !important;
-  background-size: 1.3em 1.3em !important;
-  padding-right: 2.75rem !important;
-}
-
-@media (max-width: 640px) {
-  .admin-gravetenant-form select {
-    background-position: right 0.7rem center !important;
-    background-size: 1.15em 1.15em !important;
-    padding-right: 2.5rem !important;
-  }
+  background-size: 1.15em 1.15em !important;
+  padding-right: 2.4rem !important;
 }
 
 /* ===== FORM ACTIONS ===== */
 .admin-gravetenant-form-actions {
   display: flex;
-  gap: 0.7rem;
-  margin-top: 0.4rem;
-  padding-top: 0.4rem;
+  gap: var(--agt-space-2);
+  margin-top: var(--agt-space-1);
+  padding-top: 0;
 }
 
 @media (max-width: 640px) {
   .admin-gravetenant-form-actions {
     flex-direction: column;
-    gap: 0.7rem;
+    gap: var(--agt-space-2);
   }
 }
 
 .admin-gravetenant-form-actions button {
-  padding: 0.75rem 1.25rem;
+  padding: 0.6rem 0.9rem; /* kisebb */
   border-radius: var(--agt-input-radius);
   border: none;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 0.9rem; /* kisebb */
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   flex: 1;
-  min-height: 44px;
+  min-height: 40px; /* kisebb */
+  max-width: 100%;
 }
 
 @media (max-width: 640px) {
   .admin-gravetenant-form-actions button {
     width: 100%;
     flex: none;
-    padding: 0.7rem 1.1rem;
-    font-size: 0.9rem;
-    min-height: 42px;
+    padding: 0.55rem 0.85rem;
+    font-size: 0.88rem;
+    min-height: 38px;
   }
 }
 
@@ -355,13 +377,14 @@
   border-radius: 12px;
   border: 1px solid var(--agt-border);
   background: #fff;
+  max-width: 100%;
 }
 
 .admin-gravetenant-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.9rem;
-  min-width: 900px;
+  font-size: 0.88rem; /* picit kisebb */
+  min-width: 820px; /* kisebb, hogy hamarabb férjen */
 }
 
 @media (max-width: 1024px) {
@@ -372,22 +395,25 @@
 
 .admin-gravetenant-table thead th {
   text-align: left;
-  padding: 0.875rem 1rem;
+  padding: 0.7rem 0.8rem; /* kisebb */
   background: #f9fafb;
   border-bottom: 2px solid var(--agt-border);
   font-weight: 600;
   color: #374151;
-  font-size: 0.85rem;
+  font-size: 0.78rem; /* kisebb */
   text-transform: uppercase;
   letter-spacing: 0.05em;
   white-space: nowrap;
 }
 
 .admin-gravetenant-table tbody td {
-  padding: 1rem;
+  padding: 0.75rem 0.8rem; /* kisebb */
   border-bottom: 1px solid #f3f4f6;
   vertical-align: middle;
   color: #111827;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .admin-gravetenant-table tbody tr {
@@ -405,39 +431,47 @@
 .admin-gravetenant-table td.empty {
   text-align: center;
   color: var(--agt-muted);
-  padding: 3rem 1rem;
+  padding: 2rem 1rem; /* kisebb */
   font-style: italic;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 
 /* ===== MONO (code) ===== */
 .admin-gravetenant-mono {
   font-family: var(--agt-mono-font);
-  font-size: 0.85rem;
+  font-size: 0.8rem; /* kisebb */
   color: #374151;
   background: #f9fafb;
-  padding: 0.35rem 0.6rem;
+  padding: 0.25rem 0.45rem; /* kisebb */
   border-radius: 6px;
   display: inline-block;
+
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 /* ===== ACTIONS ===== */
 .admin-gravetenant-actions {
   display: flex;
-  gap: 0.5rem;
+  gap: var(--agt-space-1);
   flex-wrap: wrap;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .admin-gravetenant-actions button {
-  padding: 0.5rem 0.85rem;
-  border-radius: 8px;
+  padding: 0.4rem 0.65rem; /* kisebb */
+  border-radius: 7px;
   border: 1px solid var(--agt-border);
   background: #fff;
   cursor: pointer;
-  font-size: 0.85rem;
+  font-size: 0.8rem; /* kisebb */
   font-weight: 500;
   transition: all 0.2s ease;
   white-space: nowrap;
+  max-width: 100%;
 }
 
 .admin-gravetenant-actions button:hover:not(:disabled) {
@@ -458,22 +492,25 @@
 
 /* ===== ALERTS ===== */
 .admin-gravetenant-alert {
-  padding: 0.85rem 1.1rem;
+  padding: 0.7rem 0.9rem; /* kisebb */
   border-radius: 10px;
   background: #f0f9ff;
   color: #0369a1;
   border: 1px solid #bae6fd;
-  margin-bottom: 1.25rem;
-  font-size: 0.9rem;
+  margin-bottom: var(--agt-space-2);
+  font-size: 0.85rem; /* kisebb */
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  line-height: 1.5;
+  line-height: 1.45;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .admin-gravetenant-alert::before {
   content: "ℹ️";
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   flex-shrink: 0;
 }
 
@@ -487,23 +524,19 @@
   content: "⚠️";
 }
 
-@media (max-width: 640px) {
-  .admin-gravetenant-alert {
-    padding: 0.75rem 0.9rem;
-    font-size: 0.85rem;
-  }
-}
-
 /* ===== FIELD ERROR ===== */
 .admin-gravetenant-field-error {
-  margin-top: 0.45rem;
-  font-size: 0.85rem;
+  margin-top: 0.35rem;
+  font-size: 0.82rem; /* kisebb */
   color: var(--agt-danger);
   font-weight: 500;
   display: flex;
   align-items: center;
   gap: 0.3rem;
-  line-height: 1.4;
+  line-height: 1.35;
+
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .admin-gravetenant-field-error::before {
@@ -512,67 +545,79 @@
   flex-shrink: 0;
 }
 
+/* =========================================================
+   MOBIL (kártyás/stackelt) nézet 900px alatt
+   - így nem lóg ki a táblázat a kártyából
+   - és nem kell vízszintes scroll
+   ========================================================= */
+@media (max-width: 900px) {
+  .admin-gravetenant-table-wrapper {
+    overflow-x: hidden;
+    border: none;
+    background: transparent;
+    border-radius: 0;
+  }
 
-@media (max-width: 1024px) {
+  .admin-gravetenant-table {
+    min-width: 0;
+    width: 100%;
+  }
+
   .admin-gravetenant-table thead {
     display: none;
+  }
+
+  .admin-gravetenant-table tbody tr {
+    display: block;
+    margin-bottom: 0.85rem;
+    border: 1px solid var(--agt-border);
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: var(--agt-shadow);
+    padding: 0.6rem 0.75rem;
   }
 
   .admin-gravetenant-table tbody td {
     display: block;
     width: 100%;
-    padding: 0.75rem 1rem;
-    text-align: right;
-    border: none;
+    padding: 0.45rem 0;
+    border: 0;
+    text-align: left;
+    overflow: visible;
+    text-overflow: initial;
+    white-space: normal;
   }
 
   .admin-gravetenant-table tbody td::before {
     content: attr(data-label);
-    float: left;
-    font-weight: 600;
-    color: #6b7280;
-    text-transform: uppercase;
-    font-size: 0.75rem;
-    letter-spacing: 0.05em;
-  }
-
-  .admin-gravetenant-table tbody tr {
     display: block;
-    margin-bottom: 1rem;
-    border: 1px solid var(--agt-border);
-    border-radius: 12px;
-    background: #fff;
-    box-shadow: var(--agt-shadow);
-  }
-
-  .admin-gravetenant-table tbody td:first-child {
-    padding-top: 1rem;
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-  }
-
-  .admin-gravetenant-table tbody td:last-child {
-    padding-bottom: 1rem;
-    border-bottom-left-radius: 12px;
-    border-bottom-right-radius: 12px;
+    font-weight: 700;
+    color: #6b7280;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.15rem;
   }
 
   .admin-gravetenant-actions {
-    justify-content: flex-end;
-    margin-top: 0.5rem;
-    padding-top: 0.75rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-direction: column;
+    align-items: stretch;
+    padding-top: 0.6rem;
+    margin-top: 0.6rem;
     border-top: 1px solid var(--agt-border);
   }
 
-  .admin-gravetenant-mono {
-    font-size: 0.8rem;
-    padding: 0.25rem 0.5rem;
+  .admin-gravetenant-actions button {
+    width: 100%;
+    white-space: normal;
   }
 }
 
 @media (max-width: 640px) {
   .admin-gravetenant-actions button {
-    font-size: 0.8rem;
+    font-size: 0.78rem;
     padding: 0.45rem 0.7rem;
   }
 }
@@ -587,7 +632,6 @@
     transform: translateY(0);
   }
 }
-
 
 .admin-gravetenant-table-wrapper::-webkit-scrollbar {
   height: 8px;
@@ -607,7 +651,6 @@
   background: #94a3b8;
 }
 
-
 .admin-gravetenant-form input:focus-visible,
 .admin-gravetenant-form select:focus-visible,
 .admin-gravetenant-form-actions button:focus-visible {
@@ -619,13 +662,13 @@
   .admin-gravetenant-page {
     background: white;
   }
-  
+
   .admin-gravetenant-form-actions,
   .admin-gravetenant-actions,
   .admin-gravetenant-list-header button {
     display: none;
   }
-  
+
   .admin-gravetenant-card {
     box-shadow: none;
     border: 1px solid #ccc;

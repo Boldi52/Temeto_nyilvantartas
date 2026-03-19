@@ -37,7 +37,7 @@ export default function AdminGraveTenant() {
         setError("");
         try {
             const headers = getAuthHeaders();
-            
+
             const [tenantsRes, kozteruletRes, telepulesRes] = await Promise.all([
                 fetch(`${API_BASE}/sirberlok`, { headers }),
                 fetch(`${API_BASE}/kozteuletTipusok`, { headers }),
@@ -107,16 +107,16 @@ export default function AdminGraveTenant() {
         setSaving(true);
         setError("");
         try {
-            const res = await fetch(`${API_BASE}/sirberlok/${id}`, { 
+            const res = await fetch(`${API_BASE}/sirberlok/${id}`, {
                 method: "DELETE",
                 headers: getAuthHeaders()
             });
-            
+
             if (!res.ok) {
                 const body = await res.json().catch(() => ({}));
                 throw new Error(body.message || `Törlés sikertelen (${res.status})`);
             }
-            
+
             await loadData();
             if (form.id === id) {
                 setForm(emptyForm);
@@ -136,8 +136,8 @@ export default function AdminGraveTenant() {
         setFieldErrors({});
 
         const method = form.id ? "PUT" : "POST";
-        const url = form.id 
-            ? `${API_BASE}/sirberlok/${form.id}` 
+        const url = form.id
+            ? `${API_BASE}/sirberlok/${form.id}`
             : `${API_BASE}/sirberlok`;
 
         const payload = {
@@ -216,17 +216,17 @@ export default function AdminGraveTenant() {
                     <h3 className="admin-gravetenant-section-title">
                         {isEditing ? "Sírbérlő szerkesztése" : "Új sírbérlő hozzáadása"}
                     </h3>
-                    
+
                     {error && <div className="admin-gravetenant-alert admin-gravetenant-alert--error">{error}</div>}
-                    
+
                     <form className="admin-gravetenant-form" onSubmit={handleSubmit}>
                         <label>
                             Név *
-                            <input 
-                                name="nev" 
-                                value={form.nev} 
-                                onChange={handleChange} 
-                                required 
+                            <input
+                                name="nev"
+                                value={form.nev}
+                                onChange={handleChange}
+                                required
                                 placeholder="Teljes név"
                                 disabled={saving}
                             />
@@ -239,10 +239,10 @@ export default function AdminGraveTenant() {
 
                         <label>
                             E-mail cím
-                            <input 
+                            <input
                                 type="email"
-                                name="email_cim" 
-                                value={form.email_cim} 
+                                name="email_cim"
+                                value={form.email_cim}
                                 onChange={handleChange}
                                 placeholder="pelda@email.com"
                                 disabled={saving}
@@ -256,9 +256,9 @@ export default function AdminGraveTenant() {
 
                         <label>
                             Telefonszám
-                            <input 
-                                name="telefonszam" 
-                                value={form.telefonszam} 
+                            <input
+                                name="telefonszam"
+                                value={form.telefonszam}
                                 onChange={handleChange}
                                 placeholder="+36 30 123 4567"
                                 disabled={saving}
@@ -272,9 +272,9 @@ export default function AdminGraveTenant() {
 
                         <label>
                             Közterület neve *
-                            <input 
-                                name="kozterulet_neve" 
-                                value={form.kozterulet_neve} 
+                            <input
+                                name="kozterulet_neve"
+                                value={form.kozterulet_neve}
                                 onChange={handleChange}
                                 required
                                 placeholder="Pl: Petőfi"
@@ -289,9 +289,9 @@ export default function AdminGraveTenant() {
 
                         <label>
                             Közterület típusa
-                            <select 
-                                name="kozterulet_tipus_id" 
-                                value={form.kozterulet_tipus_id} 
+                            <select
+                                name="kozterulet_tipus_id"
+                                value={form.kozterulet_tipus_id}
                                 onChange={handleChange}
                                 disabled={saving}
                             >
@@ -309,9 +309,9 @@ export default function AdminGraveTenant() {
 
                         <label>
                             Település *
-                            <select 
-                                name="ir_szam" 
-                                value={form.ir_szam} 
+                            <select
+                                name="ir_szam"
+                                value={form.ir_szam}
                                 onChange={handleChange}
                                 required
                                 disabled={saving}
@@ -338,10 +338,10 @@ export default function AdminGraveTenant() {
                                 <button
                                     type="button"
                                     className="admin-gravetenant-btn--ghost"
-                                    onClick={() => { 
-                                        setForm(emptyForm); 
-                                        setFieldErrors({}); 
-                                        setError(""); 
+                                    onClick={() => {
+                                        setForm(emptyForm);
+                                        setFieldErrors({});
+                                        setError("");
                                     }}
                                     disabled={saving}
                                 >
@@ -355,7 +355,9 @@ export default function AdminGraveTenant() {
                 {/* Jobb oldali lista kártya */}
                 <div className="admin-gravetenant-card">
                     <div className="admin-gravetenant-list-header">
-                        <h3 className="admin-gravetenant-section-title">Sírbérlők listája ({tenants.length})</h3>
+                        <h3 className="admin-gravetenant-section-title">
+                            Sírbérlők listája ({Math.min(tenants.length, 5)}/{tenants.length})
+                        </h3>
                         <button onClick={loadData} disabled={loading || saving}>
                             {loading ? "Betöltés..." : "🔄 Frissítés"}
                         </button>
@@ -386,25 +388,29 @@ export default function AdminGraveTenant() {
                                         </tr>
                                     )}
 
-                                    {tenants.map((t) => (
+                                    {tenants.slice(0, 5).map((t) => (
                                         <tr key={t.id}>
                                             <td data-label="ID">{t.id}</td>
                                             <td data-label="Név"><strong>{t.nev}</strong></td>
                                             <td data-label="E-mail" className="admin-gravetenant-mono">{t.email_cim || "—"}</td>
-                                            <td data-label="Telefon">{t.telefonszam || "—"}</td>
+
+                                            <td data-label="Telefon" className="admin-gravetenant-phone">
+                                                {t.telefonszam || "—"}
+                                            </td>
+
                                             <td data-label="Cím">{formatCim(t)}</td>
                                             <td data-label="Település">{getTelepulesNev(t.ir_szam)}</td>
                                             <td data-label="Műveletek" className="admin-gravetenant-actions">
-                                                <button 
+                                                <button
                                                     onClick={() => handleEdit(t)}
                                                     disabled={saving}
                                                     title="Szerkesztés"
                                                 >
                                                     ✏️ Szerk.
                                                 </button>
-                                                <button 
-                                                    className="danger" 
-                                                    onClick={() => handleDelete(t.id)} 
+                                                <button
+                                                    className="danger"
+                                                    onClick={() => handleDelete(t.id)}
                                                     disabled={saving}
                                                     title="Törlés"
                                                 >
@@ -415,6 +421,12 @@ export default function AdminGraveTenant() {
                                     ))}
                                 </tbody>
                             </table>
+
+                            {tenants.length > 5 && (
+                                <div className="admin-gravetenant-alert">
+                                    Csak az első 5 sírbérlő van megjelenítve. Összesen: {tenants.length}.
+                                </div>
+                            )}
                         </div>
                     )}
                 </div>
