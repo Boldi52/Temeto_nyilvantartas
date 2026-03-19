@@ -13,6 +13,9 @@ import AdminPayment from './Pages/Admin/AdminPayment.jsx';
 import AdminDocument from './Pages/Admin/AdminDocument.jsx';
 import AdminDeceades from './Pages/Admin/AdminDeceades.jsx';
 import RequireAdmin from "./RequireAdmin.jsx";
+import LoadingOverlay from './Layouts/LoadingOverlay.jsx';
+import "./App.css";
+
 
 export default function App() {
   return (
