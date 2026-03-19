@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sirberlo_id')->constrained('sirberlo')->cascadeOnDelete();
             $table->decimal('osszeg', 10, 2);
+            $table->foreignId('elhunyt_id')->constrained('elhunyt')->cascadeOnDelete();
             $table->integer('hossza')->nullable();
             $table->date('datum')->nullable();
             $table->timestamps();

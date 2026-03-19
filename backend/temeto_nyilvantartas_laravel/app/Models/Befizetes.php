@@ -16,6 +16,11 @@ class Befizetes extends Model
     {
         return $this->belongsTo(Dokumentum::class, 'dokumentum_id', 'id');
     }   
+
+    public function elhunytak()
+    {
+        return $this->belongsTo(Elhunyt::class, 'elhunyt_id');
+    }
 }
 
 

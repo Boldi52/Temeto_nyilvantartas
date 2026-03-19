@@ -127,6 +127,9 @@ export default function DeceasedPage() {
       return nameMatch && parcellaMatch && sorMatch && sirhelyMatch;
     });
   }, [deceasedList, filters]);
+
+  const limitedFiltered = useMemo(() => filtered.slice(0, 6), [filtered]);
+
   if (loading) {
     return (
       <div className="deceasedpage-wrapper loading-center">
@@ -193,8 +196,8 @@ export default function DeceasedPage() {
             </tr>
           </thead>
           <tbody>
-            {filtered.length > 0 ? (
-              filtered.map((item) => (
+            {limitedFiltered.length > 0 ? (
+              limitedFiltered.map((item) => (
                 <tr key={item.id}>
                   <td className="deceasedpage-col-name" data-label="Név">
                     {item.name}

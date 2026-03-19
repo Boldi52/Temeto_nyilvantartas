@@ -11,7 +11,6 @@ const LoginPage = () => {
     const [info, setInfo] = useState("");
     const navigate = useNavigate();
 
-    // Ha már bejelentkezett admin, menjen egyből a dashboardra
     useEffect(() => {
         const token = localStorage.getItem("token");
         const role = localStorage.getItem("role");

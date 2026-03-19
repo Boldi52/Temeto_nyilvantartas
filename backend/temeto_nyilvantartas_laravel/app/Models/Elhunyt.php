@@ -14,19 +14,21 @@ class Elhunyt extends Model
     protected $keyType = 'int';
     public $timestamps = true;
 
-    /*
-     Kapcsolat a sirhely táblához (1-to-1, belongsTo).
-    */
     public function sirhely()
     {
         return $this->belongsTo(Sirhely::class, 'sirhely_id', 'id');
     }
 
-    /**
-     * Kapcsolat a dokumentum táblához (1-to-1, belongsTo).
-     */
+    
     public function halottiAnyakonyviKivonat()
     {
         return $this->belongsTo(Dokumentum::class, 'halotti_anyakonyvi_kiv', 'id');
     }
+
+    public function befizetesek()
+    {
+        return $this->hasMany(Befizetes::class, 'elhunyt_id');
+    }
+    
+
 }
