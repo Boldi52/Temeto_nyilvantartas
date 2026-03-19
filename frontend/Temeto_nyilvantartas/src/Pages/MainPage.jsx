@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../CSS-ek/MainPage.css";
+import LoadingOverlay from "../Layouts/LoadingOverlay";
 
 const API_BASE = "http://localhost:8000";
 
@@ -41,7 +42,13 @@ const MainPage = () => {
     loadData();
   }, []);
 
-  if (loading) return <div className="mainpage-wrapper">Betöltés...</div>;
+ if (loading) {
+  return (
+    <div className="deceasedpage-wrapper loading-center">
+      <div className="spinner" role="status" aria-label="Betöltés" />
+    </div>
+  );
+}
   if (error) return <div className="mainpage-wrapper">Hiba: {error}</div>;
 
   return (

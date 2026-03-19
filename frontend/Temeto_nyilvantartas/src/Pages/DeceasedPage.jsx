@@ -2,9 +2,15 @@ import React, { useState, useMemo, useEffect } from "react";
 import "../Layouts/Layout.css";
 import "../CSS-ek/DeceasedPage.css";
 import { apiFetch } from "../api";
+import LoadingOverlay from "../Layouts/LoadingOverlay";
 
 export default function DeceasedPage() {
-  const [filters, setFilters] = useState({ name: "", parcella: "", sor: "", sirhely: "" });
+  const [filters, setFilters] = useState({
+    name: "",
+    parcella: "",
+    sor: "",
+    sirhely: "",
+  });
   const [deceasedList, setDeceasedList] = useState([]);
   const [parcellaMap, setParcellaMap] = useState({});
   const [sorMap, setSorMap] = useState({});
@@ -26,7 +32,10 @@ export default function DeceasedPage() {
       setLoading(true);
       setError("");
       try {
-        const elhunytak = await safeFetch("Elhunytak", "/api/elhunytMindenAdata");
+        const elhunytak = await safeFetch(
+          "Elhunytak",
+          "/api/elhunytMindenAdata",
+        );
 
         let parcellak = [];
         let sorok = [];
@@ -52,7 +61,13 @@ export default function DeceasedPage() {
 
         const parcMap = {};
         (parcellak || []).forEach((p) => {
-          parcMap[p.id] = p.nev || p.name || p.parcella || p.parcella_azonosito || p.parcela || "";
+          parcMap[p.id] =
+            p.nev ||
+            p.name ||
+            p.parcella ||
+            p.parcella_azonosito ||
+            p.parcela ||
+            "";
         });
 
         const sorokMap = {};
@@ -62,7 +77,8 @@ export default function DeceasedPage() {
 
         const sirMap = {};
         (sirhelyek || []).forEach((s) => {
-          sirMap[s.id] = s.sirkod || s.nev || s.name || s.sir || s.sir_azonosito || "";
+          sirMap[s.id] =
+            s.sirkod || s.nev || s.name || s.sir || s.sir_azonosito || "";
         });
 
         setParcellaMap(parcMap);
@@ -100,22 +116,33 @@ export default function DeceasedPage() {
 
   const filtered = useMemo(() => {
     return deceasedList.filter((item) => {
-      const nameMatch = item.name.toLowerCase().includes(filters.name.toLowerCase());
-      const parcellaMatch = !filters.parcella || String(item.parcella).includes(filters.parcella);
+      const nameMatch = item.name
+        .toLowerCase()
+        .includes(filters.name.toLowerCase());
+      const parcellaMatch =
+        !filters.parcella || String(item.parcella).includes(filters.parcella);
       const sorMatch = !filters.sor || String(item.sor).includes(filters.sor);
-      const sirhelyMatch = !filters.sirhely || String(item.sirhely).includes(filters.sirhely);
+      const sirhelyMatch =
+        !filters.sirhely || String(item.sirhely).includes(filters.sirhely);
       return nameMatch && parcellaMatch && sorMatch && sirhelyMatch;
     });
   }, [deceasedList, filters]);
-
-  if (loading) return <div className="deceasedpage-wrapper">Betöltés...</div>;
+  if (loading) {
+    return (
+      <div className="deceasedpage-wrapper loading-center">
+        <div className="spinner" role="status" aria-label="Betöltés" />
+      </div>
+    );
+  }
   if (error) return <div className="deceasedpage-wrapper">Hiba: {error}</div>;
 
   return (
     <div className="deceasedpage-wrapper">
       <div className="deceasedpage-header">
         <h1 className="deceasedpage-header__title">Elhunytak</h1>
-        <p className="deceasedpage-header__subtitle">Az összes elhunyt személy nyilvántartása és keresése</p>
+        <p className="deceasedpage-header__subtitle">
+          Az összes elhunyt személy nyilvántartása és keresése
+        </p>
       </div>
 
       <div className="deceasedpage-search-bar">
@@ -172,13 +199,22 @@ export default function DeceasedPage() {
                   <td className="deceasedpage-col-name" data-label="Név">
                     {item.name}
                   </td>
-                  <td className="deceasedpage-col-birth" data-label="Születési dátum">
+                  <td
+                    className="deceasedpage-col-birth"
+                    data-label="Születési dátum"
+                  >
                     {item.birthDate}
                   </td>
-                  <td className="deceasedpage-col-death" data-label="Halál dátuma">
+                  <td
+                    className="deceasedpage-col-death"
+                    data-label="Halál dátuma"
+                  >
                     {item.deathDate}
                   </td>
-                  <td className="deceasedpage-col-parcella" data-label="Parcella">
+                  <td
+                    className="deceasedpage-col-parcella"
+                    data-label="Parcella"
+                  >
                     {parcellaMap[item.parcella] || item.parcella || "—"}
                   </td>
                   <td className="deceasedpage-col-sor" data-label="Sor">
