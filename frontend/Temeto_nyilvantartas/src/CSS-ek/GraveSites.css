@@ -1,0 +1,551 @@
+:root {
+  --gs-text-primary: #222;
+  --gs-text-secondary: #333;
+  --gs-text-muted: #6a6a6a;
+  --gs-text-light: #777;
+
+  --gs-bg-gradient-start: rgba(255, 255, 255, 0.95);
+  --gs-bg-gradient-end: rgba(250, 250, 250, 0.95);
+
+  --gs-border-light: rgba(100, 100, 100, 0.06);
+  --gs-border-focus: rgba(120, 120, 120, 0.4);
+
+  --gs-shadow-input: 0 2px 0 rgba(0, 0, 0, 0.02) inset;
+  --gs-shadow-panel: 0 6px 18px rgba(0, 0, 0, 0.06);
+  --gs-shadow-focus: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --gs-shadow-table: 0 6px 18px rgba(0, 0, 0, 0.06);
+
+  --gs-input-border: 2px solid rgba(100, 100, 100, 0.15);
+  --gs-input-bg: rgba(255, 255, 255, 0.9);
+
+  --gs-hover-bg: rgba(0, 0, 0, 0.02);
+  --gs-hover-bg-mobile: rgba(255, 255, 255, 0.9);
+}
+
+.gravesites-wrapper {
+  padding: 32px;
+  background: linear-gradient(180deg, var(--gs-bg-gradient-start), var(--gs-bg-gradient-end));
+  min-height: 100%;
+  font-family: "Merriweather", Georgia, serif;
+  color: var(--gs-text-primary);
+  background-image: url("../img/hatter.png");
+  background-size: cover;
+}
+
+.gravesites-inner {
+  width: min(1200px, 100%);
+  margin: 0 auto;
+  position: relative;
+  padding: 18px;
+  border-radius: 16px;
+}
+
+/* áttetsző háttér a panelek mögé */
+.gravesites-inner::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.42);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  pointer-events: none;
+}
+
+.gravesites-inner > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* header */
+.gravesites-header {
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.gravesites-header__title {
+  font-size: 48px;
+  margin: 0 0 6px 0;
+  letter-spacing: -1px;
+  color: var(--gs-text-primary);
+  font-weight: 700;
+}
+
+.gravesites-header__subtitle {
+  margin: 0 0 18px 0;
+  color: var(--gs-text-muted);
+  font-size: 14px;
+  font-family: "Arial", sans-serif;
+}
+
+/* error */
+.gravesites-error {
+  margin: 0 auto 14px auto;
+  width: 100%;
+  background: rgba(255, 235, 238, 0.95);
+  color: #8a1c2d;
+  border: 1px solid rgba(255, 0, 0, 0.12);
+  border-radius: 10px;
+  padding: 12px 14px;
+  box-shadow: var(--gs-shadow-panel);
+  white-space: pre-wrap;
+  font-family: "Arial", sans-serif;
+}
+
+/* search bar */
+.gravesites-search-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 22px;
+}
+
+.gravesites-search-input {
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: var(--gs-input-border);
+  width: min(100%, 360px);
+  background: var(--gs-input-bg);
+  box-shadow: var(--gs-shadow-input);
+  font-size: 15px;
+  outline: none;
+  transition: box-shadow 0.15s, border-color 0.15s;
+  font-family: "Arial", sans-serif;
+}
+
+.gravesites-search-input:focus {
+  border-color: var(--gs-border-focus);
+  box-shadow: var(--gs-shadow-focus);
+}
+
+/* layout */
+.gravesites-layout {
+  display: grid;
+  grid-template-columns: 1.25fr 0.75fr;
+  gap: 22px;
+  align-items: start;
+}
+
+@media (max-width: 980px) {
+  .gravesites-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* table wrapper */
+.gravesites-table-wrapper {
+  margin-top: 0;
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 10px;
+  padding: 18px;
+  box-shadow: var(--gs-shadow-table);
+  backdrop-filter: blur(2px);
+  overflow-x: auto;
+}
+
+.gravesites-table {
+  width: 100%;
+  min-width: 620px;
+  border-collapse: separate;
+  border-spacing: 0;
+  table-layout: fixed;
+  font-family: inherit;
+}
+
+.gravesites-table thead th {
+  text-align: left;
+  font-weight: 700;
+  font-size: 18px;
+  padding: 18px 12px;
+  color: var(--gs-text-primary);
+  vertical-align: bottom;
+  background: rgba(255, 255, 255, 0.90);
+  border-bottom: 1px solid var(--gs-border-light);
+}
+
+.gravesites-table thead th:not(:last-child),
+.gravesites-table tbody td:not(:last-child) {
+  border-right: 1px solid var(--gs-border-light);
+}
+
+.gravesites-table tbody td {
+  padding: 16px 12px;
+  background: transparent;
+  vertical-align: middle;
+  font-size: 15px;
+  color: var(--gs-text-secondary);
+}
+
+.gravesites-table tbody tr:hover td {
+  background: var(--gs-hover-bg);
+}
+
+.gravesites-empty-row td {
+  text-align: center;
+  color: var(--gs-text-light);
+  padding: 36px 12px;
+}
+
+/* oszlopszélességek */
+.gravesites-col-name {
+  width: 34%;
+}
+
+.gravesites-col-birth {
+  width: 33%;
+}
+
+.gravesites-col-death {
+  width: 33%;
+}
+
+/* clickable row + selected row */
+.gravesites-row-clickable {
+  cursor: pointer;
+}
+
+.gravesites-row-clickable:focus-visible td {
+  outline: 2px solid rgba(90, 63, 43, 0.45);
+  outline-offset: -2px;
+}
+
+.gravesites-row-selected td {
+  background: rgba(90, 63, 43, 0.06);
+}
+
+/* right panel */
+.gravesites-panel {
+  background: rgba(255, 255, 255, 0.72);
+  border-radius: 10px;
+  box-shadow: var(--gs-shadow-panel);
+  backdrop-filter: blur(2px);
+  overflow: hidden;
+}
+
+.gravesites-panel__header {
+  background: rgba(255, 255, 255, 0.90);
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--gs-border-light);
+}
+
+.gravesites-panel__header h2 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--gs-text-primary);
+  font-weight: 700;
+}
+
+.gravesites-details {
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+
+.gravesites-photo {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.gravesites-photo__btn {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: zoom-in;
+  display: block;
+  position: relative;
+}
+
+.gravesites-photo__img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  display: block;
+}
+
+.gravesites-photo__zoomhint {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-family: "Arial", sans-serif;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.gravesites-photo__btn:hover .gravesites-photo__zoomhint {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.gravesites-photo.is-missing .gravesites-photo__missing {
+  display: block;
+}
+
+.gravesites-photo__missing {
+  display: none;
+  padding: 18px 14px;
+  color: var(--gs-text-muted);
+  font-size: 13px;
+  font-family: "Arial", sans-serif;
+  text-align: center;
+}
+
+.gravesites-photo__missing.is-visible {
+  display: block;
+}
+
+.gravesites-photo__meta {
+  padding: 10px 12px;
+  background: rgba(255, 255, 255, 0.90);
+  border-top: 1px solid var(--gs-border-light);
+  color: var(--gs-text-secondary);
+  font-family: "Arial", sans-serif;
+  font-size: 13px;
+}
+
+.gravesites-detail-row {
+  padding: 12px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.gravesites-detail-label {
+  font-size: 12px;
+  color: var(--gs-text-muted);
+  font-family: "Arial", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.gravesites-detail-value {
+  margin-top: 4px;
+  color: var(--gs-text-primary);
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.gravesites-section-title {
+  margin: 6px 0 0 0;
+  font-size: 16px;
+  color: var(--gs-text-primary);
+  font-weight: 700;
+}
+
+.gravesites-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.gravesites-list-item {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(255, 255, 255, 0.82);
+}
+
+.gravesites-list-item__name {
+  font-weight: 700;
+  color: var(--gs-text-primary);
+}
+
+.gravesites-list-item__dates {
+  color: var(--gs-text-muted);
+  font-family: "Arial", sans-serif;
+  font-size: 13px;
+}
+
+.gravesites-empty,
+.gravesites-loading {
+  padding: 18px 14px;
+  color: var(--gs-text-light);
+  font-size: 14px;
+  font-family: "Arial", sans-serif;
+  text-align: center;
+}
+
+/* ===== Zoom modal ===== */
+.gravesites-zoom {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 26, 26, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  padding: 18px;
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+
+.gravesites-zoom__content {
+  width: min(1100px, 95vw);
+  max-height: 90vh;
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.28);
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  display: flex;
+  flex-direction: column;
+
+  /* kell, hogy az X a content sarkához igazodjon */
+  position: relative;
+}
+
+.gravesites-zoom__header {
+  min-height: 54px;
+  display: flex;
+  align-items: center;
+  padding: 10px 64px 10px 14px; /* hely az X-nek */
+  background: rgba(255, 255, 255, 0.95);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+.gravesites-zoom__title {
+  font-family: "Arial", sans-serif;
+  font-weight: 700;
+  color: #2b2b2b;
+  font-size: 14px;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* FIX: X optikailag középen a gombban */
+.gravesites-zoom__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: rgba(255, 255, 255, 0.96);
+  cursor: pointer;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.18);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 28px;
+  line-height: 1;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  font-weight: 400;
+  color: #222;
+
+  /* optikai korrekció az × karakterre */
+  transform: translateY(-1px);
+}
+
+.gravesites-zoom__close:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.gravesites-zoom__body {
+  padding: 12px;
+  overflow: auto;
+  background: linear-gradient(135deg, rgba(245, 245, 245, 1), rgba(255, 255, 255, 1));
+}
+
+.gravesites-zoom__img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+@media (max-width: 900px) {
+  .gravesites-header__title {
+    font-size: 40px;
+  }
+
+  .gravesites-table thead th {
+    font-size: 15px;
+    padding: 12px 8px;
+  }
+
+  .gravesites-table tbody td {
+    padding: 12px 8px;
+  }
+}
+
+@media (max-width: 640px) {
+  .gravesites-wrapper {
+    padding: 16px;
+  }
+
+  .gravesites-inner {
+    padding: 12px;
+  }
+
+  .gravesites-table-wrapper {
+    padding: 12px;
+  }
+
+  .gravesites-table {
+    min-width: unset;
+    width: 100%;
+    border-spacing: 0;
+  }
+
+  .gravesites-table thead {
+    display: none;
+  }
+
+  .gravesites-table tbody tr {
+    display: block;
+    margin-bottom: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    border-radius: 10px;
+    background: var(--gs-hover-bg-mobile);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+  }
+
+  .gravesites-table tbody td {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 6px;
+    padding: 10px 12px;
+    border: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+  }
+
+  .gravesites-table tbody tr:last-child td:last-child {
+    border-bottom: none;
+  }
+
+  .gravesites-table tbody td::before {
+    content: attr(data-label);
+    font-weight: 700;
+    color: #444;
+    font-family: "Arial", sans-serif;
+  }
+
+  .gravesites-col-name,
+  .gravesites-col-birth,
+  .gravesites-col-death {
+    width: auto;
+  }
+}
