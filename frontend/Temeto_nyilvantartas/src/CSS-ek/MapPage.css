@@ -6,15 +6,39 @@
   align-items: start;
   text-align: center;
   width: 100%;
+
+  /* Typography */
+  font-family:  "Georgia", serif;
+  color: #111827;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Background (ugyanaz a minta, mint a többi oldalon) */
+  background-image: url("../img/hatter.png");
+  background-size: cover;
+  background-position: center center;
+  background-attachment: fixed;
+  min-height: 100%;
+  padding: 32px;
+}
+
+.page-wrapper map-page{
+      width: min(1200px, 100%);
+    margin: 0 auto;
+    position: relative;
+    padding: 18px;
+    border-radius: 16px;
 }
 
 .map-page h1 {
   margin: 0 0 24px;
-  font-size: 2rem;
+  font-size: 3rem;
   color: #1a365d;
   text-align: center;
-  font-weight: 700;
-  letter-spacing: -0.5px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
   grid-column: 1 / -1;
   margin-bottom: 12px;
   width: 100%;
@@ -51,11 +75,11 @@
 }
 
 .map-wrapper h2 {
-  font-size: 1.1rem;
+  font-size: 2rem;
   margin: 0;
   color: #2d3748;
-  font-weight: 600;
-  letter-spacing: 0.3px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
   text-align: center;
 }
 
@@ -109,6 +133,8 @@
   padding: 8px;
   text-align: center;
   font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: -0.1px;
   opacity: 0;
   transition: opacity 200ms ease;
   pointer-events: none;
@@ -172,12 +198,13 @@
   border: 2px dashed #a0aec0;
   border-radius: 12px;
   color: #4a5568;
-  font-size: 0.95rem;
-  line-height: 1.6;
+  font-size: 0.98rem;
+  line-height: 1.65;
   text-align: center;
   max-width: 900px;
   width: 100%;
   margin: 0 auto;
+  font-weight: 500;
 }
 
 .info-empty.error {
@@ -217,9 +244,10 @@
 
 .sirkod {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 1.35rem;
   color: #1a365d;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -0.4px;
 }
 
 .meta {
@@ -229,11 +257,14 @@
   align-items: center;
   flex-wrap: wrap;
   justify-content: center;
+  font-size: 0.9rem;
+  font-weight: 600;
 }
 
 .muted {
   color: #718096;
   font-size: 0.85rem;
+  font-weight: 500;
 }
 
 
@@ -244,9 +275,9 @@
   font-size: 0.75rem;
   color: #fff;
   background: #a0aec0;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.6px;
 }
 
 .status-badge.szabad {
@@ -262,8 +293,9 @@
 
 .coords {
   text-align: center;
-  font-size: 0.85rem;
+  font-size: 0.88rem;
   color: #4a5568;
+  font-weight: 600;
 }
 
 .coord {
@@ -292,17 +324,18 @@
 }
 
 .detail-label {
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   color: #718096;
   text-transform: uppercase;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+  font-weight: 800;
+  letter-spacing: 0.7px;
   margin-bottom: 6px;
 }
 
 .detail-value {
   color: #1a365d;
-  font-weight: 500;
+  font-weight: 600;
+  font-size: 0.98rem;
 }
 
 .elhunyt-list {
@@ -334,7 +367,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
+  font-weight: 800;
   font-size: 0.8rem;
   flex-shrink: 0;
   box-shadow: 0 2px 4px rgba(102, 126, 234, 0.3);
@@ -348,8 +381,8 @@
 
 .elhunyt-name {
   color: #1a365d;
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 700;
+  font-size: 0.92rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -357,8 +390,9 @@
 
 .elhunyt-date {
   color: #718096;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   margin-top: 2px;
+  font-weight: 500;
 }
 
 
@@ -379,8 +413,9 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
-  font-size: 0.9rem;
+  font-weight: 700;
+  font-size: 0.92rem;
+  letter-spacing: -0.2px;
   transition: all 200ms ease;
   box-shadow: 0 4px 8px rgba(49, 130, 206, 0.3);
   max-width: 240px;
@@ -470,9 +505,10 @@
 
 .zoom-header h2 {
   margin: 0;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   color: #fff;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -0.3px;
 }
 
 .zoom-close {
@@ -489,6 +525,7 @@
   justify-content: center;
   border-radius: 10px;
   transition: all 200ms ease;
+  font-weight: 700;
 }
 
 .zoom-close:hover {
@@ -514,8 +551,9 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  font-weight: 600;
+  font-weight: 800;
   font-size: 1rem;
+  letter-spacing: -0.2px;
   transition: all 200ms ease;
   box-shadow: 0 4px 8px rgba(49, 130, 206, 0.2);
 }
@@ -540,7 +578,7 @@
 }
 
 .zoom-level {
-  font-weight: 700;
+  font-weight: 900;
   color: #1a365d;
   min-width: 80px;
   text-align: center;
@@ -549,6 +587,9 @@
   padding: 8px 12px;
   border-radius: 6px;
   border: 2px solid #cbd5e0;
+
+  /* Typography: stable numbers (100% won't "jump") */
+  font-variant-numeric: tabular-nums;
 }
 
 .zoom-image-wrapper {
@@ -578,8 +619,9 @@
   color: #718096;
   border-top: 2px solid #cbd5e0;
   background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.86rem;
+  font-weight: 600;
+  letter-spacing: -0.1px;
 }
 
 
@@ -594,14 +636,15 @@
   margin: 0 0 4px 0;
   color: #1a365d;
   font-size: 1.1rem;
-  font-weight: 700;
+  font-weight: 900;
+  letter-spacing: -0.3px;
 }
 
 .zoom-selected-info p {
   margin: 0;
   color: #3182ce;
-  font-size: 0.85rem;
-  font-weight: 500;
+  font-size: 0.88rem;
+  font-weight: 700;
 }
 
 

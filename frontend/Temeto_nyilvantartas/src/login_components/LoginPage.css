@@ -34,6 +34,14 @@ body,
     padding: 20px;
     background: var(--lp-bg);
     overflow: hidden;
+
+    /* Háttérkép – ugyanaz a minta, mint MainPage.css-ben */
+    background-image:
+      linear-gradient(rgba(255,255,255,0.78), rgba(255,255,255,0.78)),
+      url("img/hatter.png");
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
 }
 
 .loginpage-frame {

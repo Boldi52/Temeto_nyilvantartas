@@ -278,7 +278,7 @@ export default function MapPage() {
         <div className="map-grid">
           {/* IMAGE 1 */}
           <div className="map-wrapper">
-            <h2>Térképnézet 1</h2>
+            <h2>Bótai parcella</h2>
             <div className="svg-container" role="img" aria-label="Temető drónkép 1">
               <svg
                 viewBox="0 0 100 100"
@@ -302,7 +302,7 @@ export default function MapPage() {
 
           {/* IMAGE 2 */}
           <div className="map-wrapper">
-            <h2>Térképnézet 2</h2>
+            <h2>Zalai parcella</h2>
             <div className="svg-container" role="img" aria-label="Temető drónkép 2">
               <svg
                 viewBox="0 0 100 100"
@@ -329,7 +329,7 @@ export default function MapPage() {
         <div className="info-panel">
           {loading && <div className="info-empty">Betöltés...</div>}
           {!loading && error && <div className="info-empty error">{error}</div>}
-          {!loading && !selected && !error && <div className="info-empty">Kattints egy térképre a nagyításhoz, majd válassz ki egy sírt.</div>}
+          {!loading && !selected && !error && <div className="info-empty">Kattints egy térképre a nagyításhoz.</div>}
 
           {selected && (
             <article className="info-card" aria-live="polite">
@@ -396,7 +396,7 @@ export default function MapPage() {
         <div className="zoom-modal" onClick={() => setZoomOpen1(false)}>
           <div className="zoom-container" onClick={(e) => e.stopPropagation()}>
             <div className="zoom-header">
-              <h2>Temető térkép 1 - Nagyítás</h2>
+              <h2>Bótai parcella - Nagyítás</h2>
               <button className="zoom-close" onClick={() => setZoomOpen1(false)}>✕</button>
             </div>
 
@@ -432,7 +432,7 @@ export default function MapPage() {
             </div>
 
             <div className="zoom-info">
-              <small>💡 Körgörgővel nagyíthatsz/kicsinyíthetsz | Húzz az egérrel a mozgatáshoz | Kattints egy sírhely szimbólumra a kiválasztásához | Kattints az X-re a bezáráshoz</small>
+              <small>💡 Körgörgővel nagyíthatsz/kicsinyíthetsz | Húzz az egérrel a mozgatáshoz | Kattints az X-re a bezáráshoz</small>
             </div>
 
             {selected && (
@@ -450,7 +450,7 @@ export default function MapPage() {
         <div className="zoom-modal" onClick={() => setZoomOpen2(false)}>
           <div className="zoom-container" onClick={(e) => e.stopPropagation()}>
             <div className="zoom-header">
-              <h2>Temető térkép 2 - Nagyítás</h2>
+              <h2>Zalai parcella - Nagyítás</h2>
               <button className="zoom-close" onClick={() => setZoomOpen2(false)}>✕</button>
             </div>
 
@@ -486,7 +486,7 @@ export default function MapPage() {
             </div>
 
             <div className="zoom-info">
-              <small>💡 Körgörgővel nagyíthatsz/kicsinyíthetsz | Húzz az egérrel a mozgatáshoz | Kattints egy sírhely szimbólumra a kiválasztásához | Kattints az X-re a bezáráshoz</small>
+              <small>💡 Körgörgővel nagyíthatsz/kicsinyíthetsz | Húzz az egérrel a mozgatáshoz | Kattints az X-re a bezáráshoz</small>
             </div>
 
             {selected && (
