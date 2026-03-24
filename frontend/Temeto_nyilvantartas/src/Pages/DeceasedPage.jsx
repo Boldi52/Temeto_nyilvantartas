@@ -81,23 +81,54 @@ export default function DeceasedPage() {
             s.sirkod || s.nev || s.name || s.sir || s.sir_azonosito || "";
         });
 
+        // gyors kereséshez id -> object map
+        const sorById = {};
+        (sorok || []).forEach((s) => {
+          sorById[s.id] = s;
+        });
+
+        const sirhelyById = {};
+        (sirhelyek || []).forEach((s) => {
+          sirhelyById[s.id] = s;
+        });
+
         setParcellaMap(parcMap);
         setSorMap(sorokMap);
         setSirhelyMap(sirMap);
 
         const normalized = Array.isArray(elhunytak)
-          ? elhunytak.map((item) => ({
+          ? elhunytak.map((item) => {
+            const sirhelyId = item.sirhely_id ?? item.sirhely?.id ?? "";
+
+            const sorId =
+              item.sor_id ??
+              item.sor?.id ??
+              sirhelyById[sirhelyId]?.sor_id ??
+              item.sirhely?.sor_id ??
+              item.sirhely?.sor?.id ??
+              "";
+
+            const parcellaId =
+              item.parcella_id ??
+              item.parcella?.id ??
+              item.sor?.parcella_id ??
+              sorById[sorId]?.parcella_id ??
+              item.sirhely?.sor?.parcella_id ??
+              "";
+
+            return {
               id: item.id,
               name: item.nev || "",
               birthDate: item.szul_datum || "",
               deathDate: item.halal_datuma || "",
-              parcellaId: item.id,
-              sorId: item.id,
-              sirhelyId: item.sirhely_id,
-              parcella: item.parcella_id,
-              sor: item.sor || item.sor_azonosito || "",
-              sirhely: item.sirhely_id,
-            }))
+              parcellaId,
+              sorId,
+              sirhelyId,
+              parcella: item.parcella ?? null,
+              sor: item.sor ?? item.sirhely?.sor ?? null,
+              sirhely: item.sirhely ?? null,
+            };
+          })
           : [];
         setDeceasedList(normalized);
       } catch (err) {
@@ -119,14 +150,37 @@ export default function DeceasedPage() {
       const nameMatch = item.name
         .toLowerCase()
         .includes(filters.name.toLowerCase());
+
+      const parcellaLabel =
+        parcellaMap[item.parcellaId] ||
+        item.parcella?.nev ||
+        item.parcella?.parcella_azonosito ||
+        String(item.parcellaId || "");
+
+      const sorLabel =
+        sorMap[item.sorId] ||
+        item.sor?.nev ||
+        item.sor?.sor_azonosito ||
+        String(item.sorId || "");
+
+      const sirhelyLabel =
+        sirhelyMap[item.sirhelyId] ||
+        item.sirhely?.sirkod ||
+        String(item.sirhelyId || "");
+
       const parcellaMatch =
-        !filters.parcella || String(item.parcella).includes(filters.parcella);
-      const sorMatch = !filters.sor || String(item.sor).includes(filters.sor);
+        !filters.parcella ||
+        parcellaLabel.toLowerCase().includes(filters.parcella.toLowerCase());
+      const sorMatch =
+        !filters.sor ||
+        sorLabel.toLowerCase().includes(filters.sor.toLowerCase());
       const sirhelyMatch =
-        !filters.sirhely || String(item.sirhely).includes(filters.sirhely);
+        !filters.sirhely ||
+        sirhelyLabel.toLowerCase().includes(filters.sirhely.toLowerCase());
+
       return nameMatch && parcellaMatch && sorMatch && sirhelyMatch;
     });
-  }, [deceasedList, filters]);
+  }, [deceasedList, filters, parcellaMap, sorMap, sirhelyMap]);
 
   const limitedFiltered = useMemo(() => filtered.slice(0, 6), [filtered]);
 
@@ -218,13 +272,24 @@ export default function DeceasedPage() {
                     className="deceasedpage-col-parcella"
                     data-label="Parcella"
                   >
-                    {parcellaMap[item.parcella] || item.parcella || "—"}
+                    {parcellaMap[item.parcellaId] ||
+                      item.parcella?.nev ||
+                      item.parcella?.parcella_azonosito ||
+                      item.parcellaId ||
+                      "—"}
                   </td>
                   <td className="deceasedpage-col-sor" data-label="Sor">
-                    {sorMap[item.sorId] || item.sor || "—"}
+                    {sorMap[item.sorId] ||
+                      item.sor?.nev ||
+                      item.sor?.sor_azonosito ||
+                      item.sorId ||
+                      "—"}
                   </td>
                   <td className="deceasedpage-col-sirhely" data-label="Sírhely">
-                    {sirhelyMap[item.sirhelyId] || "—"}
+                    {sirhelyMap[item.sirhelyId] ||
+                      item.sirhely?.sirkod ||
+                      item.sirhelyId ||
+                      "—"}
                   </td>
                 </tr>
               ))

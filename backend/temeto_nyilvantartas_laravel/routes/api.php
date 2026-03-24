@@ -114,14 +114,15 @@ Route::post('/logout', function (Request $request) {
 Route::post('/register', function (Request $request) {
     $validated = $request->validate([
         'name' => 'required|string|max:255',
-        'email' => 'required|string|email|max:255|unique:users',
+        'username' => 'required|string|max:255|unique:users',
         'password' => 'required|string|min:8|confirmed',
     ]);
 
     $user = \App\Models\User::create([
         'name' => $validated['name'],
-        'email' => $validated['email'],
+        'username' => $validated['username'],
         'password' => Hash::make($validated['password']),
+        'role' => 'admin'
     ]);
     $token = $user->createToken('auth')->plainTextToken; // Sanctum token
     return response()->json(['token' => $token, 'user' => $user], 201);
