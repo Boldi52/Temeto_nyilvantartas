@@ -10,7 +10,7 @@ class Sirberlo extends Model
     public $incrementing = true;
     protected $keyType = 'int';
     public $timestamps = true;
-     public function kozteruletTipus()
+    public function kozteruletTipus()
     {
         return $this->belongsTo(Kozterulet_tipus::class, 'kozterulet_tipus_id', 'id');
     }
@@ -20,7 +20,7 @@ class Sirberlo extends Model
      */
     public function telepules()
     {
-        return $this->belongsTo(Telepules::class, 'ir_szam', 'ir_szam');
+        return $this->belongsTo(Telepules::class, 'telepules_id', 'id');
     }
 
     /**
@@ -47,4 +47,3 @@ class Sirberlo extends Model
         return $this->hasMany(Dokumentum::class, 'sirberlo_id', 'id');
     }
 }
-

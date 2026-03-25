@@ -11,8 +11,10 @@ export default function AdminGraveTenant() {
         email_cim: "",
         telefonszam: "",
         kozterulet_neve: "",
+        hazszam: "",
         kozterulet_tipus_id: "",
-        ir_szam: "",
+        telepules_ir_szam: "",
+        telepules_nev: "",
     };
 
     const [tenants, setTenants] = useState([]);
@@ -88,14 +90,18 @@ export default function AdminGraveTenant() {
     };
 
     const handleEdit = (t) => {
+        const telepules = telepulesek.find(tp => tp.id === t.telepules_id);
+
         setForm({
             id: t.id,
             nev: t.nev || "",
             email_cim: t.email_cim || "",
             telefonszam: t.telefonszam || "",
             kozterulet_neve: t.kozterulet_neve || "",
+            hazszam: t.hazszam || "",
             kozterulet_tipus_id: t.kozterulet_tipus_id || "",
-            ir_szam: t.ir_szam || "",
+            telepules_ir_szam: telepules ? String(telepules.ir_szam) : "",
+            telepules_nev: telepules ? telepules.nev : "",
         });
         setFieldErrors({});
         setError("");
@@ -145,8 +151,10 @@ export default function AdminGraveTenant() {
             email_cim: form.email_cim || null,
             telefonszam: form.telefonszam || null,
             kozterulet_neve: form.kozterulet_neve,
+            hazszam: form.hazszam,
             kozterulet_tipus_id: form.kozterulet_tipus_id || null,
-            ir_szam: parseInt(form.ir_szam),
+            telepules_ir_szam: parseInt(form.telepules_ir_szam, 10),
+            telepules_nev: form.telepules_nev,
         };
 
         try {
@@ -188,10 +196,10 @@ export default function AdminGraveTenant() {
         return tipus ? tipus.nev : "";
     };
 
-    const getTelepulesNev = (irSzam) => {
-        if (!irSzam) return "—";
-        const telepules = telepulesek.find(t => t.ir_szam === parseInt(irSzam));
-        return telepules ? `${telepules.nev} (${irSzam})` : String(irSzam);
+    const getTelepulesNev = (telepulesId) => {
+        if (!telepulesId) return "—";
+        const telepules = telepulesek.find(t => t.id === telepulesId);
+        return telepules ? `${telepules.nev} (${telepules.ir_szam})` : "—";
     };
 
     const formatCim = (tenant) => {
@@ -199,6 +207,7 @@ export default function AdminGraveTenant() {
         if (tenant.kozterulet_neve) parts.push(tenant.kozterulet_neve);
         const tipus = getKozteruletTipusNev(tenant.kozterulet_tipus_id);
         if (tipus) parts.push(tipus);
+        if (tenant.hazszam) parts.push(tenant.hazszam);
         return parts.length > 0 ? parts.join(' ') : "—";
     };
 
@@ -277,12 +286,29 @@ export default function AdminGraveTenant() {
                                 value={form.kozterulet_neve}
                                 onChange={handleChange}
                                 required
-                                placeholder="Pl: Petőfi"
+                                placeholder="Pl. Petőfi Sándor"
                                 disabled={saving}
                             />
                             {fieldErrors.kozterulet_neve && (
                                 <div className="admin-gravetenant-field-error">
                                     {Array.isArray(fieldErrors.kozterulet_neve) ? fieldErrors.kozterulet_neve[0] : fieldErrors.kozterulet_neve}
+                                </div>
+                            )}
+                        </label>
+
+                        <label>
+                            Házszám *
+                            <input
+                                name="hazszam"
+                                value={form.hazszam}
+                                onChange={handleChange}
+                                required
+                                placeholder="Pl. 23"
+                                disabled={saving}
+                            />
+                            {fieldErrors.hazszam && (
+                                <div className="admin-gravetenant-field-error">
+                                    {Array.isArray(fieldErrors.hazszam) ? fieldErrors.hazszam[0] : fieldErrors.hazszam}
                                 </div>
                             )}
                         </label>
@@ -308,24 +334,35 @@ export default function AdminGraveTenant() {
                         </label>
 
                         <label>
-                            Település *
-                            <select
-                                name="ir_szam"
-                                value={form.ir_szam}
+                            Irányítószám *
+                            <input
+                                name="telepules_ir_szam"
+                                value={form.telepules_ir_szam}
                                 onChange={handleChange}
                                 required
+                                placeholder="Pl. 1100"
                                 disabled={saving}
-                            >
-                                <option value="">-- Válassz települést --</option>
-                                {telepulesek.map(t => (
-                                    <option key={t.ir_szam} value={t.ir_szam}>
-                                        {t.nev} ({t.ir_szam})
-                                    </option>
-                                ))}
-                            </select>
-                            {fieldErrors.ir_szam && (
+                            />
+                            {fieldErrors.telepules_ir_szam && (
                                 <div className="admin-gravetenant-field-error">
-                                    {Array.isArray(fieldErrors.ir_szam) ? fieldErrors.ir_szam[0] : fieldErrors.ir_szam}
+                                    {Array.isArray(fieldErrors.telepules_ir_szam) ? fieldErrors.telepules_ir_szam[0] : fieldErrors.telepules_ir_szam}
+                                </div>
+                            )}
+                        </label>
+
+                        <label>
+                            Település neve *
+                            <input
+                                name="telepules_nev"
+                                value={form.telepules_nev}
+                                onChange={handleChange}
+                                required
+                                placeholder="Pl. Budapest"
+                                disabled={saving}
+                            />
+                            {fieldErrors.telepules_nev && (
+                                <div className="admin-gravetenant-field-error">
+                                    {Array.isArray(fieldErrors.telepules_nev) ? fieldErrors.telepules_nev[0] : fieldErrors.telepules_nev}
                                 </div>
                             )}
                         </label>
@@ -399,7 +436,7 @@ export default function AdminGraveTenant() {
                                             </td>
 
                                             <td data-label="Cím">{formatCim(t)}</td>
-                                            <td data-label="Település">{getTelepulesNev(t.ir_szam)}</td>
+                                            <td data-label="Település">{getTelepulesNev(t.telepules_id)}</td>
                                             <td data-label="Műveletek" className="admin-gravetenant-actions">
                                                 <button
                                                     onClick={() => handleEdit(t)}

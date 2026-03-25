@@ -16,7 +16,7 @@
   --agt-mono-font: Menlo, Monaco, "Courier New", monospace;
   --agt-input-focus: rgba(37, 99, 235, 0.12);
 
-  /* Kompakt spacing tokenek */
+
   --agt-space-0: 0.35rem;
   --agt-space-1: 0.5rem;
   --agt-space-2: 0.75rem;
@@ -28,9 +28,8 @@
   box-sizing: border-box;
 }
 
-/* ===== MAIN PAGE ===== */
 .admin-gravetenant-page {
-  padding: 1.25rem 1rem; /* kisebb */
+  padding: 1.25rem 1rem;
   max-width: 1400px;
   margin: 0 auto;
   color: #111827;
@@ -39,34 +38,40 @@
 }
 
 .admin-gravetenant-header {
-  margin-bottom: var(--agt-space-3); /* kisebb */
+  margin-bottom: var(--agt-space-3);
 }
+
+
 
 .admin-gravetenant-title {
   margin: 0;
-  font-size: 1.6rem; /* kisebb */
+  font-size: 1.6rem;
   font-weight: 700;
   color: #111827;
   letter-spacing: -0.025em;
 }
 
 .admin-gravetenant-subtitle {
-  margin: var(--agt-space-1) 0 0; /* kisebb */
+  margin: var(--agt-space-1) 0 0;
+  /* kisebb */
   color: var(--agt-muted);
-  font-size: 0.98rem; /* kisebb */
+  font-size: 0.98rem;
+  /* kisebb */
   line-height: 1.45;
 }
 
 /* ===== GRID LAYOUT ===== */
 .admin-gravetenant-grid {
   display: grid;
-  grid-template-columns: 420px 1fr; /* keskenyebb bal oszlop */
-  gap: var(--agt-space-3); /* kisebb gap */
+  grid-template-columns: 420px 1fr;
+  /* keskenyebb bal oszlop */
+  gap: var(--agt-space-3);
+  /* kisebb gap */
   align-items: start;
 }
 
 /* grid item overflow fix */
-.admin-gravetenant-grid > * {
+.admin-gravetenant-grid>* {
   min-width: 0;
 }
 
@@ -118,7 +123,8 @@
   border: 1px solid var(--agt-border);
   border-radius: var(--agt-card-radius);
   box-shadow: var(--agt-shadow-lg);
-  padding: var(--agt-space-4); /* kisebb */
+  padding: var(--agt-space-4);
+  /* kisebb */
   animation: agtFadeIn 0.3s ease-out;
 
   min-width: 0;
@@ -134,8 +140,10 @@
 
 /* ===== SECTION TITLE ===== */
 .admin-gravetenant-section-title {
-  margin: 0 0 var(--agt-space-2) 0; /* kisebb */
-  font-size: 1.05rem; /* kisebb */
+  margin: 0 0 var(--agt-space-2) 0;
+  /* kisebb */
+  font-size: 1.05rem;
+  /* kisebb */
   font-weight: 600;
   color: #111827;
   letter-spacing: -0.015em;
@@ -153,7 +161,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: var(--agt-space-2); /* kisebb */
+  margin-bottom: var(--agt-space-2);
+  /* kisebb */
   gap: var(--agt-space-2);
   flex-wrap: wrap;
 
@@ -163,11 +172,13 @@
 .admin-gravetenant-list-header button {
   background: #fff;
   border: 2px solid var(--agt-border);
-  padding: 0.5rem 0.75rem; /* kisebb */
+  padding: 0.5rem 0.75rem;
+  /* kisebb */
   border-radius: 9px;
   cursor: pointer;
   color: #111827;
-  font-size: 0.85rem; /* kisebb */
+  font-size: 0.85rem;
+  /* kisebb */
   font-weight: 500;
   transition: all 0.2s ease;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -198,7 +209,8 @@
 .admin-gravetenant-form {
   display: flex;
   flex-direction: column;
-  gap: var(--agt-space-3); /* kisebb */
+  gap: var(--agt-space-3);
+  /* kisebb */
 }
 
 @media (max-width: 640px) {
@@ -209,7 +221,8 @@
 
 .admin-gravetenant-form label {
   display: block;
-  font-size: 0.9rem; /* kisebb */
+  font-size: 0.9rem;
+  /* kisebb */
   font-weight: 600;
   color: #374151;
   margin-bottom: 0;
@@ -218,31 +231,34 @@
   word-break: break-word;
 }
 
-/* ===== FORM INPUTS ===== */
 .admin-gravetenant-form input[type="text"],
 .admin-gravetenant-form input[type="email"],
 .admin-gravetenant-form input[name="nev"],
 .admin-gravetenant-form input[name="telefonszam"],
 .admin-gravetenant-form input[name="kozterulet_neve"],
 .admin-gravetenant-form input[name="email_cim"],
+.admin-gravetenant-form input[name="hazszam"],
+.admin-gravetenant-form input[name="telepules_ir_szam"],
+.admin-gravetenant-form input[name="telepules_nev"],
 .admin-gravetenant-form select {
   width: 100% !important;
   max-width: 100% !important;
-  padding: 0.6rem 0.85rem !important; /* kisebb */
+  padding: 0.6rem 0.85rem !important;
   border: 2px solid var(--agt-border) !important;
   border-radius: var(--agt-input-radius) !important;
   background: #fff !important;
   box-sizing: border-box !important;
-  font-size: 0.92rem !important; /* kisebb */
+  font-size: 0.92rem !important;
   color: #111827 !important;
-  margin-top: var(--agt-space-0) !important; /* kisebb */
+  margin-top: var(--agt-space-0) !important;
   transition: all 0.2s ease !important;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif !important;
   line-height: 1.45 !important;
-  min-height: 40px !important; /* kisebb */
+  min-height: 40px !important;
 }
 
 @media (max-width: 640px) {
+
   .admin-gravetenant-form input[type="text"],
   .admin-gravetenant-form input[type="email"],
   .admin-gravetenant-form input[name="nev"],
@@ -312,16 +328,19 @@
 }
 
 .admin-gravetenant-form-actions button {
-  padding: 0.6rem 0.9rem; /* kisebb */
+  padding: 0.6rem 0.9rem;
+  /* kisebb */
   border-radius: var(--agt-input-radius);
   border: none;
   cursor: pointer;
   font-weight: 600;
-  font-size: 0.9rem; /* kisebb */
+  font-size: 0.9rem;
+  /* kisebb */
   transition: all 0.2s ease;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   flex: 1;
-  min-height: 40px; /* kisebb */
+  min-height: 40px;
+  /* kisebb */
   max-width: 100%;
 }
 
@@ -383,8 +402,10 @@
 .admin-gravetenant-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.88rem; /* picit kisebb */
-  min-width: 820px; /* kisebb, hogy hamarabb férjen */
+  font-size: 0.88rem;
+  /* picit kisebb */
+  min-width: 820px;
+  /* kisebb, hogy hamarabb férjen */
 }
 
 @media (max-width: 1024px) {
@@ -395,19 +416,22 @@
 
 .admin-gravetenant-table thead th {
   text-align: left;
-  padding: 0.7rem 0.8rem; /* kisebb */
+  padding: 0.7rem 0.8rem;
+  /* kisebb */
   background: #f9fafb;
   border-bottom: 2px solid var(--agt-border);
   font-weight: 600;
   color: #374151;
-  font-size: 0.78rem; /* kisebb */
+  font-size: 0.78rem;
+  /* kisebb */
   text-transform: uppercase;
   letter-spacing: 0.05em;
   white-space: nowrap;
 }
 
 .admin-gravetenant-table tbody td {
-  padding: 0.75rem 0.8rem; /* kisebb */
+  padding: 0.75rem 0.8rem;
+  /* kisebb */
   border-bottom: 1px solid #f3f4f6;
   vertical-align: middle;
   color: #111827;
@@ -431,7 +455,8 @@
 .admin-gravetenant-table td.empty {
   text-align: center;
   color: var(--agt-muted);
-  padding: 2rem 1rem; /* kisebb */
+  padding: 2rem 1rem;
+  /* kisebb */
   font-style: italic;
   font-size: 0.95rem;
 }
@@ -439,10 +464,12 @@
 /* ===== MONO (code) ===== */
 .admin-gravetenant-mono {
   font-family: var(--agt-mono-font);
-  font-size: 0.8rem; /* kisebb */
+  font-size: 0.8rem;
+  /* kisebb */
   color: #374151;
   background: #f9fafb;
-  padding: 0.25rem 0.45rem; /* kisebb */
+  padding: 0.25rem 0.45rem;
+  /* kisebb */
   border-radius: 6px;
   display: inline-block;
 
@@ -462,12 +489,14 @@
 }
 
 .admin-gravetenant-actions button {
-  padding: 0.4rem 0.65rem; /* kisebb */
+  padding: 0.4rem 0.65rem;
+  /* kisebb */
   border-radius: 7px;
   border: 1px solid var(--agt-border);
   background: #fff;
   cursor: pointer;
-  font-size: 0.8rem; /* kisebb */
+  font-size: 0.8rem;
+  /* kisebb */
   font-weight: 500;
   transition: all 0.2s ease;
   white-space: nowrap;
@@ -492,13 +521,15 @@
 
 /* ===== ALERTS ===== */
 .admin-gravetenant-alert {
-  padding: 0.7rem 0.9rem; /* kisebb */
+  padding: 0.7rem 0.9rem;
+  /* kisebb */
   border-radius: 10px;
   background: #f0f9ff;
   color: #0369a1;
   border: 1px solid #bae6fd;
   margin-bottom: var(--agt-space-2);
-  font-size: 0.85rem; /* kisebb */
+  font-size: 0.85rem;
+  /* kisebb */
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -527,7 +558,8 @@
 /* ===== FIELD ERROR ===== */
 .admin-gravetenant-field-error {
   margin-top: 0.35rem;
-  font-size: 0.82rem; /* kisebb */
+  font-size: 0.82rem;
+  /* kisebb */
   color: var(--agt-danger);
   font-weight: 500;
   display: flex;
@@ -627,6 +659,7 @@
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);

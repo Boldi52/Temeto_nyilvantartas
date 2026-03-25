@@ -36,9 +36,10 @@ class SirberloController extends Controller
                 'nev'                => 'required|string|max:255',
                 'kozterulet_neve'    => 'required|string|max:255',
                 'kozterulet_tipus_id' => 'nullable|integer|exists:kozterulet_tipus,id',
-                'ir_szam'            => 'required|integer|exists:telepules,ir_szam',
                 'email_cim'          => 'nullable|email|max:255',
                 'telefonszam' => 'nullable|string|max:30',
+                'hazszam' => 'required|integer',
+                'telepules_id' => 'nullable|integer|exists:kozterulet_tipus,id'
             ],
             [
                 'nev.required'             => 'A név megadása kötelező.',
@@ -51,10 +52,6 @@ class SirberloController extends Controller
 
                 'kozterulet_tipus_id.integer' => 'A közterület típus azonosító csak szám lehet.',
                 'kozterulet_tipus_id.exists'  => 'A megadott közterület típus nem található.',
-
-                'ir_szam.required'         => 'Az irányítószám megadása kötelező.',
-                'ir_szam.integer'          => 'Az irányítószám csak szám lehet.',
-                'ir_szam.exists'           => 'A megadott irányítószám nem található.',
 
                 'email_cim.email'          => 'Az e-mail cím formátuma nem megfelelő.',
                 'email_cim.max'            => 'Az e-mail cím legfeljebb 255 karakter lehet.',
@@ -78,7 +75,8 @@ class SirberloController extends Controller
         $sirberlo->nev                 = $data['nev'];
         $sirberlo->kozterulet_neve     = $data['kozterulet_neve'];
         $sirberlo->kozterulet_tipus_id = $data['kozterulet_tipus_id'] ?? null;
-        $sirberlo->ir_szam             = $data['ir_szam'];
+        $sirberlo->hazszam = $data['hazszam'];
+        $sirberlo -> telepules_id = $data['telepules_id'];
         $sirberlo->email_cim           = $data['email_cim'] ?? null;
         $sirberlo->telefonszam = $data['telefonszam'] ?? null;
         $sirberlo->save();
@@ -122,8 +120,8 @@ class SirberloController extends Controller
                 'nev'                => 'required|string|max:255',
                 'kozterulet_neve'    => 'required|string|max:255',
                 'kozterulet_tipus_id' => 'nullable|integer|exists:kozterulet_tipus,id',
-                'ir_szam'            => 'required|integer|exists:telepules,ir_szam',
                 'email_cim'          => 'nullable|email|max:255',
+                "hazszam" => "required|int"
             ],
             [
                 'nev.required'             => 'A név megadása kötelező.',
@@ -137,9 +135,6 @@ class SirberloController extends Controller
                 'kozterulet_tipus_id.integer' => 'A közterület típus azonosító csak szám lehet.',
                 'kozterulet_tipus_id.exists'  => 'A megadott közterület típus nem található.',
 
-                'ir_szam.required'         => 'Az irányítószám megadása kötelező.',
-                'ir_szam.integer'          => 'Az irányítószám csak szám lehet.',
-                'ir_szam.exists'           => 'A megadott irányítószám nem található.',
 
                 'email_cim.email'          => 'Az e-mail cím formátuma nem megfelelő.',
                 'email_cim.max'            => 'Az e-mail cím legfeljebb 255 karakter lehet.',
@@ -158,8 +153,8 @@ class SirberloController extends Controller
         if (!empty($sirberlo)) {
             $sirberlo->nev                 = $request->nev;
             $sirberlo->kozterulet_neve     = $request->kozterulet_neve;
+            $sirberlo->hazszam = $request->hazszam;
             $sirberlo->kozterulet_tipus_id = $request->kozterulet_tipus_id;
-            $sirberlo->ir_szam             = $request->ir_szam;
             $sirberlo->email_cim           = $request->email_cim;
             $sirberlo->save();
 

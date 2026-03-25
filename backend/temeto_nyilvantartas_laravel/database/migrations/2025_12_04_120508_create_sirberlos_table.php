@@ -25,8 +25,6 @@ return new class extends Migration
         $table->foreignId('telepules_id')
               ->constrained('telepules')
               ->restrictOnDelete();
-
-        $table->unsignedBigInteger('ir_szam'); 
         $table->timestamps();
     });
 }
