@@ -12,12 +12,14 @@ export default function AdminPayment() {
   const emptyForm = {
     id: null,
     sirberlo_id: "",
+    elhunyt_id: "",
     osszeg: "",
     datum: "",
   };
 
   const [payments, setPayments] = useState([]);
   const [tenants, setTenants] = useState([]);
+  const [deceased, setDeceased] = useState([]);
   const [form, setForm] = useState(emptyForm);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -29,18 +31,25 @@ export default function AdminPayment() {
     setLoading(true);
     setError("");
     try {
-      const [payRes, tenRes] = await Promise.all([
+      const [payRes, tenRes, decRes] = await Promise.all([
         fetch(`${API_BASE}/api/befizetesek`),
         fetch(`${API_BASE}/api/sirberlok`),
+        fetch(`${API_BASE}/api/elhunytMindenAdata`),
       ]);
 
       if (!payRes.ok) throw new Error("Befizetések betöltése sikertelen");
       if (!tenRes.ok) throw new Error("Sírbérlők betöltése sikertelen");
+      if (!decRes.ok) throw new Error("Elhunytak betöltése sikertelen");
 
-      const [payData, tenData] = await Promise.all([payRes.json(), tenRes.json()]);
+      const [payData, tenData, decData] = await Promise.all([
+        payRes.json(),
+        tenRes.json(),
+        decRes.json(),
+      ]);
 
       setPayments(Array.isArray(payData) ? payData : []);
       setTenants(Array.isArray(tenData) ? tenData : []);
+      setDeceased(Array.isArray(decData) ? decData : []);
     } catch (err) {
       setError(err.message || "Ismeretlen hiba történt.");
     } finally {
@@ -54,7 +63,14 @@ export default function AdminPayment() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((f) => ({ ...f, [name]: value }));
+    
+    if (name === "sirberlo_id") {
+      // Sírbérlő megváltoztatásakor az elhunyt mezőt reseteljük
+      setForm((f) => ({ ...f, sirberlo_id: value, elhunyt_id: "" }));
+    } else {
+      setForm((f) => ({ ...f, [name]: value }));
+    }
+
     if (fieldErrors[name]) {
       setFieldErrors((prev) => {
         const next = { ...prev };
@@ -79,6 +95,7 @@ export default function AdminPayment() {
     const url = `${API_BASE}/api/befizetesek`;
     const payload = {
       sirberlo_id: form.sirberlo_id ? Number(form.sirberlo_id) : null,
+      elhunyt_id: form.elhunyt_id ? Number(form.elhunyt_id) : null,
       osszeg: form.osszeg ? parseFloat(form.osszeg) : null,
       datum: form.datum || null,
       hossza: computedMonths,
@@ -122,9 +139,21 @@ export default function AdminPayment() {
     return t ? t.nev : sirberlo_id ? `#${sirberlo_id}` : "—";
   };
 
+  const getDeceasedName = (elhunyt_id) => {
+    const d = deceased.find((x) => x.id === Number(elhunyt_id));
+    return d ? d.nev : elhunyt_id ? `#${elhunyt_id}` : "—";
+  };
+
   const filteredPayments = payments.filter((p) => {
-    const tenantName = getTenantName(p.sirberlo_id) || "";
-    return tenantName.toLowerCase().includes(searchTerm.toLowerCase());
+    if (p.sirberlo_id) {
+      const tenantName = getTenantName(p.sirberlo_id) || "";
+      return tenantName.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+    if (p.elhunyt_id) {
+      const deceasedName = getDeceasedName(p.elhunyt_id) || "";
+      return deceasedName.toLowerCase().includes(searchTerm.toLowerCase());
+    }
+    return false;
   });
 
   const formatAmount = (osszeg) => {
@@ -166,6 +195,29 @@ export default function AdminPayment() {
               </select>
               {fieldErrors.sirberlo_id && (
                 <span className="admin-payment-field-error">{fieldErrors.sirberlo_id}</span>
+              )}
+            </div>
+
+            {/* Elhunyt dropdown - ugyanolyan stílusú, mint a sírbérlő */}
+            <div className="admin-payment-form-group">
+              <label htmlFor="elhunyt_id">Elhunyt</label>
+              <select
+                id="elhunyt_id"
+                name="elhunyt_id"
+                value={form.elhunyt_id}
+                onChange={handleChange}
+                disabled={saving}
+                className={fieldErrors.elhunyt_id ? "input-error" : ""}
+              >
+                <option value="">-- Válassz elhunytakat --</option>
+                {deceased.map((d) => (
+                  <option key={d.id} value={d.id}>
+                    {d.nev}
+                  </option>
+                ))}
+              </select>
+              {fieldErrors.elhunyt_id && (
+                <span className="admin-payment-field-error">{fieldErrors.elhunyt_id}</span>
               )}
             </div>
 
@@ -236,7 +288,7 @@ export default function AdminPayment() {
           <div className="admin-payment-filters">
             <input
               type="text"
-              placeholder="Keresés sírbérlő nevében..."
+              placeholder="Keresés sírbérlő vagy elhunyt nevében..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="admin-payment-search-input"
@@ -253,6 +305,7 @@ export default function AdminPayment() {
                 <thead>
                   <tr>
                     <th>Sírbérlő</th>
+                    <th>Elhunyt</th>
                     <th>Összeg (Ft)</th>
                     <th>Dátum</th>
                     <th>Hossz (hónap)</th>
@@ -262,6 +315,7 @@ export default function AdminPayment() {
                   {filteredPayments.map((p) => (
                     <tr key={p.id}>
                       <td>{getTenantName(p.sirberlo_id)}</td>
+                      <td>{p.elhunyt_id ? getDeceasedName(p.elhunyt_id) : "—"}</td>
                       <td className="amount">{formatAmount(p.osszeg)}</td>
                       <td>{p.datum || "—"}</td>
                       <td>{p.hossza ?? "—"}</td>

@@ -8,55 +8,45 @@ use Illuminate\Support\Facades\Validator;
 
 class BefizetesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
         $befizetesek = Befizetes::all();
         return response()->json($befizetesek);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         //
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
         $befizetesvalidator = Validator::make(
             $request->all(),
             [
                 'sirberlo_id' => 'required|integer|exists:sirberlo,id',
+                'elhunyt_id' => 'nullable|integer|exists:elhunyt,id',
                 'osszeg' => 'required|numeric|min:0.01|max:99999999.99',
-                'hossza' => 'nullable|integer|min:1|max:240', // hónap, igény szerint állítsd
+                'hossza' => 'nullable|integer|min:1|max:240',
                 'datum' => 'nullable|date',
             ],
             [
                 'sirberlo_id.required' => 'A sírbérlő megadása kötelező.',
                 'sirberlo_id.integer'  => 'A sírbérlő azonosító csak szám lehet.',
                 'sirberlo_id.exists'   => 'A megadott sírbérlő nem található.',
-
+                'elhunyt_id.integer'   => 'Az elhunyt azonosító csak szám lehet.',
+                'elhunyt_id.exists'    => 'A megadott elhunyt nem található.',
                 'osszeg.required' => 'Az összeg megadása kötelező.',
                 'osszeg.numeric'  => 'Az összeg csak szám lehet.',
                 'osszeg.min'      => 'Az összegnek pozitívnak kell lennie.',
                 'osszeg.max'      => 'Az összeg túl nagy (max. 99 999 999,99).',
-
                 'hossza.integer'  => 'A hossza csak egész hónap lehet.',
                 'hossza.min'      => 'A hossza legalább 1 hónap legyen.',
                 'hossza.max'      => 'A hossza legfeljebb 240 hónap lehet.',
-
                 'datum.date'      => 'A dátum formátuma nem megfelelő.',
-
-
             ]
         );
+
         if ($befizetesvalidator->fails()) {
             return response()->json([
                 'success' => false,
@@ -65,9 +55,9 @@ class BefizetesController extends Controller
             ], 422);
         }
 
-
         $befizetes = new Befizetes();
         $befizetes->sirberlo_id = $request->sirberlo_id;
+        $befizetes->elhunyt_id = $request->elhunyt_id ?? null;
         $befizetes->osszeg = $request->osszeg;
         $befizetes->hossza = $request->hossza;
         $befizetes->datum = $request->datum;
@@ -81,12 +71,6 @@ class BefizetesController extends Controller
         ], 201);
     }
 
-
-
-
-    /**
-     * Display the specified resource.
-     */
     public function show(string $id)
     {
         $befizetesAdatok = Befizetes::find($id);
@@ -97,23 +81,18 @@ class BefizetesController extends Controller
         }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Befizetes $befizetes)
     {
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, string $id)
     {
         $befizetesValidator = Validator::make(
             $request->all(),
             [
                 'sirberlo_id' => 'required|integer|exists:sirberlo,id',
+                'elhunyt_id' => 'nullable|integer|exists:elhunyt,id',
                 'osszeg'      => 'required|numeric|min:0.01|max:99999999.99',
                 'hossza'      => 'nullable|integer|min:1|max:240',
                 'datum'       => 'nullable|date',
@@ -122,16 +101,15 @@ class BefizetesController extends Controller
                 'sirberlo_id.required' => 'A sírbérlő megadása kötelező.',
                 'sirberlo_id.integer'  => 'A sírbérlő azonosító csak szám lehet.',
                 'sirberlo_id.exists'   => 'A megadott sírbérlő nem található.',
-
+                'elhunyt_id.integer'   => 'Az elhunyt azonosító csak szám lehet.',
+                'elhunyt_id.exists'    => 'A megadott elhunyt nem található.',
                 'osszeg.required' => 'Az összeg megadása kötelező.',
                 'osszeg.numeric'  => 'Az összeg csak szám lehet.',
                 'osszeg.min'      => 'Az összegnek pozitívnak kell lennie.',
                 'osszeg.max'      => 'Az összeg túl nagy (max. 99 999 999,99).',
-
                 'hossza.integer'  => 'A hossza csak egész hónap lehet.',
                 'hossza.min'      => 'A hossza legalább 1 hónap legyen.',
                 'hossza.max'      => 'A hossza legfeljebb 240 hónap lehet.',
-
                 'datum.date'      => 'A dátum formátuma nem megfelelő.',
             ]
         );
@@ -147,6 +125,7 @@ class BefizetesController extends Controller
         $befizetes = Befizetes::find($id);
         if (!empty($befizetes)) {
             $befizetes->sirberlo_id = $request->sirberlo_id;
+            $befizetes->elhunyt_id = $request->elhunyt_id ?? null;
             $befizetes->osszeg      = $request->osszeg;
             $befizetes->hossza      = $request->hossza;
             $befizetes->datum       = $request->datum;
@@ -158,9 +137,6 @@ class BefizetesController extends Controller
         }
     }
 
-    /**
-     * Remove the specified resource from storage.s
-     */
     public function destroy(string $id)
     {
         $befizetesTorles = Befizetes::find($id);
