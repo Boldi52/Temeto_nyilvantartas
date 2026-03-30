@@ -9,6 +9,7 @@ export default function AdminGraveSites() {
         id: null,
         sor_id: "",
         sirkod: "",
+        allapot: "",
         foto: "",
         sirberlo_id: "",
     };
@@ -66,6 +67,7 @@ export default function AdminGraveSites() {
             id: item.id,
             sor_id: item.sor_id ?? "",
             sirkod: item.sirkod ?? "",
+            allapot: item.allapot ?? "",
             foto: item.foto ?? "",
             sirberlo_id: item.sirberlo_id ?? "",
         });
@@ -106,6 +108,7 @@ export default function AdminGraveSites() {
         const payload = {
             sor_id: form.sor_id ? Number(form.sor_id) : null,
             sirkod: form.sirkod || null,
+            allapot: form.allapot || null,
             foto: form.foto || null,
             sirberlo_id: form.sirberlo_id ? Number(form.sirberlo_id) : null,
         };
@@ -200,6 +203,21 @@ export default function AdminGraveSites() {
                         </label>
 
                         <label>
+                            Állapot
+                            <input
+                                name="allapot"
+                                value={form.allapot}
+                                onChange={handleChange}
+                                placeholder="szabad / foglalva / stb."
+                            />
+                            {fieldErrors.allapot && (
+                                <div className="admin-gravesites-field-error">
+                                    {fieldErrors.allapot}
+                                </div>
+                            )}
+                        </label>
+
+                        <label>
                             Fotó (URL vagy elérési út)
                             <input
                                 name="foto"
@@ -279,6 +297,7 @@ export default function AdminGraveSites() {
                                         <th>ID</th>
                                         <th>Sor</th>
                                         <th>Sírkód</th>
+                                        <th>Állapot</th>
                                         <th>Fotó</th>
                                         <th>Bérlő</th>
                                         <th>Műveletek</th>
@@ -287,7 +306,7 @@ export default function AdminGraveSites() {
                                 <tbody>
                                     {graves.length === 0 && (
                                         <tr>
-                                            <td colSpan="6" className="empty">
+                                            <td colSpan="7" className="empty">
                                                 Nincs adat.
                                             </td>
                                         </tr>
@@ -297,6 +316,7 @@ export default function AdminGraveSites() {
                                             <td>{g.id}</td>
                                             <td>{g.sor_id ?? "—"}</td>
                                             <td>{g.sirkod ?? "—"}</td>
+                                            <td>{g.allapot ?? "—"}</td>
                                             <td className="mono">{g.foto ?? "—"}</td>
                                             <td>{g.sirberlo_id ?? "—"}</td>
                                             <td className="admin-gravesites-actions">
