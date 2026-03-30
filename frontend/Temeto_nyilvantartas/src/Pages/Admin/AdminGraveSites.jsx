@@ -7,6 +7,7 @@ const API_BASE = "http://localhost:8000";
 export default function AdminGraveSites() {
     const emptyForm = {
         id: null,
+        parcella_id: "",
         sor_id: "",
         sirkod: "",
         allapot: "",
@@ -15,6 +16,7 @@ export default function AdminGraveSites() {
     };
 
     const [graves, setGraves] = useState([]);
+    const [parcellak, setParcellak] = useState([]);
     const [sorok, setSorok] = useState([]);
     const [berlok, setBerlok] = useState([]);
     const [form, setForm] = useState(emptyForm);
@@ -27,23 +29,27 @@ export default function AdminGraveSites() {
         setLoading(true);
         setError("");
         try {
-            const [grRes, sorRes, berRes] = await Promise.all([
+            const [grRes, parRes, sorRes, berRes] = await Promise.all([
                 fetch(`${API_BASE}/api/sirhelyek`),
+                fetch(`${API_BASE}/api/parcellak`),
                 fetch(`${API_BASE}/api/sorok`),
                 fetch(`${API_BASE}/api/sirberlok`),
             ]);
 
             if (!grRes.ok) throw new Error("Sírhelyek betöltése sikertelen");
+            if (!parRes.ok) throw new Error("Parcellák betöltése sikertelen");
             if (!sorRes.ok) throw new Error("Sorok betöltése sikertelen");
             if (!berRes.ok) throw new Error("Sírbérlők betöltése sikertelen");
 
-            const [grData, sorData, berData] = await Promise.all([
+            const [grData, parData, sorData, berData] = await Promise.all([
                 grRes.json(),
+                parRes.json(),
                 sorRes.json(),
                 berRes.json(),
             ]);
 
             setGraves(grData);
+            setParcellak(parData);
             setSorok(sorData);
             setBerlok(berData);
         } catch (err) {
@@ -65,6 +71,7 @@ export default function AdminGraveSites() {
     const handleEdit = (item) => {
         setForm({
             id: item.id,
+            parcella_id: item.parcella_id ?? "",
             sor_id: item.sor_id ?? "",
             sirkod: item.sirkod ?? "",
             allapot: item.allapot ?? "",
@@ -106,6 +113,7 @@ export default function AdminGraveSites() {
             : `${API_BASE}/api/sirhelyek`;
 
         const payload = {
+            parcella_id: form.parcella_id ? Number(form.parcella_id) : null,
             sor_id: form.sor_id ? Number(form.sor_id) : null,
             sirkod: form.sirkod || null,
             allapot: form.allapot || null,
@@ -140,6 +148,11 @@ export default function AdminGraveSites() {
         }
     };
 
+    // Csak a kiválasztott parcellához tartozó sorok
+    const filteredSorok = form.parcella_id
+        ? sorok.filter((s) => Number(s.parcella_id) === Number(form.parcella_id))
+        : [];
+
     const isEditing = !!form.id;
 
     return (
@@ -166,15 +179,38 @@ export default function AdminGraveSites() {
                     )}
                     <form className="admin-gravesites-form" onSubmit={handleSubmit}>
                         <label>
+                            Parcella
+                            <select
+                                name="parcella_id"
+                                value={form.parcella_id}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Válassz parcelláját…</option>
+                                {parcellak.map((p) => (
+                                    <option key={p.id} value={p.id}>
+                                        {p.nev} (#{p.id})
+                                    </option>
+                                ))}
+                            </select>
+                            {fieldErrors.parcella_id && (
+                                <div className="admin-gravesites-field-error">
+                                    {fieldErrors.parcella_id}
+                                </div>
+                            )}
+                        </label>
+
+                        <label>
                             Sor
                             <select
                                 name="sor_id"
                                 value={form.sor_id}
                                 onChange={handleChange}
                                 required
+                                disabled={!form.parcella_id}
                             >
                                 <option value="">Válassz sort…</option>
-                                {sorok.map((s) => (
+                                {filteredSorok.map((s) => (
                                     <option key={s.id} value={s.id}>
                                         {s.nev} (#{s.id})
                                     </option>
@@ -295,6 +331,7 @@ export default function AdminGraveSites() {
                                 <thead>
                                     <tr>
                                         <th>ID</th>
+                                        <th>Parcella</th>
                                         <th>Sor</th>
                                         <th>Sírkód</th>
                                         <th>Állapot</th>
@@ -306,7 +343,7 @@ export default function AdminGraveSites() {
                                 <tbody>
                                     {graves.length === 0 && (
                                         <tr>
-                                            <td colSpan="7" className="empty">
+                                            <td colSpan="8" className="empty">
                                                 Nincs adat.
                                             </td>
                                         </tr>
@@ -314,6 +351,7 @@ export default function AdminGraveSites() {
                                     {graves.map((g) => (
                                         <tr key={g.id}>
                                             <td>{g.id}</td>
+                                            <td>{g.parcella_id ?? "—"}</td>
                                             <td>{g.sor_id ?? "—"}</td>
                                             <td>{g.sirkod ?? "—"}</td>
                                             <td>{g.allapot ?? "—"}</td>
