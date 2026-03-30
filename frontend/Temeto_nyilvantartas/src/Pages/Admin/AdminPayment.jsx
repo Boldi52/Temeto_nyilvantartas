@@ -7,6 +7,7 @@ const API_BASE = "http://localhost:8000";
 // 1 év = 35 000 Ft
 const YEAR_PRICE_FT = 35000;
 const MONTH_PRICE_FT = YEAR_PRICE_FT / 12;
+const ITEMS_PER_PAGE = 10;
 
 export default function AdminPayment() {
   const emptyForm = {
@@ -24,8 +25,10 @@ export default function AdminPayment() {
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [fieldErrors, setFieldErrors] = useState({});
   const [searchTerm, setSearchTerm] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const loadData = async () => {
     setLoading(true);
@@ -61,6 +64,14 @@ export default function AdminPayment() {
     loadData();
   }, []);
 
+  // Success üzenet eltüntetése 3 másodperc után
+  useEffect(() => {
+    if (success) {
+      const timer = setTimeout(() => setSuccess(""), 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [success]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     
@@ -90,6 +101,7 @@ export default function AdminPayment() {
     e.preventDefault();
     setSaving(true);
     setError("");
+    setSuccess("");
     setFieldErrors({});
 
     const url = `${API_BASE}/api/befizetesek`;
@@ -121,6 +133,8 @@ export default function AdminPayment() {
 
       await loadData();
       setForm(emptyForm);
+      setCurrentPage(1);
+      setSuccess("Befizetés sikeresen hozzáadva!");
     } catch (err) {
       setError(err.message || "Ismeretlen hiba történt.");
     } finally {
@@ -132,6 +146,7 @@ export default function AdminPayment() {
     setForm(emptyForm);
     setFieldErrors({});
     setError("");
+    setSuccess("");
   };
 
   const getTenantName = (sirberlo_id) => {
@@ -156,6 +171,18 @@ export default function AdminPayment() {
     return false;
   });
 
+  // Paginálás logika
+  const totalPages = Math.ceil(filteredPayments.length / ITEMS_PER_PAGE);
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = startIndex + ITEMS_PER_PAGE;
+  const paginatedPayments = filteredPayments.slice(startIndex, endIndex);
+
+  // Keresés módosításakor vissza az 1. oldalra
+  const handleSearch = (value) => {
+    setSearchTerm(value);
+    setCurrentPage(1);
+  };
+
   const formatAmount = (osszeg) => {
     const n = Number(osszeg);
     if (Number.isNaN(n)) return "—";
@@ -168,6 +195,7 @@ export default function AdminPayment() {
       <h2 className="admin-title">Befizetések</h2>
 
       {error && <div className="admin-payment-alert admin-payment-alert--error">{error}</div>}
+      {success && <div className="admin-payment-alert admin-payment-alert--success">{success}</div>}
 
       <div className="admin-payment-container">
         {/* Form Panel */}
@@ -290,7 +318,7 @@ export default function AdminPayment() {
               type="text"
               placeholder="Keresés sírbérlő vagy elhunyt nevében..."
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={(e) => handleSearch(e.target.value)}
               className="admin-payment-search-input"
             />
           </div>
@@ -300,30 +328,59 @@ export default function AdminPayment() {
           ) : filteredPayments.length === 0 ? (
             <div className="admin-payment-no-data">Nincsenek befizetések.</div>
           ) : (
-            <div className="admin-payment-table-wrapper">
-              <table className="admin-payment-table">
-                <thead>
-                  <tr>
-                    <th>Sírbérlő</th>
-                    <th>Elhunyt</th>
-                    <th>Összeg (Ft)</th>
-                    <th>Dátum</th>
-                    <th>Hossz (hónap)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredPayments.map((p) => (
-                    <tr key={p.id}>
-                      <td>{getTenantName(p.sirberlo_id)}</td>
-                      <td>{p.elhunyt_id ? getDeceasedName(p.elhunyt_id) : "—"}</td>
-                      <td className="amount">{formatAmount(p.osszeg)}</td>
-                      <td>{p.datum || "—"}</td>
-                      <td>{p.hossza ?? "—"}</td>
+            <>
+              <div className="admin-payment-table-wrapper">
+                <table className="admin-payment-table">
+                  <thead>
+                    <tr>
+                      <th>Sírbérlő</th>
+                      <th>Elhunyt</th>
+                      <th>Összeg (Ft)</th>
+                      <th>Dátum</th>
+                      <th>Hossz (hónap)</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {paginatedPayments.map((p) => (
+                      <tr key={p.id}>
+                        <td>{getTenantName(p.sirberlo_id)}</td>
+                        <td>{p.elhunyt_id ? getDeceasedName(p.elhunyt_id) : "—"}</td>
+                        <td className="amount">{formatAmount(p.osszeg)}</td>
+                        <td>{p.datum || "—"}</td>
+                        <td>{p.hossza ?? "—"}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+
+              {/* Paginálás kontrollok */}
+              <div className="admin-payment-pagination-container">
+                <div className="admin-payment-pagination-info">
+                  Oldal <strong>{currentPage}</strong> / <strong>{totalPages}</strong>
+                  {" "}
+                  ({filteredPayments.length} befizetés összesen)
+                </div>
+
+                <div className="admin-payment-pagination-buttons">
+                  <button
+                    className="admin-payment-btn"
+                    onClick={() => setCurrentPage(currentPage - 1)}
+                    disabled={currentPage === 1}
+                  >
+                    ← Előző
+                  </button>
+
+                  <button
+                    className="admin-payment-btn"
+                    onClick={() => setCurrentPage(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                  >
+                    Következő →
+                  </button>
+                </div>
+              </div>
+            </>
           )}
         </div>
       </div>
