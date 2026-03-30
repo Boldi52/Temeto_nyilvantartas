@@ -283,7 +283,7 @@ const GraveSites = () => {
                   <div className="gravesites-photo__meta">
                     <strong>{kivalasztottSirhely?.sirkod ?? "Nincs sírkód"}</strong>
                     {kivalasztottSirhely?.tipus ? ` • ${kivalasztottSirhely.tipus}` : ""}
-                    {kivalasztottSirhely?.allapot ? ` • ${kivalasztottSirhely.allapot}` : ""}
+                    
                   </div>
                 </div>
 
