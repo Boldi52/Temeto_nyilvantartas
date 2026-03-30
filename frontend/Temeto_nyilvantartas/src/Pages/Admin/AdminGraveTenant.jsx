@@ -136,57 +136,61 @@ export default function AdminGraveTenant() {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        setSaving(true);
-        setError("");
-        setFieldErrors({});
+    e.preventDefault();
+    setSaving(true);
+    setError("");
+    setFieldErrors({});
 
-        const method = form.id ? "PUT" : "POST";
-        const url = form.id
-            ? `${API_BASE}/sirberlok/${form.id}`
-            : `${API_BASE}/sirberlok`;
+    const method = form.id ? "PUT" : "POST";
+    const url = form.id
+        ? `${API_BASE}/sirberlok/${form.id}`
+        : `${API_BASE}/sirberlok`;
 
-        const payload = {
-            nev: form.nev,
-            email_cim: form.email_cim || null,
-            telefonszam: form.telefonszam || null,
-            kozterulet_neve: form.kozterulet_neve,
-            hazszam: form.hazszam,
-            kozterulet_tipus_id: form.kozterulet_tipus_id || null,
-            telepules_ir_szam: parseInt(form.telepules_ir_szam, 10),
-            telepules_nev: form.telepules_nev,
-        };
-
-        try {
-            const res = await fetch(url, {
-                method,
-                headers: getAuthHeaders(),
-                body: JSON.stringify(payload),
-            });
-
-            if (res.status === 422) {
-                const body = await res.json();
-                setFieldErrors(body.errors || {});
-                throw new Error(body.message || "Validációs hiba történt.");
-            }
-
-            if (!res.ok) {
-                const body = await res.json().catch(() => ({}));
-                throw new Error(body.message || `Mentés sikertelen (${res.status})`);
-            }
-
-            await loadData();
-            setForm(emptyForm);
-            setError("");
-        } catch (err) {
-            console.error("Mentési hiba:", err);
-            if (!err.message.includes("Validációs")) {
-                setError(err.message || "Ismeretlen hiba történt.");
-            }
-        } finally {
-            setSaving(false);
-        }
+    const payload = {
+        nev: form.nev,
+        email_cim: form.email_cim || null,
+        telefonszam: form.telefonszam || null,
+        kozterulet_neve: form.kozterulet_neve,
+        hazszam: form.hazszam,
+        kozterulet_tipus_id: form.kozterulet_tipus_id || null,
+        telepules_ir_szam: parseInt(form.telepules_ir_szam, 10) || 0,
+        telepules_nev: form.telepules_nev || "",
     };
+
+    console.log("Küldött payload:", payload);  // Debuggoláshoz
+
+    try {
+        const res = await fetch(url, {
+            method,
+            headers: getAuthHeaders(),
+            body: JSON.stringify(payload),
+        });
+
+        console.log("Response status:", res.status);  // Debuggoláshoz
+
+        if (res.status === 422) {
+            const body = await res.json();
+            setFieldErrors(body.errors || {});
+            throw new Error(body.message || "Validációs hiba történt.");
+        }
+
+        if (!res.ok) {
+            const body = await res.json().catch(() => ({}));
+            throw new Error(body.message || `Mentés sikertelen (${res.status})`);
+        }
+
+        await loadData();
+        setForm(emptyForm);
+        setError("");
+    } catch (err) {
+        console.error("Mentési hiba:", err);
+        if (!err.message.includes("Validációs")) {
+            setError(err.message || "Ismeretlen hiba történt.");
+        }
+    } finally {
+        setSaving(false);
+    }
+};
 
     const isEditing = !!form.id;
 
