@@ -26,6 +26,17 @@
   margin: 0 auto;
 }
 
+.admin-gravesites-main-title {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.admin-gravesites-subtitle {
+  color: #6b7280;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
 .admin-gravesites-header {
   margin-bottom: 1.25rem;
 }
@@ -121,7 +132,8 @@
 
 .admin-gravesites-form-actions button,
 .admin-gravesites-list-header button,
-.admin-gravesites-actions button {
+.admin-gravesites-actions button,
+.admin-gravesites-pagination-buttons .admin-gravesites-btn {
   border: none;
   border-radius: 8px;
   padding: 9px 12px;
@@ -136,14 +148,16 @@
 
 .admin-gravesites-form-actions button:hover,
 .admin-gravesites-list-header button:hover,
-.admin-gravesites-actions button:hover {
+.admin-gravesites-actions button:hover,
+.admin-gravesites-pagination-buttons .admin-gravesites-btn:hover {
   transform: translateY(-1px);
   box-shadow: var(--agr-btn-hover-shadow);
 }
 
 .admin-gravesites-form-actions button:disabled,
 .admin-gravesites-list-header button:disabled,
-.admin-gravesites-actions button:disabled {
+.admin-gravesites-actions button:disabled,
+.admin-gravesites-pagination-buttons .admin-gravesites-btn:disabled {
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -183,7 +197,7 @@
 .admin-gravesites-table {
   width: 100%;
   border-collapse: collapse;
-  min-width: 720px;
+  min-width: 740px;
 }
 
 .admin-gravesites-table th,
@@ -192,6 +206,7 @@
   padding: 10px 8px;
   text-align: left;
   font-size: 0.95rem;
+  vertical-align: top;
 }
 
 .admin-gravesites-table th {
@@ -212,22 +227,87 @@
   word-break: break-all;
 }
 
-/* ===== ACTIONS ===== */
+/* ===== ACTIONS (AS REQUESTED: vertical, edit on top) ===== */
 .admin-gravesites-actions {
   display: flex;
+  flex-direction: column;
   gap: 8px;
 }
 
 .admin-gravesites-actions button {
   padding: 6px 10px;
+  min-width: 74px;
+}
+
+/* ===== MOBILE CARD LIST ===== */
+.admin-gravesites-mobile-list {
+  display: none;
+}
+
+.admin-gravesites-mobile-card {
+  border: 1px solid var(--agr-border);
+  border-radius: 10px;
+  padding: 10px;
+  background: #fff;
+}
+
+.admin-gravesites-mobile-card .mono {
+  font-family: var(--agr-mono-font);
+  word-break: break-all;
+}
+
+.admin-gravesites-mobile-empty {
+  text-align: center;
+  color: var(--agr-text-muted);
+  padding: 14px;
+  border: 1px dashed var(--agr-border);
+  border-radius: 10px;
+}
+
+/* ===== PAGINATION ===== */
+.admin-gravesites-pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 1px solid #e5e7eb;
+  gap: 20px;
+}
+
+.admin-gravesites-pagination-info {
+  font-size: 0.95rem;
+  color: var(--agr-text-dark);
+  white-space: nowrap;
+}
+
+.admin-gravesites-pagination-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.admin-gravesites-pagination-buttons .admin-gravesites-btn {
+  flex: 0 1 auto;
+  min-width: 120px;
 }
 
 /* ===== RESPONSIVE ===== */
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .admin-gravesites-page {
     padding: 1.5rem 1rem;
   }
 
+  .admin-gravesites-main-title {
+    font-size: 1.3rem;
+  }
+
+  .admin-gravesites-card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  /* form buttons stack */
   .admin-gravesites-form-actions {
     flex-direction: column;
   }
@@ -237,7 +317,57 @@
     width: 100%;
   }
 
+  /* switch table -> card list */
   .admin-gravesites-table {
-    min-width: unset;
+    display: none;
+  }
+
+  .admin-gravesites-mobile-list {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .admin-gravesites-pagination-container {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .admin-gravesites-pagination-info {
+    white-space: normal;
+    text-align: center;
+  }
+
+  .admin-gravesites-pagination-buttons {
+    flex-direction: column;
+  }
+
+  .admin-gravesites-pagination-buttons .admin-gravesites-btn {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-gravesites-page {
+    padding: 1rem 0.75rem;
+  }
+
+  .admin-gravesites-main-title {
+    font-size: 1.15rem;
+  }
+
+  .admin-gravesites-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .admin-gravesites-form label {
+    font-size: 0.9rem;
+  }
+
+  .admin-gravesites-form input,
+  .admin-gravesites-form select {
+    font-size: 16px; /* iOS zoom fix */
   }
 }

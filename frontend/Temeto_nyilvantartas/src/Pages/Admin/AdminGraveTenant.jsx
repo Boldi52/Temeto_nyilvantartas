@@ -397,7 +397,7 @@ export default function AdminGraveTenant() {
                 <div className="admin-gravetenant-card">
                     <div className="admin-gravetenant-list-header">
                         <h3 className="admin-gravetenant-section-title">
-                            Sírbérlők listája ({Math.min(tenants.length, 5)}/{tenants.length})
+                            Sírbérlők listája ({Math.min(tenants.length, 10)}/{tenants.length})
                         </h3>
                         <button onClick={loadData} disabled={loading || saving}>
                             {loading ? "Betöltés..." : "🔄 Frissítés"}
@@ -429,7 +429,7 @@ export default function AdminGraveTenant() {
                                         </tr>
                                     )}
 
-                                    {tenants.slice(0, 5).map((t) => (
+                                    {tenants.slice(0, 10).map((t) => (
                                         <tr key={t.id}>
                                             <td data-label="ID">{t.id}</td>
                                             <td data-label="Név"><strong>{t.nev}</strong></td>

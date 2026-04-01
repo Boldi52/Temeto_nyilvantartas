@@ -198,7 +198,7 @@ export default function DeceasedPage() {
       <div className="deceasedpage-header">
         <h1 className="deceasedpage-header__title">Elhunytak</h1>
         <p className="deceasedpage-header__subtitle">
-          Az összes elhunyt személy nyilvántartása és keresése
+          Keresés az elhunytak között
         </p>
       </div>
 
