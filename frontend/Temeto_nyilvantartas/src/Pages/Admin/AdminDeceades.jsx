@@ -28,7 +28,6 @@ export default function AdminDeceades() {
     const fileInputRef = useRef(null);
 
     const openFilePicker = () => {
-        // Biztosabb: natív click létrehozása (egyes böngészők / css-ek mellett stabilabb)
         const input = fileInputRef.current;
         if (!input) return;
         input.dispatchEvent(new MouseEvent("click", { bubbles: true }));
@@ -44,7 +43,7 @@ export default function AdminDeceades() {
             ]);
 
             if (!sirhelyRes.ok) throw new Error("Sírhelyek betöltése sikertelen.");
-            if (!elhunytRes.ok) throw new Error("Elhunytak betöltése sikertelen.");
+            if (!elhunytRes.ok) throw new Error("Elhunytak bet��ltése sikertelen.");
 
             const [sirhelyData, elhunytData] = await Promise.all([
                 sirhelyRes.json(),
@@ -188,7 +187,6 @@ export default function AdminDeceades() {
             </div>
 
             <div className="admin-deceades-grid">
-                {/* FORM */}
                 <div className="admin-deceades-card">
                     <h3 className="admin-deceades-section-title">
                         {isEditing ? "Elhunyt szerkesztése" : "Új elhunyt hozzáadása"}
@@ -255,7 +253,6 @@ export default function AdminDeceades() {
                                 role="button"
                                 tabIndex={0}
                                 onMouseDown={(e) => {
-                                    // fontos: mousedown-nál nyitjuk, így a böngésző biztosan user gesture-nek veszi
                                     e.preventDefault();
                                     e.stopPropagation();
                                     openFilePicker();
@@ -300,7 +297,6 @@ export default function AdminDeceades() {
                     </form>
                 </div>
 
-                {/* LIST */}
                 <div className="admin-deceades-card">
                     <div className="admin-deceades-list-header">
                         <h3 className="admin-deceades-section-title">Elhunytak listája</h3>
@@ -322,13 +318,14 @@ export default function AdminDeceades() {
                                         <th>Halál</th>
                                         <th>Anyja neve</th>
                                         <th>Sírhely</th>
+                                        <th>Kivonat</th>
                                         <th>Műveletek</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {elhunytak.length === 0 && (
                                         <tr>
-                                            <td colSpan="7" className="empty">Nincs adat.</td>
+                                            <td colSpan="8" className="empty">Nincs adat.</td>
                                         </tr>
                                     )}
                                     {elhunytak.map((e) => (
@@ -339,6 +336,26 @@ export default function AdminDeceades() {
                                             <td data-label="Halál">{e.halal_datuma || "—"}</td>
                                             <td data-label="Anyja neve">{e.anyja_neve || "—"}</td>
                                             <td data-label="Sírhely">{e.sirhely_id || "—"}</td>
+
+                                            <td data-label="Kivonat">
+                                                {e.halotti_anyakonyvi_kiv ? (
+                                                    <div className="admin-deceades-actions">
+                                                        <a
+                                                            href={`${API_BASE}/dok-megnyit/${e.halotti_anyakonyvi_kiv}`}
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                        >
+                                                            Megnyitás
+                                                        </a>
+                                                        <a href={`${API_BASE}/dok-letoltes/${e.halotti_anyakonyvi_kiv}`}>
+                                                            Letöltés
+                                                        </a>
+                                                    </div>
+                                                ) : (
+                                                    "—"
+                                                )}
+                                            </td>
+
                                             <td data-label="Műveletek">
                                                 <div className="admin-deceades-actions">
                                                     <button onClick={() => handleEdit(e)}>Szerk.</button>

@@ -19,10 +19,7 @@ export default function AdminDocument() {
     const [documents, setDocuments] = useState([]);
     const [tenants, setTenants] = useState([]);
     const [form, setForm] = useState(emptyForm);
-
-    // induláskor true, így nincs "villanás"
     const [loading, setLoading] = useState(true);
-
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
@@ -78,14 +75,15 @@ export default function AdminDocument() {
         setForm({
             id: item.id,
             nev: item.nev ?? "",
-            fajl_tipo: item.fajl_tipo ?? "",
+            fajl_tipo: item.fajl_tipo ?? item.tipus ?? "",
             leiras: item.leiras ?? "",
             sirberlo_id: item.sirberlo_id ?? "",
-            feltoltve: item.feltoltve ?? "",
+            feltoltve: item.feltoltve ?? item.datum ?? "",
         });
         setFile(null);
         setFieldErrors({});
         setError("");
+        if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
     const handleDelete = async (id) => {
@@ -129,8 +127,8 @@ export default function AdminDocument() {
 
         const errors = {};
         if (!form.nev.trim()) errors.nev = "A dokumentum neve kötelező";
-        if (!form.fajl_tipo && !file) errors.fajl_tipo = "A fájltípus vagy fájl kötelező";
         if (!form.sirberlo_id) errors.sirberlo_id = "A sírbérlő kiválasztása kötelező";
+        if (!form.id && !file) errors.fajl_tipo = "Új dokumentumnál a fájl kötelező";
 
         if (Object.keys(errors).length > 0) {
             setFieldErrors(errors);
@@ -139,25 +137,30 @@ export default function AdminDocument() {
         }
 
         try {
-            const method = form.id ? "PUT" : "POST";
-            const url = form.id
+            const isEdit = !!form.id;
+            const url = isEdit
                 ? `${API_BASE}/api/dokumentumok/${form.id}`
                 : `${API_BASE}/api/dokumentumok`;
 
             const formData = new FormData();
-            formData.append("nev", form.nev);
+
+            formData.append("tipus", form.nev);
+            formData.append("datum", form.feltoltve);
             formData.append("leiras", form.leiras);
             formData.append("sirberlo_id", form.sirberlo_id);
-            formData.append("feltoltve", form.feltoltve);
+
             if (file) formData.append("file", file);
+            if (isEdit) formData.append("_method", "PUT");
 
             const token = localStorage.getItem("token");
 
             const res = await fetch(url, {
-                method,
+                method: "POST",
                 headers: token ? { Authorization: `Bearer ${token}` } : {},
                 body: formData,
             });
+
+            const body = await res.json().catch(() => ({}));
 
             if (res.status === 401) {
                 localStorage.removeItem("token");
@@ -165,14 +168,21 @@ export default function AdminDocument() {
             }
 
             if (!res.ok) {
-                const body = await res.json().catch(() => ({}));
+                if (res.status === 422 && body?.errors) {
+                    const mapped = {};
+                    if (body.errors.tipus) mapped.nev = body.errors.tipus[0];
+                    if (body.errors.sirberlo_id) mapped.sirberlo_id = body.errors.sirberlo_id[0];
+                    if (body.errors.file) mapped.fajl_tipo = body.errors.file[0];
+                    if (body.errors.datum) mapped.feltoltve = body.errors.datum[0];
+                    if (body.errors.leiras) mapped.leiras = body.errors.leiras[0];
+                    setFieldErrors(mapped);
+                }
                 throw new Error(body.message || "Mentés sikertelen.");
             }
 
             await loadData();
             setForm(emptyForm);
             setFile(null);
-
             if (fileInputRef.current) fileInputRef.current.value = "";
         } catch (err) {
             setError(err?.message || "Ismeretlen hiba történt.");
@@ -197,21 +207,25 @@ export default function AdminDocument() {
 
     const formatDate = (value) => {
         if (!value) return "—";
-        // backend adhat "YYYY-MM-DD" vagy ISO stringet; mindkettőt kezeljük
         const d = new Date(value);
         if (Number.isNaN(d.getTime())) return String(value);
-        return d.toLocaleDateString("hu-HU"); // pl. 2026. 03. 18.
+        return d.toLocaleDateString("hu-HU");
     };
 
     const filteredDocuments = documents.filter((doc) => {
-        const matchesType = filterType === "all" || doc.fajl_tipo === filterType;
+        const typeValue = doc.fajl_tipo ?? doc.tipus ?? "";
+        const nameValue = doc.nev ?? doc.tipus ?? "";
+
+        const matchesType = filterType === "all" || typeValue === filterType;
         const matchesSearch =
-            (doc.nev ?? "").toLowerCase().includes(searchTerm.toLowerCase()) ||
+            nameValue.toLowerCase().includes(searchTerm.toLowerCase()) ||
             getTenantName(doc.sirberlo_id).toLowerCase().includes(searchTerm.toLowerCase());
         return matchesType && matchesSearch;
     });
 
-    const documentTypes = [...new Set(documents.map((d) => d.fajl_tipo).filter(Boolean))];
+    const documentTypes = [
+        ...new Set(documents.map((d) => d.fajl_tipo ?? d.tipus).filter(Boolean)),
+    ];
 
     return (
         <div className="admin-document-page">
@@ -222,7 +236,6 @@ export default function AdminDocument() {
             </p>
 
             <div className="admin-document-container">
-                {/* FORM SECTION */}
                 <div className="admin-document-form-section">
                     <h2 className="admin-document-section-title">
                         {form.id ? "Dokumentum szerkesztése" : "Új dokumentum"}
@@ -278,7 +291,6 @@ export default function AdminDocument() {
 
                         <div className="admin-document-form-group">
                             <label htmlFor="file">Fájl feltöltése *</label>
-
                             <div
                                 className="admin-document-file-wrapper"
                                 role="button"
@@ -364,7 +376,6 @@ export default function AdminDocument() {
                     </form>
                 </div>
 
-                {/* LIST SECTION */}
                 <div className="admin-document-list-section">
                     <h2 className="admin-document-section-title">
                         Dokumentumok ({filteredDocuments.length})
@@ -398,47 +409,70 @@ export default function AdminDocument() {
                         <div className="admin-document-no-data">Nincsenek dokumentumok.</div>
                     ) : (
                         <div className="admin-document-grid">
-                            {filteredDocuments.map((doc) => (
-                                <div key={doc.id} className="admin-document-card">
-                                    <div className="admin-document-card-header">
-                                        <h3 className="admin-document-card-title">{doc.nev}</h3>
-                                        <span className="admin-document-card-type">{doc.fajl_tipo}</span>
+                            {filteredDocuments.map((doc) => {
+                                const displayName = doc.nev ?? doc.tipus ?? "Név nélkül";
+                                const displayType = doc.fajl_tipo ?? doc.mime_type ?? doc.tipus ?? "ismeretlen";
+                                const displayDate = doc.feltoltve ?? doc.datum;
+                                const filePath = doc.fajl_utvonal ?? "";
+
+                                return (
+                                    <div key={doc.id} className="admin-document-card">
+                                        <div className="admin-document-card-header">
+                                            <h3 className="admin-document-card-title">{displayName}</h3>
+                                            <span className="admin-document-card-type">{displayType}</span>
+                                        </div>
+
+                                        <div className="admin-document-card-body">
+                                            <p className="admin-document-card-tenant">
+                                                <strong>Sírbérlő:</strong> {getTenantName(doc.sirberlo_id)}
+                                            </p>
+
+                                            {doc.leiras && (
+                                                <p className="admin-document-card-description">{doc.leiras}</p>
+                                            )}
+
+                                            <p className="admin-document-card-date">
+                                                <strong>Feltöltve:</strong>{" "}
+                                                <span>{formatDate(displayDate)}</span>
+                                            </p>
+                                        </div>
+
+                                        <div className="admin-document-card-actions">
+                                            {filePath ? (
+                                                <a
+                                                    href={`${API_BASE}/dok-letoltes/${filePath}`}
+                                                    className="admin-document-btn admin-document-btn--small"
+                                                >
+                                                    Letöltés
+                                                </a>
+                                            ) : (
+                                                <button
+                                                    type="button"
+                                                    className="admin-document-btn admin-document-btn--small"
+                                                    disabled
+                                                >
+                                                    Nincs fájl
+                                                </button>
+                                            )}
+
+                                            <button
+                                                onClick={() => handleEdit(doc)}
+                                                className="admin-document-btn admin-document-btn--small admin-document-btn--edit"
+                                                disabled={saving}
+                                            >
+                                                Szerkesztés
+                                            </button>
+                                            <button
+                                                onClick={() => handleDelete(doc.id)}
+                                                className="admin-document-btn admin-document-btn--small admin-document-btn--delete"
+                                                disabled={saving}
+                                            >
+                                                Törlés
+                                            </button>
+                                        </div>
                                     </div>
-
-                                    <div className="admin-document-card-body">
-                                        <p className="admin-document-card-tenant">
-                                            <strong>Sírbérlő:</strong> {getTenantName(doc.sirberlo_id)}
-                                        </p>
-
-                                        {doc.leiras && (
-                                            <p className="admin-document-card-description">{doc.leiras}</p>
-                                        )}
-
-                                        {/* Itt: a "Feltöltve:" mellett a dátum */}
-                                        <p className="admin-document-card-date">
-                                            <strong>Feltöltve:</strong>{" "}
-                                            <span>{formatDate(doc.feltoltve)}</span>
-                                        </p>
-                                    </div>
-
-                                    <div className="admin-document-card-actions">
-                                        <button
-                                            onClick={() => handleEdit(doc)}
-                                            className="admin-document-btn admin-document-btn--small admin-document-btn--edit"
-                                            disabled={saving}
-                                        >
-                                            Szerkesztés
-                                        </button>
-                                        <button
-                                            onClick={() => handleDelete(doc.id)}
-                                            className="admin-document-btn admin-document-btn--small admin-document-btn--delete"
-                                            disabled={saving}
-                                        >
-                                            Törlés
-                                        </button>
-                                    </div>
-                                </div>
-                            ))}
+                                );
+                            })}
                         </div>
                     )}
                 </div>

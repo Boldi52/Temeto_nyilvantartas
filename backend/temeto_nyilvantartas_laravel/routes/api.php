@@ -51,6 +51,7 @@ Route::put('/sirberlok/{id}', [\App\Http\Controllers\SirberloController::class, 
 Route::delete('/sirberlok/{id}', [\App\Http\Controllers\SirberloController::class, 'destroy']); // sírbérlő törlése id alapján
 
 Route::get('/dokumentumok', [\App\Http\Controllers\DokumentumController::class, 'index']); // ez a route kiirja az összes dokumentumot.
+Route::post('/dokumentumok', [\App\Http\Controllers\DokumentumController::class, 'store']);
 Route::post('/dokumentumok', [\App\Http\Controllers\DokumentumController::class, 'store']); // ez a route egy új dokumentumot hoz létre a request-ben megadott adatokkal.
 Route::delete('/dokumentumok/{id}', [\App\Http\Controllers\DokumentumController::class, 'destroy']); // ez a route egy dokumentumot töröl id alapján szűrve.
 

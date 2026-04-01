@@ -182,6 +182,11 @@
 
 .admin-deceades-table th:nth-child(7),
 .admin-deceades-table td:nth-child(7) {
+    width: 180px;
+}
+
+.admin-deceades-table th:nth-child(8),
+.admin-deceades-table td:nth-child(8) {
     width: 120px;
 }
 
@@ -209,6 +214,49 @@
 
 .admin-deceades-actions .danger {
     background: #e53e3e;
+}
+
+/* ===== ÚJ: Kivonat gombok (Megnyitás + Letöltés) ===== */
+.admin-deceades-file-actions {
+    display: flex;
+    gap: 0.4rem;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.admin-deceades-file-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    border-radius: 6px;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    line-height: 1.2;
+    white-space: nowrap;
+    transition: filter 0.15s ease, transform 0.05s ease;
+}
+
+.admin-deceades-file-btn:hover {
+    filter: brightness(0.95);
+}
+
+.admin-deceades-file-btn:active {
+    transform: translateY(1px);
+}
+
+.admin-deceades-file-btn--open {
+    background: #6366f1; /* mint a sima "Szerk." */
+    color: #fff;
+}
+
+.admin-deceades-file-btn--download {
+    background: #4b5563; /* visszafogott másodlagos */
+    color: #fff;
 }
 
 @media (max-width: 1200px) {
@@ -298,6 +346,17 @@
 
     .admin-deceades-actions button {
         width: 100%;
+    }
+
+    .admin-deceades-file-actions {
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+    }
+
+    .admin-deceades-file-btn {
+        width: 100%;
+        text-align: center;
     }
 }
 

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,7 +14,7 @@ return new class extends Migration
             $table->id();
             $table->string('tipus_elnevezese');
             $table->foreignId('dokumentum_id')->nullable()
-                  ->constrained('dokumentum')->cascadeOnDelete();
+                ->constrained('dokumentum')->cascadeOnDelete();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('telepules_tipus');
+        Schema::dropIfExists('dokumentum_tipus');
     }
 };
