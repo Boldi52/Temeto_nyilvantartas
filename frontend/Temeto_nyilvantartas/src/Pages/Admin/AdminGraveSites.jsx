@@ -12,6 +12,7 @@ export default function AdminGraveSites() {
     parcella_id: "",
     sor_id: "",
     sirkod: "",
+    tipus: "",
     allapot: "",
     foto: "",
     sirberlo_id: "",
@@ -22,12 +23,15 @@ export default function AdminGraveSites() {
   const [sorok, setSorok] = useState([]);
   const [berlok, setBerlok] = useState([]);
   const [form, setForm] = useState(emptyForm);
+
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const [fieldErrors, setFieldErrors] = useState({});
-  const [currentPage, setCurrentPage] = useState(1);
 
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+
+  const [currentPage, setCurrentPage] = useState(1);
   const listTopRef = useRef(null);
 
   const scrollListToTopOnMobile = () => {
@@ -52,6 +56,15 @@ export default function AdminGraveSites() {
     scrollListToTopOnMobile();
   };
 
+  const normalizeFieldErrors = (errorsObj = {}) => {
+    const normalized = {};
+    Object.entries(errorsObj).forEach(([key, value]) => {
+      if (Array.isArray(value)) normalized[key] = value[0];
+      else normalized[key] = value;
+    });
+    return normalized;
+  };
+
   const loadData = async () => {
     setLoading(true);
     setError("");
@@ -63,10 +76,10 @@ export default function AdminGraveSites() {
         fetch(`${API_BASE}/api/sirberlok`),
       ]);
 
-      if (!grRes.ok) throw new Error("Sírhelyek betöltése sikertelen");
-      if (!parRes.ok) throw new Error("Parcellák betöltése sikertelen");
-      if (!sorRes.ok) throw new Error("Sorok betöltése sikertelen");
-      if (!berRes.ok) throw new Error("Sírbérlők betöltése sikertelen");
+      if (!grRes.ok) throw new Error("Sírhelyek betöltése sikertelen.");
+      if (!parRes.ok) throw new Error("Parcellák betöltése sikertelen.");
+      if (!sorRes.ok) throw new Error("Sorok betöltése sikertelen.");
+      if (!berRes.ok) throw new Error("Sírbérlők betöltése sikertelen.");
 
       const [grData, parData, sorData, berData] = await Promise.all([
         grRes.json(),
@@ -105,39 +118,50 @@ export default function AdminGraveSites() {
         return next;
       });
     }
+
+    if (error) setError("");
+    if (success) setSuccess("");
   };
 
   const handleEdit = (item) => {
-    // Mivel a sirhely táblában nincs parcella_id, azt a sorból számoljuk
     const selectedSor = sorok.find((s) => Number(s.id) === Number(item.sor_id));
 
     setForm({
       id: item.id,
       parcella_id: selectedSor?.parcella_id ? String(selectedSor.parcella_id) : "",
-      sor_id: item.sor_id ?? "",
+      sor_id: item.sor_id ? String(item.sor_id) : "",
       sirkod: item.sirkod ?? "",
+      tipus: item.tipus ?? "",
       allapot: item.allapot ?? "",
       foto: item.foto ?? "",
-      sirberlo_id: item.sirberlo_id ?? "",
+      sirberlo_id: item.sirberlo_id ? String(item.sirberlo_id) : "",
     });
+
     setFieldErrors({});
     setError("");
+    setSuccess("");
   };
 
   const handleDelete = async (id) => {
     if (!window.confirm("Biztosan törlöd ezt a sírhelyet?")) return;
+
     setSaving(true);
     setError("");
+    setSuccess("");
+
     try {
       const res = await fetch(`${API_BASE}/api/sirhelyek/${id}`, {
         method: "DELETE",
       });
+
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
         throw new Error(body.message || "Törlés sikertelen.");
       }
+
       await loadData();
       setCurrentPage(1);
+      setSuccess("Sikeres mentés.");
       scrollListToTopOnMobile();
     } catch (err) {
       setError(err.message || "Ismeretlen hiba történt.");
@@ -148,8 +172,10 @@ export default function AdminGraveSites() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     setSaving(true);
     setError("");
+    setSuccess("");
     setFieldErrors({});
 
     const method = form.id ? "PUT" : "POST";
@@ -157,12 +183,12 @@ export default function AdminGraveSites() {
       ? `${API_BASE}/api/sirhelyek/${form.id}`
       : `${API_BASE}/api/sirhelyek`;
 
-    // A backend séma alapján sirhely-ben nincs parcella_id, csak sor_id
     const payload = {
       sor_id: form.sor_id ? Number(form.sor_id) : null,
-      sirkod: form.sirkod || null,
-      allapot: form.allapot || null,
-      foto: form.foto || null,
+      sirkod: form.sirkod?.trim() || null,
+      tipus: form.tipus?.trim() || null,
+      allapot: form.allapot?.trim() || null,
+      foto: form.foto?.trim() || null,
       sirberlo_id: form.sirberlo_id ? Number(form.sirberlo_id) : null,
     };
 
@@ -173,20 +199,22 @@ export default function AdminGraveSites() {
         body: JSON.stringify(payload),
       });
 
+      const body = await res.json().catch(() => ({}));
+
       if (res.status === 422) {
-        const body = await res.json();
-        setFieldErrors(body.errors || {});
-        throw new Error(body.message || "Validációs hiba.");
+        setFieldErrors(normalizeFieldErrors(body.errors || {}));
+        setError(body.message || "Kérlek javítsd a hibás mezőket.");
+        return;
       }
 
       if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
         throw new Error(body.message || "Mentés sikertelen.");
       }
 
       await loadData();
       setForm(emptyForm);
       setCurrentPage(1);
+      setSuccess("Sikeres mentés");
       scrollListToTopOnMobile();
     } catch (err) {
       setError(err.message || "Ismeretlen hiba történt.");
@@ -202,10 +230,9 @@ export default function AdminGraveSites() {
   const getTenantName = (sirberlo_id) => {
     if (!sirberlo_id) return "—";
     const tenant = berlok.find((b) => Number(b.id) === Number(sirberlo_id));
-    return tenant?.nev ?? `#${sirberlo_id}`;
+    return tenant?.nev ?? "—";
   };
 
-  // sirhely.sor_id -> sor.parcella_id -> parcella.nev
   const getParcellaNameFromSorId = (sor_id) => {
     if (!sor_id) return "—";
     const sor = sorok.find((s) => Number(s.id) === Number(sor_id));
@@ -215,10 +242,12 @@ export default function AdminGraveSites() {
   };
 
   const isEditing = !!form.id;
-
   const totalPages = Math.max(1, Math.ceil(graves.length / ITEMS_PER_PAGE));
+
+  // ✅ Legújabb sírhely elöl (nagyobb id előre)
+  const sortedGraves = [...graves].sort((a, b) => Number(b.id) - Number(a.id));
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-  const paginatedGraves = graves.slice(startIndex, startIndex + ITEMS_PER_PAGE);
+  const paginatedGraves = sortedGraves.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
   return (
     <div className="admin-gravesites-page">
@@ -245,6 +274,12 @@ export default function AdminGraveSites() {
             </div>
           )}
 
+          {success && (
+            <div className="admin-gravesites-alert admin-gravesites-alert--success">
+              {success}
+            </div>
+          )}
+
           <form className="admin-gravesites-form" onSubmit={handleSubmit}>
             <label>
               Parcella
@@ -258,7 +293,7 @@ export default function AdminGraveSites() {
                 <option value="">Válassz parcellát…</option>
                 {parcellak.map((p) => (
                   <option key={p.id} value={p.id}>
-                    {p.nev} (#{p.id})
+                    {p.nev}
                   </option>
                 ))}
               </select>
@@ -279,7 +314,7 @@ export default function AdminGraveSites() {
                 <option value="">Válassz sort…</option>
                 {filteredSorok.map((s) => (
                   <option key={s.id} value={s.id}>
-                    {s.nev} (#{s.id})
+                    {s.nev}
                   </option>
                 ))}
               </select>
@@ -289,16 +324,31 @@ export default function AdminGraveSites() {
             </label>
 
             <label>
-              Sírkód
+              Sorszám
               <input
                 name="sirkod"
                 value={form.sirkod}
                 onChange={handleChange}
-                placeholder="pl. S011"
+                placeholder="pl. 3"
                 disabled={saving}
               />
               {fieldErrors.sirkod && (
                 <div className="admin-gravesites-field-error">{fieldErrors.sirkod}</div>
+              )}
+            </label>
+
+            <label>
+              Típus
+              <input
+                name="tipus"
+                value={form.tipus}
+                onChange={handleChange}
+                placeholder="pl. urna"
+                disabled={saving}
+                required
+              />
+              {fieldErrors.tipus && (
+                <div className="admin-gravesites-field-error">{fieldErrors.tipus}</div>
               )}
             </label>
 
@@ -308,7 +358,7 @@ export default function AdminGraveSites() {
                 name="allapot"
                 value={form.allapot}
                 onChange={handleChange}
-                placeholder="szabad / foglalt / stb."
+                placeholder="elhanyagolt, rendben tartott stb."
                 disabled={saving}
               />
               {fieldErrors.allapot && (
@@ -322,7 +372,7 @@ export default function AdminGraveSites() {
                 name="foto"
                 value={form.foto}
                 onChange={handleChange}
-                placeholder="pl. /uploads/sirhely.jpg"
+                placeholder="pl. asd.jpg"
                 disabled={saving}
               />
               {fieldErrors.foto && (
@@ -338,10 +388,10 @@ export default function AdminGraveSites() {
                 onChange={handleChange}
                 disabled={saving}
               >
-                <option value="">— nincs hozzárendelve —</option>
+                <option value="">--válassz sírbérlőt--</option>
                 {berlok.map((b) => (
                   <option key={b.id} value={b.id}>
-                    {b.nev} (#{b.id})
+                    {b.nev}
                   </option>
                 ))}
               </select>
@@ -363,6 +413,7 @@ export default function AdminGraveSites() {
                     setForm(emptyForm);
                     setFieldErrors({});
                     setError("");
+                    setSuccess("");
                   }}
                   disabled={saving}
                 >
@@ -392,6 +443,7 @@ export default function AdminGraveSites() {
                       <th>Parcella</th>
                       <th>Sor</th>
                       <th>Sírkód</th>
+                      <th>Típus</th>
                       <th>Állapot</th>
                       <th>Fotó</th>
                       <th>Bérlő</th>
@@ -401,16 +453,18 @@ export default function AdminGraveSites() {
                   <tbody>
                     {paginatedGraves.length === 0 && (
                       <tr>
-                        <td colSpan="7" className="empty">
+                        <td colSpan="8" className="empty">
                           Nincs adat.
                         </td>
                       </tr>
                     )}
+
                     {paginatedGraves.map((g) => (
                       <tr key={g.id}>
                         <td>{getParcellaNameFromSorId(g.sor_id)}</td>
                         <td>{g.sor_id ?? "—"}</td>
                         <td>{g.sirkod ?? "—"}</td>
+                        <td>{g.tipus ?? "—"}</td>
                         <td>{g.allapot ?? "—"}</td>
                         <td className="mono">{g.foto ?? "—"}</td>
                         <td>{getTenantName(g.sirberlo_id)}</td>
@@ -439,10 +493,9 @@ export default function AdminGraveSites() {
                       <div><strong>Parcella:</strong> {getParcellaNameFromSorId(g.sor_id)}</div>
                       <div><strong>Sor:</strong> {g.sor_id ?? "—"}</div>
                       <div><strong>Sírkód:</strong> {g.sirkod ?? "—"}</div>
+                      <div><strong>Típus:</strong> {g.tipus ?? "—"}</div>
                       <div><strong>Állapot:</strong> {g.allapot ?? "—"}</div>
-                      <div>
-                        <strong>Fotó:</strong> <span className="mono">{g.foto ?? "—"}</span>
-                      </div>
+                      <div><strong>Fotó:</strong> <span className="mono">{g.foto ?? "—"}</span></div>
                       <div><strong>Bérlő:</strong> {getTenantName(g.sirberlo_id)}</div>
 
                       <div className="admin-gravesites-actions">
@@ -462,8 +515,7 @@ export default function AdminGraveSites() {
 
               <div className="admin-gravesites-pagination-container">
                 <div className="admin-gravesites-pagination-info">
-                  Oldal <strong>{currentPage}</strong> / <strong>{totalPages}</strong>{" "}
-                  ({graves.length} sírhely összesen)
+                  Oldal <strong>{currentPage}</strong> / <strong>{totalPages}</strong> ({graves.length} sírhely összesen)
                 </div>
 
                 <div className="admin-gravesites-pagination-buttons">
