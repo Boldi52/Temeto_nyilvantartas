@@ -4,8 +4,8 @@ import AdminBackLink from "../../AdminBackLink";
 
 const API_BASE = "http://localhost:8000";
 
-// 1 év = 35 000 Ft
-const YEAR_PRICE_FT = 35000;
+// 1 év = 12 000 Ft
+const YEAR_PRICE_FT = 12000;
 const MONTH_PRICE_FT = YEAR_PRICE_FT / 12;
 const ITEMS_PER_PAGE = 10;
 
@@ -74,9 +74,8 @@ export default function AdminPayment() {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
+
     if (name === "sirberlo_id") {
-      // Sírbérlő megváltoztatásakor az elhunyt mezőt reseteljük
       setForm((f) => ({ ...f, sirberlo_id: value, elhunyt_id: "" }));
     } else {
       setForm((f) => ({ ...f, [name]: value }));
@@ -91,11 +90,38 @@ export default function AdminPayment() {
     }
   };
 
+  // Összegből számolt hossz (hónap)
   const computedMonths = useMemo(() => {
     const amount = Number(form.osszeg);
     if (!Number.isFinite(amount) || amount <= 0) return null;
     return Math.round(amount / MONTH_PRICE_FT);
   }, [form.osszeg]);
+
+  // Dátum + hónap => lejárat
+  const addMonths = (dateStr, months) => {
+    if (!dateStr || !months || months <= 0) return null;
+    const d = new Date(dateStr);
+    if (Number.isNaN(d.getTime())) return null;
+
+    const result = new Date(d);
+    result.setMonth(result.getMonth() + Number(months));
+    return result;
+  };
+
+  const formatDate = (dateValue) => {
+    if (!dateValue) return "—";
+    const d = new Date(dateValue);
+    if (Number.isNaN(d.getTime())) return "—";
+    return d.toLocaleDateString("hu-HU");
+  };
+
+  // Ha backend nem ad lejarat_datum-ot, kiszámoljuk datum + hossza alapján
+  const getExpiryDateText = (payment) => {
+    if (payment.lejarat_datum) return formatDate(payment.lejarat_datum);
+
+    const calc = addMonths(payment.datum, Number(payment.hossza));
+    return calc ? formatDate(calc) : "—";
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -171,13 +197,16 @@ export default function AdminPayment() {
     return false;
   });
 
-  // Paginálás logika
-  const totalPages = Math.ceil(filteredPayments.length / ITEMS_PER_PAGE);
+  // Legfrissebb elöl
+  const sortedPayments = [...filteredPayments].sort(
+    (a, b) => Number(b.id) - Number(a.id)
+  );
+
+  const totalPages = Math.max(1, Math.ceil(sortedPayments.length / ITEMS_PER_PAGE));
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
   const endIndex = startIndex + ITEMS_PER_PAGE;
-  const paginatedPayments = filteredPayments.slice(startIndex, endIndex);
+  const paginatedPayments = sortedPayments.slice(startIndex, endIndex);
 
-  // Keresés módosításakor vissza az 1. oldalra
   const handleSearch = (value) => {
     setSearchTerm(value);
     setCurrentPage(1);
@@ -188,6 +217,12 @@ export default function AdminPayment() {
     if (Number.isNaN(n)) return "—";
     return `${n.toLocaleString("hu-HU")} Ft`;
   };
+
+  // Form preview: ha admin tölti az űrlapot, azonnal lássa a várható lejáratot
+  const formExpiryPreview = useMemo(() => {
+    const calc = addMonths(form.datum, computedMonths);
+    return calc ? formatDate(calc) : "—";
+  }, [form.datum, computedMonths]);
 
   return (
     <div className="admin-payment">
@@ -226,7 +261,6 @@ export default function AdminPayment() {
               )}
             </div>
 
-            {/* Elhunyt dropdown - ugyanolyan stílusú, mint a sírbérlő */}
             <div className="admin-payment-form-group">
               <label htmlFor="elhunyt_id">Elhunyt</label>
               <select
@@ -271,8 +305,12 @@ export default function AdminPayment() {
                 Számolt hossz:{" "}
                 <strong>{computedMonths === null ? "—" : `${computedMonths} hónap`}</strong>{" "}
                 <span>
-                  (35 000 Ft/év alapján, ~{MONTH_PRICE_FT.toFixed(2)} Ft/hó)
+                  (12 000 Ft/év alapján, ~{MONTH_PRICE_FT.toFixed(2)} Ft/hó)
                 </span>
+              </div>
+
+              <div style={{ marginTop: 4, fontSize: 13, opacity: 0.85 }}>
+                Várható lejárat: <strong>{formExpiryPreview}</strong>
               </div>
             </div>
 
@@ -325,7 +363,7 @@ export default function AdminPayment() {
 
           {loading ? (
             <div className="admin-payment-loading">Betöltés...</div>
-          ) : filteredPayments.length === 0 ? (
+          ) : sortedPayments.length === 0 ? (
             <div className="admin-payment-no-data">Nincsenek befizetések.</div>
           ) : (
             <>
@@ -338,6 +376,7 @@ export default function AdminPayment() {
                       <th>Összeg (Ft)</th>
                       <th>Dátum</th>
                       <th>Hossz (hónap)</th>
+                      <th>Lejárati dátum</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -346,26 +385,25 @@ export default function AdminPayment() {
                         <td>{getTenantName(p.sirberlo_id)}</td>
                         <td>{p.elhunyt_id ? getDeceasedName(p.elhunyt_id) : "—"}</td>
                         <td className="amount">{formatAmount(p.osszeg)}</td>
-                        <td>{p.datum || "—"}</td>
+                        <td>{formatDate(p.datum)}</td>
                         <td>{p.hossza ?? "—"}</td>
+                        <td>{getExpiryDateText(p)}</td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
 
-              {/* Paginálás kontrollok */}
               <div className="admin-payment-pagination-container">
                 <div className="admin-payment-pagination-info">
-                  Oldal <strong>{currentPage}</strong> / <strong>{totalPages}</strong>
-                  {" "}
-                  ({filteredPayments.length} befizetés összesen)
+                  Oldal <strong>{currentPage}</strong> / <strong>{totalPages}</strong>{" "}
+                  ({sortedPayments.length} befizetés összesen)
                 </div>
 
                 <div className="admin-payment-pagination-buttons">
                   <button
                     className="admin-payment-btn"
-                    onClick={() => setCurrentPage(currentPage - 1)}
+                    onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                     disabled={currentPage === 1}
                   >
                     ← Előző
@@ -373,7 +411,7 @@ export default function AdminPayment() {
 
                   <button
                     className="admin-payment-btn"
-                    onClick={() => setCurrentPage(currentPage + 1)}
+                    onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                     disabled={currentPage === totalPages}
                   >
                     Következő →

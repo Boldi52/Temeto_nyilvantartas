@@ -4,6 +4,7 @@ import "../../CSS-ek/AdminDocument.css";
 import AdminBackLink from "../../AdminBackLink";
 
 const API_BASE = "http://localhost:8000";
+const ITEMS_PER_PAGE = 11;
 
 export default function AdminDeceades() {
     const emptyForm = {
@@ -12,10 +13,14 @@ export default function AdminDeceades() {
         szul_datum: "",
         halal_datuma: "",
         anyja_neve: "",
+        parcella_id: "",
+        sor_id: "",
         sirhely_id: "",
     };
 
     const [form, setForm] = useState(emptyForm);
+    const [parcellak, setParcellak] = useState([]);
+    const [sorok, setSorok] = useState([]);
     const [sirhelyek, setSirhelyek] = useState([]);
     const [elhunytak, setElhunytak] = useState([]);
     const [file, setFile] = useState(null);
@@ -24,34 +29,48 @@ export default function AdminDeceades() {
     const [error, setError] = useState("");
     const [success, setSuccess] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
+    const [currentPage, setCurrentPage] = useState(1);
 
     const fileInputRef = useRef(null);
 
     const openFilePicker = () => {
         const input = fileInputRef.current;
         if (!input) return;
-        input.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+        input.click();
     };
 
     const loadData = async () => {
         setLoading(true);
         setError("");
         try {
-            const [sirhelyRes, elhunytRes] = await Promise.all([
+            const [parcellaRes, sorRes, sirhelyRes, elhunytRes] = await Promise.all([
+                fetch(`${API_BASE}/api/parcellak`),
+                fetch(`${API_BASE}/api/sorok`),
                 fetch(`${API_BASE}/api/sirhelyek`),
                 fetch(`${API_BASE}/api/elhunytMindenAdata`),
             ]);
 
+            if (!parcellaRes.ok) throw new Error("Parcellák betöltése sikertelen.");
+            if (!sorRes.ok) throw new Error("Sorok betöltése sikertelen.");
             if (!sirhelyRes.ok) throw new Error("Sírhelyek betöltése sikertelen.");
-            if (!elhunytRes.ok) throw new Error("Elhunytak bet��ltése sikertelen.");
+            if (!elhunytRes.ok) throw new Error("Elhunytak betöltése sikertelen.");
 
-            const [sirhelyData, elhunytData] = await Promise.all([
+            const [parcellaData, sorData, sirhelyData, elhunytData] = await Promise.all([
+                parcellaRes.json(),
+                sorRes.json(),
                 sirhelyRes.json(),
                 elhunytRes.json(),
             ]);
 
+            setParcellak(Array.isArray(parcellaData) ? parcellaData : []);
+            setSorok(Array.isArray(sorData) ? sorData : []);
             setSirhelyek(Array.isArray(sirhelyData) ? sirhelyData : []);
-            setElhunytak(Array.isArray(elhunytData) ? elhunytData : []);
+
+            const safeElhunytak = Array.isArray(elhunytData) ? elhunytData : [];
+            setElhunytak(safeElhunytak);
+
+            const maxPage = Math.max(1, Math.ceil(safeElhunytak.length / ITEMS_PER_PAGE));
+            setCurrentPage((prev) => Math.min(prev, maxPage));
         } catch (err) {
             setError(err.message || "Ismeretlen hiba történt.");
         } finally {
@@ -65,7 +84,24 @@ export default function AdminDeceades() {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setForm((f) => ({ ...f, [name]: value }));
+
+        if (name === "parcella_id") {
+            setForm((f) => ({
+                ...f,
+                parcella_id: value,
+                sor_id: "",
+                sirhely_id: "",
+            }));
+        } else if (name === "sor_id") {
+            setForm((f) => ({
+                ...f,
+                sor_id: value,
+                sirhely_id: "",
+            }));
+        } else {
+            setForm((f) => ({ ...f, [name]: value }));
+        }
+
         if (fieldErrors[name]) {
             setFieldErrors((prev) => {
                 const next = { ...prev };
@@ -90,14 +126,22 @@ export default function AdminDeceades() {
     };
 
     const handleEdit = (item) => {
+        const selectedSirhely = sirhelyek.find((s) => Number(s.id) === Number(item.sirhely_id));
+        const selectedSor = selectedSirhely
+            ? sorok.find((s) => Number(s.id) === Number(selectedSirhely.sor_id))
+            : null;
+
         setForm({
             id: item.id,
             nev: item.nev || "",
             szul_datum: item.szul_datum || "",
             halal_datuma: item.halal_datuma || "",
             anyja_neve: item.anyja_neve || "",
-            sirhely_id: item.sirhely_id || "",
+            parcella_id: selectedSor?.parcella_id ? String(selectedSor.parcella_id) : "",
+            sor_id: selectedSirhely?.sor_id ? String(selectedSirhely.sor_id) : "",
+            sirhely_id: item.sirhely_id ? String(item.sirhely_id) : "",
         });
+
         setFile(null);
         setFieldErrors({});
         setError("");
@@ -120,6 +164,7 @@ export default function AdminDeceades() {
             }
             await loadData();
             if (form.id === id) handleReset();
+            setCurrentPage(1);
         } catch (err) {
             setError(err.message || "Ismeretlen hiba történt.");
         } finally {
@@ -145,9 +190,7 @@ export default function AdminDeceades() {
         const isEditing = !!form.id;
         const url = isEditing ? `${API_BASE}/api/elhunytak/${form.id}` : `${API_BASE}/api/elhunytak`;
 
-        if (isEditing) {
-            formData.append("_method", "PUT");
-        }
+        if (isEditing) formData.append("_method", "PUT");
 
         try {
             const res = await fetch(url, {
@@ -169,6 +212,7 @@ export default function AdminDeceades() {
             setSuccess(isEditing ? "Elhunyt frissítve." : "Elhunyt hozzáadva.");
             handleReset();
             await loadData();
+            setCurrentPage(1);
         } catch (err) {
             setError(err.message || "Ismeretlen hiba történt.");
         } finally {
@@ -177,6 +221,36 @@ export default function AdminDeceades() {
     };
 
     const isEditing = !!form.id;
+
+    const filteredSorok = form.parcella_id
+        ? sorok.filter((s) => Number(s.parcella_id) === Number(form.parcella_id))
+        : [];
+
+    const filteredSirhelyek = form.sor_id
+        ? sirhelyek.filter((s) => Number(s.sor_id) === Number(form.sor_id))
+        : [];
+
+    const getSorNameFromSirhelyId = (sirhelyId) => {
+        const sirhely = sirhelyek.find((s) => Number(s.id) === Number(sirhelyId));
+        if (!sirhely) return "—";
+        const sor = sorok.find((r) => Number(r.id) === Number(sirhely.sor_id));
+        return sor?.nev || sor?.sor || `#${sirhely.sor_id}` || "—";
+    };
+
+    const getParcellaNameFromSirhelyId = (sirhelyId) => {
+        const sirhely = sirhelyek.find((s) => Number(s.id) === Number(sirhelyId));
+        if (!sirhely) return "—";
+        const sor = sorok.find((r) => Number(r.id) === Number(sirhely.sor_id));
+        if (!sor) return "—";
+        const parcella = parcellak.find((p) => Number(p.id) === Number(sor.parcella_id));
+        return parcella?.nev || `#${sor.parcella_id}` || "—";
+    };
+
+    const sortedElhunytak = [...elhunytak].sort((a, b) => Number(b.id) - Number(a.id));
+
+    const totalPages = Math.max(1, Math.ceil(sortedElhunytak.length / ITEMS_PER_PAGE));
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const paginatedElhunytak = sortedElhunytak.slice(startIndex, startIndex + ITEMS_PER_PAGE);
 
     return (
         <div className="admin-deceades-page">
@@ -198,14 +272,7 @@ export default function AdminDeceades() {
                     <form className="admin-deceades-form" onSubmit={handleSubmit}>
                         <label>
                             Név *
-                            <input
-                                type="text"
-                                name="nev"
-                                value={form.nev}
-                                onChange={handleChange}
-                                required
-                                placeholder="Pl. Kovács János"
-                            />
+                            <input type="text" name="nev" value={form.nev} onChange={handleChange} required placeholder="Pl. Kovács János" />
                             {fieldErrors.nev && <div className="admin-deceades-error">{fieldErrors.nev}</div>}
                         </label>
 
@@ -223,24 +290,38 @@ export default function AdminDeceades() {
 
                         <label>
                             Anyja neve
-                            <input
-                                type="text"
-                                name="anyja_neve"
-                                value={form.anyja_neve}
-                                onChange={handleChange}
-                                placeholder="Pl. Nagy Anna"
-                            />
+                            <input type="text" name="anyja_neve" value={form.anyja_neve} onChange={handleChange} placeholder="Pl. Nagy Anna" />
                             {fieldErrors.anyja_neve && <div className="admin-deceades-error">{fieldErrors.anyja_neve}</div>}
                         </label>
 
                         <label>
+                            Parcella
+                            <select name="parcella_id" value={form.parcella_id} onChange={handleChange}>
+                                <option value="">Válassz parcellát</option>
+                                {parcellak.map((p) => (
+                                    <option key={p.id} value={p.id}>{p.nev}</option>
+                                ))}
+                            </select>
+                            {fieldErrors.parcella_id && <div className="admin-deceades-error">{fieldErrors.parcella_id}</div>}
+                        </label>
+
+                        <label>
+                            Sor
+                            <select name="sor_id" value={form.sor_id} onChange={handleChange} disabled={!form.parcella_id}>
+                                <option value="">Válassz sort</option>
+                                {filteredSorok.map((s) => (
+                                    <option key={s.id} value={s.id}>{s.nev || s.sor || `Sor #${s.id}`}</option>
+                                ))}
+                            </select>
+                            {fieldErrors.sor_id && <div className="admin-deceades-error">{fieldErrors.sor_id}</div>}
+                        </label>
+
+                        <label>
                             Sírhely
-                            <select name="sirhely_id" value={form.sirhely_id} onChange={handleChange}>
+                            <select name="sirhely_id" value={form.sirhely_id} onChange={handleChange} disabled={!form.sor_id}>
                                 <option value="">Nincs megadva</option>
-                                {sirhelyek.map((s) => (
-                                    <option key={s.id} value={s.id}>
-                                        {s.sirkod || `Sírhely #${s.id}`}
-                                    </option>
+                                {filteredSirhelyek.map((s) => (
+                                    <option key={s.id} value={s.id}>{s.sirkod || `Sírhely #${s.id}`}</option>
                                 ))}
                             </select>
                             {fieldErrors.sirhely_id && <div className="admin-deceades-error">{fieldErrors.sirhely_id}</div>}
@@ -252,7 +333,7 @@ export default function AdminDeceades() {
                                 className="admin-document-file-wrapper"
                                 role="button"
                                 tabIndex={0}
-                                onMouseDown={(e) => {
+                                onClick={(e) => {
                                     e.preventDefault();
                                     e.stopPropagation();
                                     openFilePicker();
@@ -271,6 +352,7 @@ export default function AdminDeceades() {
                                     type="file"
                                     name="halotti_anyakonyvi_kiv"
                                     onChange={handleFileChange}
+                                    onClick={(e) => e.stopPropagation()}
                                     accept=".pdf,.png,.jpg,.jpeg"
                                     className="admin-document-hidden-file-input"
                                 />
@@ -308,67 +390,100 @@ export default function AdminDeceades() {
                     {loading ? (
                         <div className="admin-deceades-message">Betöltés...</div>
                     ) : (
-                        <div className="admin-deceades-table-wrapper">
-                            <table className="admin-deceades-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>Név</th>
-                                        <th>Születés</th>
-                                        <th>Halál</th>
-                                        <th>Anyja neve</th>
-                                        <th>Sírhely</th>
-                                        <th>Kivonat</th>
-                                        <th>Műveletek</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {elhunytak.length === 0 && (
+                        <>
+                            <div className="admin-deceades-table-wrapper">
+                                <table className="admin-deceades-table">
+                                    <thead>
                                         <tr>
-                                            <td colSpan="8" className="empty">Nincs adat.</td>
+                                            <th>ID</th>
+                                            <th>Név</th>
+                                            <th>Születés</th>
+                                            <th>Halál</th>
+                                            <th>Anyja neve</th>
+                                            <th>Parcella</th>
+                                            <th>Sor</th>
+                                            <th>Sírhely</th>
+                                            <th>Kivonat</th>
+                                            <th>Műveletek</th>
                                         </tr>
-                                    )}
-                                    {elhunytak.map((e) => (
-                                        <tr key={e.id}>
-                                            <td data-label="ID">{e.id}</td>
-                                            <td data-label="Név"><strong>{e.nev}</strong></td>
-                                            <td data-label="Születés">{e.szul_datum || "—"}</td>
-                                            <td data-label="Halál">{e.halal_datuma || "—"}</td>
-                                            <td data-label="Anyja neve">{e.anyja_neve || "—"}</td>
-                                            <td data-label="Sírhely">{e.sirhely_id || "—"}</td>
+                                    </thead>
+                                    <tbody>
+                                        {paginatedElhunytak.length === 0 && (
+                                            <tr>
+                                                <td colSpan="10" className="empty">Nincs adat.</td>
+                                            </tr>
+                                        )}
+                                        {paginatedElhunytak.map((e) => (
+                                            <tr key={e.id}>
+                                                <td data-label="ID">{e.id}</td>
+                                                <td data-label="Név"><strong>{e.nev}</strong></td>
+                                                <td data-label="Születés">{e.szul_datum || "—"}</td>
+                                                <td data-label="Halál">{e.halal_datuma || "—"}</td>
+                                                <td data-label="Anyja neve">{e.anyja_neve || "—"}</td>
+                                                <td data-label="Parcella">{e.sirhely_id ? getParcellaNameFromSirhelyId(e.sirhely_id) : "—"}</td>
+                                                <td data-label="Sor">{e.sirhely_id ? getSorNameFromSirhelyId(e.sirhely_id) : "—"}</td>
+                                                <td data-label="Sírhely">{e.sirhely_id || "—"}</td>
 
-                                            <td data-label="Kivonat">
-                                                {e.halotti_anyakonyvi_kiv ? (
+                                                <td data-label="Kivonat">
+                                                    {e.halotti_anyakonyvi_kiv ? (
+                                                        <div className="admin-deceades-file-actions">
+                                                            <a
+                                                                className="admin-deceades-file-btn admin-deceades-file-btn--open"
+                                                                href={`${API_BASE}/dok-megnyit/${e.halotti_anyakonyvi_kiv}`}
+                                                                target="_blank"
+                                                                rel="noreferrer"
+                                                            >
+                                                                Megnyitás
+                                                            </a>
+                                                            <a
+                                                                className="admin-deceades-file-btn admin-deceades-file-btn--download"
+                                                                href={`${API_BASE}/dok-letoltes/${e.halotti_anyakonyvi_kiv}`}
+                                                            >
+                                                                Letöltés
+                                                            </a>
+                                                        </div>
+                                                    ) : (
+                                                        "—"
+                                                    )}
+                                                </td>
+
+                                                <td data-label="Műveletek">
                                                     <div className="admin-deceades-actions">
-                                                        <a
-                                                            href={`${API_BASE}/dok-megnyit/${e.halotti_anyakonyvi_kiv}`}
-                                                            target="_blank"
-                                                            rel="noreferrer"
-                                                        >
-                                                            Megnyitás
-                                                        </a>
-                                                        <a href={`${API_BASE}/dok-letoltes/${e.halotti_anyakonyvi_kiv}`}>
-                                                            Letöltés
-                                                        </a>
+                                                        <button onClick={() => handleEdit(e)}>Szerk.</button>
+                                                        <button className="danger" onClick={() => handleDelete(e.id)} disabled={saving}>
+                                                            Törlés
+                                                        </button>
                                                     </div>
-                                                ) : (
-                                                    "—"
-                                                )}
-                                            </td>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
 
-                                            <td data-label="Műveletek">
-                                                <div className="admin-deceades-actions">
-                                                    <button onClick={() => handleEdit(e)}>Szerk.</button>
-                                                    <button className="danger" onClick={() => handleDelete(e.id)} disabled={saving}>
-                                                        Törlés
-                                                    </button>
-                                                </div>
-                                            </td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-                        </div>
+                            <div className="admin-deceades-pagination-container">
+                                <div className="admin-deceades-pagination-info">
+                                    Oldal <strong>{currentPage}</strong> / <strong>{totalPages}</strong>{" "}
+                                    ({sortedElhunytak.length} elhunyt összesen)
+                                </div>
+
+                                <div className="admin-deceades-pagination-buttons">
+                                    <button
+                                        onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                                        disabled={currentPage === 1}
+                                    >
+                                        ← Előző
+                                    </button>
+
+                                    <button
+                                        onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                                        disabled={currentPage === totalPages}
+                                    >
+                                        Következő →
+                                    </button>
+                                </div>
+                            </div>
+                        </>
                     )}
                 </div>
             </div>

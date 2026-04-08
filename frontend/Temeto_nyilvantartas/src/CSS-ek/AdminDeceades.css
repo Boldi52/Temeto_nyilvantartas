@@ -139,9 +139,14 @@
 
 .admin-deceades-table {
     width: 100%;
+    min-width: 1160px;
     border-collapse: collapse;
     font-size: 0.92rem;
-    table-layout: fixed;
+    table-layout: auto;
+}
+
+.admin-deceades-table th {
+    white-space: nowrap;
 }
 
 .admin-deceades-table th,
@@ -150,44 +155,55 @@
     padding: 0.75rem 0.55rem;
     text-align: left;
     vertical-align: middle;
-    word-wrap: break-word;
 }
 
 .admin-deceades-table th:nth-child(1),
 .admin-deceades-table td:nth-child(1) {
-    width: 40px;
+    min-width: 52px;
 }
 
 .admin-deceades-table th:nth-child(2),
 .admin-deceades-table td:nth-child(2) {
-    width: 120px;
+    min-width: 160px;
 }
 
 .admin-deceades-table th:nth-child(3),
 .admin-deceades-table td:nth-child(3),
 .admin-deceades-table th:nth-child(4),
 .admin-deceades-table td:nth-child(4) {
-    width: 95px;
+    min-width: 120px;
 }
 
 .admin-deceades-table th:nth-child(5),
 .admin-deceades-table td:nth-child(5) {
-    width: 110px;
+    min-width: 150px;
 }
 
 .admin-deceades-table th:nth-child(6),
 .admin-deceades-table td:nth-child(6) {
-    width: 65px;
+    min-width: 130px;
 }
 
 .admin-deceades-table th:nth-child(7),
 .admin-deceades-table td:nth-child(7) {
-    width: 180px;
+    min-width: 90px;
 }
 
 .admin-deceades-table th:nth-child(8),
 .admin-deceades-table td:nth-child(8) {
-    width: 120px;
+    min-width: 86px;
+    white-space: nowrap;
+}
+
+.admin-deceades-table th:nth-child(9),
+.admin-deceades-table td:nth-child(9) {
+    min-width: 170px;
+    text-align: left;
+}
+
+.admin-deceades-table th:nth-child(10),
+.admin-deceades-table td:nth-child(10) {
+    min-width: 145px;
 }
 
 .admin-deceades-table .empty {
@@ -195,14 +211,52 @@
     color: var(--adm-text-muted);
 }
 
+/* ===== Kivonat cella: ne csússzon el ===== */
+.admin-deceades-table td[data-label="Kivonat"] {
+    text-align: left;
+}
+
+.admin-deceades-table td[data-label="Kivonat"] .admin-deceades-file-actions,
+.admin-deceades-table td[data-label="Kivonat"] .admin-deceades-actions {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+}
+
+/* Kivonat linkek gomb stílusa */
+.admin-deceades-table td[data-label="Kivonat"] a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-decoration: none;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: #fff;
+    background: #6366f1;
+}
+
+.admin-deceades-table td[data-label="Kivonat"] a:last-child {
+    background: #4b5563;
+}
+
+/* Művelet gombok */
 .admin-deceades-actions {
     display: flex;
     gap: 0.4rem;
     justify-content: flex-end;
+    align-items: center;
     flex-wrap: wrap;
 }
 
-.admin-deceades-actions button {
+.admin-deceades-actions button,
+.admin-deceades-actions a {
     border: none;
     border-radius: 6px;
     padding: 0.4rem 0.6rem;
@@ -210,53 +264,59 @@
     cursor: pointer;
     background: #6366f1;
     color: #fff;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
 .admin-deceades-actions .danger {
     background: #e53e3e;
 }
 
-/* ===== ÚJ: Kivonat gombok (Megnyitás + Letöltés) ===== */
-.admin-deceades-file-actions {
+/* ===== Pagination ===== */
+.admin-deceades-pagination-container {
     display: flex;
-    gap: 0.4rem;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.9rem;
+    flex-wrap: nowrap;
 }
 
-.admin-deceades-file-btn {
-    display: inline-flex;
+.admin-deceades-pagination-info {
+    margin: 0;
+}
+
+.admin-deceades-pagination-buttons {
+    display: flex;
     align-items: center;
-    justify-content: center;
+    gap: 0.5rem;
+    margin-left: auto;
+}
+
+.admin-deceades-pagination-buttons button {
     border: none;
-    border-radius: 6px;
-    padding: 0.4rem 0.6rem;
-    font-size: 0.8rem;
+    border-radius: 8px;
+    padding: 0.55rem 0.9rem;
+    font-size: 0.9rem;
     font-weight: 600;
     cursor: pointer;
-    text-decoration: none;
-    line-height: 1.2;
-    white-space: nowrap;
+    background: #6366f1;
+    color: #fff;
     transition: filter 0.15s ease, transform 0.05s ease;
 }
 
-.admin-deceades-file-btn:hover {
+.admin-deceades-pagination-buttons button:hover:not(:disabled) {
     filter: brightness(0.95);
 }
 
-.admin-deceades-file-btn:active {
+.admin-deceades-pagination-buttons button:active:not(:disabled) {
     transform: translateY(1px);
 }
 
-.admin-deceades-file-btn--open {
-    background: #6366f1; /* mint a sima "Szerk." */
-    color: #fff;
-}
-
-.admin-deceades-file-btn--download {
-    background: #4b5563; /* visszafogott másodlagos */
-    color: #fff;
+.admin-deceades-pagination-buttons button:disabled {
+    background: #c7d2fe;
+    color: #eef2ff;
+    cursor: not-allowed;
 }
 
 @media (max-width: 1200px) {
@@ -276,12 +336,8 @@
 
 @media (max-width: 900px) {
     .admin-deceades-table {
+        min-width: 980px;
         table-layout: auto;
-    }
-
-    .admin-deceades-table th,
-    .admin-deceades-table td {
-        white-space: normal;
     }
 }
 
@@ -313,6 +369,10 @@
         display: none;
     }
 
+    .admin-deceades-table {
+        min-width: 100%;
+    }
+
     .admin-deceades-table tr {
         display: block;
         border: 1px solid var(--adm-border-default);
@@ -328,6 +388,7 @@
         padding: 0.35rem 0;
         word-break: break-word;
         overflow-wrap: anywhere;
+        white-space: normal;
     }
 
     .admin-deceades-table td::before {
@@ -344,19 +405,35 @@
         width: 100%;
     }
 
-    .admin-deceades-actions button {
+    .admin-deceades-actions button,
+    .admin-deceades-actions a {
         width: 100%;
+        text-align: center;
     }
 
-    .admin-deceades-file-actions {
+    .admin-deceades-table td[data-label="Kivonat"] .admin-deceades-file-actions,
+    .admin-deceades-table td[data-label="Kivonat"] .admin-deceades-actions {
         flex-direction: column;
         align-items: stretch;
         width: 100%;
     }
 
-    .admin-deceades-file-btn {
+    .admin-deceades-table td[data-label="Kivonat"] a {
         width: 100%;
         text-align: center;
+    }
+
+    .admin-deceades-pagination-container {
+        flex-wrap: wrap;
+    }
+
+    .admin-deceades-pagination-buttons {
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .admin-deceades-pagination-buttons button {
+        flex: 1;
     }
 }
 
