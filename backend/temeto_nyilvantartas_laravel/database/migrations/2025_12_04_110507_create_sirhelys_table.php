@@ -14,12 +14,16 @@ return new class extends Migration
         Schema::create('sirhely', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sor_id')->constrained('sor')->restrictOnDelete();
-            $table->string('sirkod')->unique();
-            $table->string('tipus');
+            $table->string('sorszam');
+            $table->foreignId('sirhely_tipus_id')
+                ->nullable()
+                ->constrained('sirhely_tipus')
+                ->nullOnDelete()
+                ->cascadeOnUpdate();
             $table->string('allapot')->nullable();
             $table->string('foto')->nullable();
             $table->foreignId('sirberlo_id')->nullable()
-                  ->constrained('sirberlo')->nullOnDelete();
+                ->constrained('sirberlo')->nullOnDelete();
             $table->timestamps();
         });
     }

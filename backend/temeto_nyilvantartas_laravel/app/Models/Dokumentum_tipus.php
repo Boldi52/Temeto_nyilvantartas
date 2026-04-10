@@ -12,9 +12,8 @@ class Dokumentum_tipus extends Model
     protected $keyType = 'int';
     public $timestamps = true;
 
-    public function dokumentum()
+    public function dokumentumok()
     {
-        return $this->belongsTo(Dokumentum::class, 'dokumentum_id', 'id');
+        return $this->hasMany(Dokumentum::class, 'dokumentum_tipus_id');
     }
 }
-

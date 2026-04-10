@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('sirhely_id')->nullable()->constrained('sirhely')->nullOnDelete();
             $table->foreignId('sirberlo_id')->nullable()->constrained('sirberlo')->nullOnDelete();
+            $table->foreignId('dokumentum_tipus_id')->constrained('dokumentum_tipus')->cascadeOnDelete();
             $table->string('tipus')->nullable();
             $table->date('datum')->nullable();
             $table->text('leiras')->nullable();

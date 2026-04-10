@@ -10,8 +10,8 @@ class Dokumentum extends Model
     public $incrementing = true;
     protected $keyType = 'int';
     public $timestamps = true;
-    public function dokumentum_tipusok()
+    public function tipus()
     {
-        return $this->hasMany(Dokumentum_tipus::class, 'dokumentum_id', 'id');
+        return $this->belongsTo(Dokumentum_tipus::class, 'dokumentum_tipus_id');
     }
 }

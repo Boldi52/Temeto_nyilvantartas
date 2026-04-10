@@ -13,8 +13,6 @@ return new class extends Migration {
         Schema::create('dokumentum_tipus', function (Blueprint $table) {
             $table->id();
             $table->string('tipus_elnevezese');
-            $table->foreignId('dokumentum_id')->nullable()
-                ->constrained('dokumentum')->cascadeOnDelete();
             $table->timestamps();
         });
     }

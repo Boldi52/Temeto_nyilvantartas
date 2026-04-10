@@ -26,7 +26,6 @@ class DokumentumTipusController extends Controller
             $request->all(),
             [
                 'tipus_elnevezese' => 'required|string|max:255',
-                'dokumentum_id'    => 'nullable|integer|exists:dokumentum,id',
             ],
             [
                 'tipus_elnevezese.required' => 'A típus elnevezése kötelező.',
@@ -50,7 +49,6 @@ class DokumentumTipusController extends Controller
 
         $dokTipus = new Dokumentum_tipus();
         $dokTipus->tipus_elnevezese = $data['tipus_elnevezese'];
-        $dokTipus->dokumentum_id    = $data['dokumentum_id'] ?? null;
         $dokTipus->save();
 
         return response()->json([

@@ -24,7 +24,7 @@ const GraveSites = () => {
       let json = null;
       try {
         json = text ? JSON.parse(text) : null;
-      } catch {}
+      } catch { }
 
       if (!resp.ok) {
         throw new Error(
@@ -154,17 +154,17 @@ const GraveSites = () => {
     setZoomOpen(true);
   };
 
- if (loading) {
-  return (
-    <div className="deceasedpage-wrapper loading-center">
-      <div className="spinner" role="status" aria-label="Betöltés" />
-    </div>
-  );
-}
+  if (loading) {
+    return (
+      <div className="deceasedpage-wrapper loading-center">
+        <div className="spinner" role="status" aria-label="Betöltés" />
+      </div>
+    );
+  }
 
   const fotoSrc = getSirhelyFotoUrl(kivalasztottSirhely);
   const fotoAlt =
-    kivalasztottSirhely?.sirkod ? `Sírhely: ${kivalasztottSirhely.sirkod}` : "S��rhely fotó";
+    kivalasztottSirhely?.sirkod ? `Sírhely: ${kivalasztottSirhely.sirkod}` : "Sírhely fotó";
 
   return (
     <div className="gravesites-wrapper">
@@ -283,7 +283,7 @@ const GraveSites = () => {
                   <div className="gravesites-photo__meta">
                     <strong>{kivalasztottSirhely?.sirkod ?? "Nincs sírkód"}</strong>
                     {kivalasztottSirhely?.tipus ? ` • ${kivalasztottSirhely.tipus}` : ""}
-                    
+
                   </div>
                 </div>
 

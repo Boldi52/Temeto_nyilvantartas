@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('sirhely_tipus', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sirhely_id')->constrained('sirhely')->cascadeOnDelete();
             $table->string('nev');
             $table->timestamps();
         });

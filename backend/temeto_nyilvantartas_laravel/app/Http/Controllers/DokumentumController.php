@@ -29,6 +29,7 @@ class DokumentumController extends Controller
                 'sirhely_id'  => 'nullable|integer|exists:sirhely,id',
                 'sirberlo_id' => 'nullable|integer|exists:sirberlo,id',
                 'tipus'       => 'nullable|string|max:255',
+                'dokumentum_tipus_id' => 'required|exists:dokumentum_tipus,id',
                 'datum'       => 'nullable|date',
                 'leiras'      => 'nullable|string|max:1000',
 
@@ -74,6 +75,7 @@ class DokumentumController extends Controller
         $dokumentum->sirhely_id      = $data['sirhely_id'] ?? null;
         $dokumentum->sirberlo_id     = $data['sirberlo_id'] ?? null;
         $dokumentum->tipus           = $data['tipus'] ?? null;
+        $dokumentum->dokumentum_tipus_id = $data['dokumentum_tipus_id'];
         $dokumentum->datum           = $data['datum'] ?? null;
         $dokumentum->leiras          = $data['leiras'] ?? null;
         $dokumentum->fajl_utvonal    = $path;

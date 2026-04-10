@@ -9,25 +9,26 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-   public function up(): void
-{
-    Schema::create('sirberlo', function (Blueprint $table) {
-        $table->id();
-        $table->string('nev');
-        $table->string('email_cim');
-        $table->string('kozterulet_neve');
+    public function up(): void
+    {
+        Schema::create('sirberlo', function (Blueprint $table) {
+            $table->id();
+            $table->string('nev');
+            $table->string('email_cim');
+            $table->string('kozterulet_neve');
+            $table->string('hazszam');
 
-        $table->foreignId('kozterulet_tipus_id')
-              ->nullable()
-              ->constrained('kozterulet_tipus')
-              ->nullOnDelete();
+            $table->foreignId('kozterulet_tipus_id')
+                ->nullable()
+                ->constrained('kozterulet_tipus')
+                ->nullOnDelete();
 
-        $table->foreignId('telepules_id')
-              ->constrained('telepules')
-              ->restrictOnDelete();
-        $table->timestamps();
-    });
-}
+            $table->foreignId('telepules_id')
+                ->constrained('telepules')
+                ->restrictOnDelete();
+            $table->timestamps();
+        });
+    }
 
     /**
      * Reverse the migrations.

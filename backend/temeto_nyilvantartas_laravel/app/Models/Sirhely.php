@@ -31,9 +31,9 @@ class Sirhely extends Model
         return $this->belongsTo(Sor::class, 'sor_id', 'id');
     }
 
-    public function sirhelyTipusok()
+    public function tipus()
     {
-        return $this->hasMany(Sirhely_tipus::class, 'sirhely_id', 'id');
+        return $this->belongsTo(Sirhely_tipus::class, 'sirhely_tipus_id');
     }
 
     public function dokumentumok()
