@@ -75,15 +75,13 @@ class DokumentumTipusController extends Controller
             $request->all(),
             [
                 'tipus_elnevezese' => 'required|string|max:255',
-                'dokumentum_id'    => 'nullable|integer|exists:dokumentum,id',
+                'dokumentum_id' => 'prohibited',
             ],
             [
                 'tipus_elnevezese.required' => 'A típus elnevezése kötelező.',
                 'tipus_elnevezese.string'   => 'A típus elnevezése szöveg típusú legyen.',
                 'tipus_elnevezese.max'      => 'A típus elnevezése legfeljebb 255 karakter lehet.',
-
-                'dokumentum_id.integer' => 'A dokumentum azonosító csak szám lehet.',
-                'dokumentum_id.exists'  => 'A megadott dokumentum nem található.',
+                
             ]
         );
 
@@ -98,7 +96,6 @@ class DokumentumTipusController extends Controller
         $dokumentumTipus = Dokumentum_tipus::find($id);
         if (!empty($dokumentumTipus)) {
             $dokumentumTipus->tipus_elnevezese = $request->tipus_elnevezese;
-            $dokumentumTipus->dokumentum_id    = $request->dokumentum_id;
             $dokumentumTipus->save();
 
             return response()->json(["message" => "Dokumentum típus sikeresen módosítva!"], 202);

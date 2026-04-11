@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Telepules;
+use App\Models\Sirberlok;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -71,9 +72,9 @@ class TelepulesController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $ir_szam)
+    public function show(string $id)
     {
-        $telepules = Telepules::find($ir_szam);
+        $telepules = Telepules::find($id);
         if (!empty($telepules)) {
             return response()->json($telepules);
         } else {
@@ -135,10 +136,13 @@ class TelepulesController extends Controller
      */
     public function destroy(string $id)
     {
+        $telepules = Telepules::find($id);
+        if (!empty($telepules)) {
+            // Először törlünk minden sírbérlőt amely erre a településre hivatkozik
+            Sirberlok::where('telepules_id', $id)->delete();
 
-        $telepulesTorles = Telepules::find($id);
-        if (!empty($telepulesTorles)) {
-            $telepulesTorles->delete();
+            // Aztán töröljük a településet
+            $telepules->delete();
             return response()->json(["message" => "Település sikeresen törölve!"]);
         } else {
             return response()->json(["message" => "Nincs település ezzel az id-val!"], 404);

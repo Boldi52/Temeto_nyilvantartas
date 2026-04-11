@@ -7,9 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 class Telepules extends Model
 {
     protected $table = 'telepules';
+
+    public $primaryKey = 'id';
     
-    // Ezek a mezők lehetnek tömeges hozzárendelésben
     protected $fillable = ['ir_szam', 'nev'];
     
     public $timestamps = true;
+
+    public function sirbnerlok()
+    {
+        return $this->hasMany(Sirberlo::class, 'telepules_id', 'id');
+    }
+
+
 }

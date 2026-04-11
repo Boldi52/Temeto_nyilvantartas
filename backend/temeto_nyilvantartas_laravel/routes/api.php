@@ -79,10 +79,10 @@ Route::put('/sirhelytipusok/{id}', [\App\Http\Controllers\SirhelyTipusController
 Route::delete('/sirhelytipusok/{id}', [\App\Http\Controllers\SirhelyTipusController::class, 'destroy']); // sirhely tipus törlése id alapján
 
 Route::get('/telepulesek', [\App\Http\Controllers\TelepulesController::class, 'index']); // ez a route kiirja az összes települést.
-Route::get('/telepulesek/{ir_szam}', [\App\Http\Controllers\TelepulesController::class, 'show']); // ez a route egy település adatait adja vissza, ir_szam alapján szűrve.
+Route::get('/telepulesek/{id}', [\App\Http\Controllers\TelepulesController::class, 'show']); // ez a route egy település adatait adja vissza, ir_szam alapján szűrve.
 Route::post('/telepulesek', [\App\Http\Controllers\TelepulesController::class, 'store']); // új település létrehozása a request-ben megadott adatokkal
-Route::put('/telepulesek/{ir_szam}', [\App\Http\Controllers\TelepulesController::class, 'update']); // település frissítése ir_szam alapján
-Route::delete('/telepulesek/{ir_szam}', [\App\Http\Controllers\TelepulesController::class, 'destroy']); // település törlése ir_szam alapján
+Route::put('/telepulesek/{id}', [\App\Http\Controllers\TelepulesController::class, 'update']); // település frissítése id alapján
+Route::delete('/telepulesek/{id}', [\App\Http\Controllers\TelepulesController::class, 'destroy']); // település törlése idElhunytak alapján
 
 
 

@@ -6,6 +6,8 @@ use App\Models\Sirberlo;
 use App\Models\Telepules;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+
 
 class SirberloController extends Controller
 {
@@ -30,83 +32,82 @@ class SirberloController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-{
-    // Logold az összes bejövő adatot
-    \Log::info('Store request data:', $request->all());
-    
-    $sirberloValidator = Validator::make(
-        $request->all(),
-        [
-            'nev'                => 'required|string|max:255',
-            'kozterulet_neve'    => 'required|string|max:255',
-            'kozterulet_tipus_id' => 'nullable|integer|exists:kozterulet_tipus,id',
-            'email_cim'          => 'nullable|email|max:255',
-            'telefonszam'        => 'nullable|string|max:30',
-            'hazszam'            => 'required',
-            'telepules_ir_szam'  => 'required',
-            'telepules_nev'      => 'required|string|max:255'
-        ]
-    );
+    {
+        Log::info('Store request data:', $request->all());
 
-    if ($sirberloValidator->fails()) {
-        return response()->json([
-            'success' => false,
-            'message' => 'Az adatok nem megfelelőek!',
-            'errors'  => $sirberloValidator->errors()->toArray(),
-        ], 422);
-    }
+        $sirberloValidator = Validator::make(
+            $request->all(),
+            [
+                'nev'                => 'required|string|max:255',
+                'kozterulet_neve'    => 'required|string|max:255',
+                'kozterulet_tipus_id' => 'nullable|integer|exists:kozterulet_tipus,id',
+                'email_cim'          => 'nullable|email|max:255',
+                'telefonszam'        => 'nullable|string|max:30',
+                'hazszam'            => 'required',
+                'telepules_ir_szam'  => 'required',
+                'telepules_nev'      => 'required|string|max:255'
+            ]
+        );
 
-    $data = $sirberloValidator->validated();
-    
-    try {
-        $telepulesIrszam = (int)$data['telepules_ir_szam'];
-        $telepulesNev = trim($data['telepules_nev']);
-        
-        \Log::info("Keresés: ir_szam=$telepulesIrszam, nev=$telepulesNev");
-        
-        // Keress a település után
-        $telepules = Telepules::where('ir_szam', $telepulesIrszam)
-            ->where('nev', $telepulesNev)
-            ->first();
-        
-        // Ha nem létezik, hozd létre!
-        if (!$telepules) {
-            \Log::info("Új település létrehozása: ir_szam=$telepulesIrszam, nev=$telepulesNev");
-            $telepules = new Telepules();
-            $telepules->ir_szam = $telepulesIrszam;
-            $telepules->nev = $telepulesNev;
-            $telepules->save();
-            \Log::info("Település létrehozva: ID=" . $telepules->id);
-        } else {
-            \Log::info("Település megtalálva: ID=" . $telepules->id);
+        if ($sirberloValidator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Az adatok nem megfelelőek!',
+                'errors'  => $sirberloValidator->errors()->toArray(),
+            ], 422);
         }
 
-        $sirberlo = new Sirberlo();
-        $sirberlo->nev                 = $data['nev'];
-        $sirberlo->kozterulet_neve     = $data['kozterulet_neve'];
-        $sirberlo->kozterulet_tipus_id = $data['kozterulet_tipus_id'] ?? null;
-        $sirberlo->hazszam             = $data['hazszam'];
-        $sirberlo->telepules_id        = $telepules->id;
-        $sirberlo->email_cim           = $data['email_cim'] ?? null;
-        $sirberlo->telefonszam         = $data['telefonszam'] ?? null;
-        $sirberlo->save();
+        $data = $sirberloValidator->validated();
 
-        \Log::info("Sírbérlő mentve: ID=" . $sirberlo->id);
+        try {
+            $telepulesIrszam = (int)$data['telepules_ir_szam'];
+            $telepulesNev = trim($data['telepules_nev']);
 
-        return response()->json([
-            'success' => true,
-            'message' => 'Sírbérlő rögzítve.',
-            'data'    => $sirberlo,
-        ], 201);
-    } catch (\Exception $e) {
-        \Log::error('Sirberlo store error: ' . $e->getMessage());
-        \Log::error('Stack trace: ' . $e->getTraceAsString());
-        return response()->json([
-            'success' => false,
-            'message' => 'Hiba történt a mentés során: ' . $e->getMessage(),
-        ], 500);
+            Log::info("Keresés: ir_szam=$telepulesIrszam, nev=$telepulesNev");
+
+
+            $telepules = Telepules::where('ir_szam', $telepulesIrszam)
+                ->where('nev', $telepulesNev)
+                ->first();
+
+
+            if (!$telepules) {
+                Log::info("Új település létrehozása: ir_szam=$telepulesIrszam, nev=$telepulesNev");
+                $telepules = new Telepules();
+                $telepules->ir_szam = $telepulesIrszam;
+                $telepules->nev = $telepulesNev;
+                $telepules->save();
+                Log::info("Település létrehozva: ID=" . $telepules->id);
+            } else {
+                Log::info("Település megtalálva: ID=" . $telepules->id);
+            }
+
+            $sirberlo = new Sirberlo();
+            $sirberlo->nev                 = $data['nev'];
+            $sirberlo->kozterulet_neve     = $data['kozterulet_neve'];
+            $sirberlo->kozterulet_tipus_id = $data['kozterulet_tipus_id'] ?? null;
+            $sirberlo->hazszam             = $data['hazszam'];
+            $sirberlo->telepules_id        = $telepules->id;
+            $sirberlo->email_cim           = $data['email_cim'] ?? null;
+            $sirberlo->telefonszam         = $data['telefonszam'] ?? null;
+            $sirberlo->save();
+
+            Log::info("Sírbérlő mentve: ID=" . $sirberlo->id);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Sírbérlő rögzítve.',
+                'data'    => $sirberlo,
+            ], 201);
+        } catch (\Exception $e) {
+            Log::error('Sirberlo store error: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            return response()->json([
+                'success' => false,
+                'message' => 'Hiba történt a mentés során: ' . $e->getMessage(),
+            ], 500);
+        }
     }
-}
 
     /**
      * Display the specified resource.
@@ -168,17 +169,17 @@ class SirberloController extends Controller
         }
 
         $data = $sirberloValidator->validated();
-        
+
         try {
             $telepulesIrszam = (int)$data['telepules_ir_szam'];
             $telepulesNev = trim($data['telepules_nev']);
-            
-            // Keress a település után
+
+           
             $telepules = Telepules::where('ir_szam', $telepulesIrszam)
                 ->where('nev', $telepulesNev)
                 ->first();
+
             
-            // Ha nem létezik, hozd létre!
             if (!$telepules) {
                 $telepules = new Telepules();
                 $telepules->ir_szam = $telepulesIrszam;
@@ -197,7 +198,7 @@ class SirberloController extends Controller
 
             return response()->json(["message" => "Sírbérlő sikeresen módosítva!"], 202);
         } catch (\Exception $e) {
-            \Log::error('Sirberlo update error: ' . $e->getMessage());
+            Log::error('Sirberlo update error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
                 'message' => 'Hiba történt a módosítás során: ' . $e->getMessage(),

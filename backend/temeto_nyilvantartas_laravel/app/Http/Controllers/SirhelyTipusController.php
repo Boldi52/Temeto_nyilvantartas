@@ -33,14 +33,9 @@ class SirhelyTipusController extends Controller
         $sirhely_tipusValidator = Validator::make(
             $request->all(),
             [
-                'sirhely_id' => 'required|integer|exists:sirhely,id',
                 'nev'        => 'required|string|max:255',
             ],
             [
-                'sirhely_id.required' => 'A sírhely megadása kötelező.',
-                'sirhely_id.integer'  => 'A sírhely azonosító csak szám lehet.',
-                'sirhely_id.exists'   => 'A megadott sírhely nem található.',
-
                 'nev.required'        => 'A név megadása kötelező.',
                 'nev.string'          => 'A név szöveg típusú legyen.',
                 'nev.max'             => 'A név legfeljebb 255 karakter lehet.',
@@ -58,7 +53,6 @@ class SirhelyTipusController extends Controller
         $data = $sirhely_tipusValidator->validated();
 
         $sirhelyTipus = new Sirhely_tipus();
-        $sirhelyTipus->sirhely_id = $data['sirhely_id'];
         $sirhelyTipus->nev        = $data['nev'];
         $sirhelyTipus->save();
 
@@ -98,14 +92,9 @@ class SirhelyTipusController extends Controller
         $sirhelyTipusValidator = Validator::make(
             $request->all(),
             [
-                'sirhely_id' => 'required|integer|exists:sirhely,id',
                 'nev'        => 'required|string|max:255',
             ],
             [
-                'sirhely_id.required' => 'A sírhely megadása kötelező.',
-                'sirhely_id.integer'  => 'A sírhely azonosító csak szám lehet.',
-                'sirhely_id.exists'   => 'A megadott sírhely nem található.',
-
                 'nev.required'        => 'A név megadása kötelező.',
                 'nev.string'          => 'A név szöveg típusú legyen.',
                 'nev.max'             => 'A név legfeljebb 255 karakter lehet.',
@@ -122,7 +111,6 @@ class SirhelyTipusController extends Controller
 
         $sirhelyTipus = Sirhely_tipus::find($id);
         if (!empty($sirhelyTipus)) {
-            $sirhelyTipus->sirhely_id = $request->sirhely_id;
             $sirhelyTipus->nev        = $request->nev;
             $sirhelyTipus->save();
 
