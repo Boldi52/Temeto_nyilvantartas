@@ -26,11 +26,15 @@ export default function AdminGraveTenant() {
     const [error, setError] = useState("");
     const [fieldErrors, setFieldErrors] = useState({});
 
+    // Pagination
+    const [page, setPage] = useState(1);
+    const pageSize = 10;
+
     const getAuthHeaders = () => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem("token");
         return {
-            'Content-Type': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : '',
+            "Content-Type": "application/json",
+            Authorization: token ? `Bearer ${token}` : "",
         };
     };
 
@@ -43,7 +47,7 @@ export default function AdminGraveTenant() {
             const [tenantsRes, kozteruletRes, telepulesRes] = await Promise.all([
                 fetch(`${API_BASE}/sirberlok`, { headers }),
                 fetch(`${API_BASE}/kozteuletTipusok`, { headers }),
-                fetch(`${API_BASE}/telepulesek`, { headers })
+                fetch(`${API_BASE}/telepulesek`, { headers }),
             ]);
 
             if (!tenantsRes.ok) {
@@ -59,12 +63,13 @@ export default function AdminGraveTenant() {
             const [tenantsData, kozteruletData, telepulesData] = await Promise.all([
                 tenantsRes.json(),
                 kozteruletRes.json(),
-                telepulesRes.json()
+                telepulesRes.json(),
             ]);
 
             setTenants(Array.isArray(tenantsData) ? tenantsData : []);
             setKozteruletTipusok(Array.isArray(kozteruletData) ? kozteruletData : []);
             setTelepulesek(Array.isArray(telepulesData) ? telepulesData : []);
+            setPage(1); // frissítés után mindig első oldal
         } catch (err) {
             console.error("Betöltési hiba:", err);
             setError(err.message || "Ismeretlen hiba történt.");
@@ -81,7 +86,7 @@ export default function AdminGraveTenant() {
         const { name, value } = e.target;
         setForm((f) => ({ ...f, [name]: value }));
         if (fieldErrors[name]) {
-            setFieldErrors(prev => {
+            setFieldErrors((prev) => {
                 const newErrors = { ...prev };
                 delete newErrors[name];
                 return newErrors;
@@ -90,7 +95,7 @@ export default function AdminGraveTenant() {
     };
 
     const handleEdit = (t) => {
-        const telepules = telepulesek.find(tp => tp.id === t.telepules_id);
+        const telepules = telepulesek.find((tp) => tp.id === t.telepules_id);
 
         setForm({
             id: t.id,
@@ -105,7 +110,7 @@ export default function AdminGraveTenant() {
         });
         setFieldErrors({});
         setError("");
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     const handleDelete = async (id) => {
@@ -115,7 +120,7 @@ export default function AdminGraveTenant() {
         try {
             const res = await fetch(`${API_BASE}/sirberlok/${id}`, {
                 method: "DELETE",
-                headers: getAuthHeaders()
+                headers: getAuthHeaders(),
             });
 
             if (!res.ok) {
@@ -136,73 +141,67 @@ export default function AdminGraveTenant() {
     };
 
     const handleSubmit = async (e) => {
-    e.preventDefault();
-    setSaving(true);
-    setError("");
-    setFieldErrors({});
-
-    const method = form.id ? "PUT" : "POST";
-    const url = form.id
-        ? `${API_BASE}/sirberlok/${form.id}`
-        : `${API_BASE}/sirberlok`;
-
-    const payload = {
-        nev: form.nev,
-        email_cim: form.email_cim || null,
-        telefonszam: form.telefonszam || null,
-        kozterulet_neve: form.kozterulet_neve,
-        hazszam: form.hazszam,
-        kozterulet_tipus_id: form.kozterulet_tipus_id || null,
-        telepules_ir_szam: parseInt(form.telepules_ir_szam, 10) || 0,
-        telepules_nev: form.telepules_nev || "",
-    };
-
-    console.log("Küldött payload:", payload);  // Debuggoláshoz
-
-    try {
-        const res = await fetch(url, {
-            method,
-            headers: getAuthHeaders(),
-            body: JSON.stringify(payload),
-        });
-
-        console.log("Response status:", res.status);  // Debuggoláshoz
-
-        if (res.status === 422) {
-            const body = await res.json();
-            setFieldErrors(body.errors || {});
-            throw new Error(body.message || "Validációs hiba történt.");
-        }
-
-        if (!res.ok) {
-            const body = await res.json().catch(() => ({}));
-            throw new Error(body.message || `Mentés sikertelen (${res.status})`);
-        }
-
-        await loadData();
-        setForm(emptyForm);
+        e.preventDefault();
+        setSaving(true);
         setError("");
-    } catch (err) {
-        console.error("Mentési hiba:", err);
-        if (!err.message.includes("Validációs")) {
-            setError(err.message || "Ismeretlen hiba történt.");
+        setFieldErrors({});
+
+        const method = form.id ? "PUT" : "POST";
+        const url = form.id ? `${API_BASE}/sirberlok/${form.id}` : `${API_BASE}/sirberlok`;
+
+        const payload = {
+            nev: form.nev,
+            email_cim: form.email_cim || null,
+            telefonszam: form.telefonszam || null,
+            kozterulet_neve: form.kozterulet_neve,
+            hazszam: form.hazszam,
+            kozterulet_tipus_id: form.kozterulet_tipus_id || null,
+            telepules_ir_szam: parseInt(form.telepules_ir_szam, 10) || 0,
+            telepules_nev: form.telepules_nev || "",
+        };
+
+        try {
+            const res = await fetch(url, {
+                method,
+                headers: getAuthHeaders(),
+                body: JSON.stringify(payload),
+            });
+
+            if (res.status === 422) {
+                const body = await res.json();
+                setFieldErrors(body.errors || {});
+                throw new Error(body.message || "Validációs hiba történt.");
+            }
+
+            if (!res.ok) {
+                const body = await res.json().catch(() => ({}));
+                throw new Error(body.message || `Mentés sikertelen (${res.status})`);
+            }
+
+            await loadData();
+            setForm(emptyForm);
+            setError("");
+        } catch (err) {
+            console.error("Mentési hiba:", err);
+            if (!err.message.includes("Validációs")) {
+                setError(err.message || "Ismeretlen hiba történt.");
+            }
+        } finally {
+            setSaving(false);
         }
-    } finally {
-        setSaving(false);
-    }
-};
+    };
 
     const isEditing = !!form.id;
 
     const getKozteruletTipusNev = (id) => {
         if (!id) return "";
-        const tipus = kozteruletTipusok.find(k => k.id === parseInt(id));
+        const tipus = kozteruletTipusok.find((k) => k.id === parseInt(id, 10));
         return tipus ? tipus.nev : "";
     };
 
     const getTelepulesNev = (telepulesId) => {
         if (!telepulesId) return "—";
-        const telepules = telepulesek.find(t => t.id === telepulesId);
+        const telepules = telepulesek.find((t) => t.id === telepulesId);
         return telepules ? `${telepules.nev} (${telepules.ir_szam})` : "—";
     };
 
@@ -212,15 +211,26 @@ export default function AdminGraveTenant() {
         const tipus = getKozteruletTipusNev(tenant.kozterulet_tipus_id);
         if (tipus) parts.push(tipus);
         if (tenant.hazszam) parts.push(tenant.hazszam);
-        return parts.length > 0 ? parts.join(' ') : "—";
+        return parts.length > 0 ? parts.join(" ") : "—";
     };
+
+    // Rendezés: legújabb legelöl (feltételezve, hogy nagyobb id az újabb)
+    const sortedTenants = [...tenants].sort((a, b) => b.id - a.id);
+
+    // Pagination számítás
+    const totalPages = Math.max(1, Math.ceil(sortedTenants.length / pageSize));
+    const currentPage = Math.min(page, totalPages);
+    const startIndex = (currentPage - 1) * pageSize;
+    const pagedTenants = sortedTenants.slice(startIndex, startIndex + pageSize);
 
     return (
         <div className="admin-gravetenant-page">
             <AdminBackLink />
             <div className="admin-gravetenant-header">
                 <h2 className="admin-gravetenant-title">Sírbérlők kezelése</h2>
-                <p className="admin-gravetenant-subtitle">Itt kezelheted a sírbérlők adatait - hozzáadás, módosítás és törlés.</p>
+                <p className="admin-gravetenant-subtitle">
+                    Itt kezelheted a sírbérlők adatait - hozzáadás, módosítás és törlés.
+                </p>
             </div>
 
             <div className="admin-gravetenant-grid">
@@ -326,13 +336,17 @@ export default function AdminGraveTenant() {
                                 disabled={saving}
                             >
                                 <option value="">-- Válassz típust --</option>
-                                {kozteruletTipusok.map(kt => (
-                                    <option key={kt.id} value={kt.id}>{kt.nev}</option>
+                                {kozteruletTipusok.map((kt) => (
+                                    <option key={kt.id} value={kt.id}>
+                                        {kt.nev}
+                                    </option>
                                 ))}
                             </select>
                             {fieldErrors.kozterulet_tipus_id && (
                                 <div className="admin-gravetenant-field-error">
-                                    {Array.isArray(fieldErrors.kozterulet_tipus_id) ? fieldErrors.kozterulet_tipus_id[0] : fieldErrors.kozterulet_tipus_id}
+                                    {Array.isArray(fieldErrors.kozterulet_tipus_id)
+                                        ? fieldErrors.kozterulet_tipus_id[0]
+                                        : fieldErrors.kozterulet_tipus_id}
                                 </div>
                             )}
                         </label>
@@ -349,7 +363,9 @@ export default function AdminGraveTenant() {
                             />
                             {fieldErrors.telepules_ir_szam && (
                                 <div className="admin-gravetenant-field-error">
-                                    {Array.isArray(fieldErrors.telepules_ir_szam) ? fieldErrors.telepules_ir_szam[0] : fieldErrors.telepules_ir_szam}
+                                    {Array.isArray(fieldErrors.telepules_ir_szam)
+                                        ? fieldErrors.telepules_ir_szam[0]
+                                        : fieldErrors.telepules_ir_szam}
                                 </div>
                             )}
                         </label>
@@ -366,14 +382,16 @@ export default function AdminGraveTenant() {
                             />
                             {fieldErrors.telepules_nev && (
                                 <div className="admin-gravetenant-field-error">
-                                    {Array.isArray(fieldErrors.telepules_nev) ? fieldErrors.telepules_nev[0] : fieldErrors.telepules_nev}
+                                    {Array.isArray(fieldErrors.telepules_nev)
+                                        ? fieldErrors.telepules_nev[0]
+                                        : fieldErrors.telepules_nev}
                                 </div>
                             )}
                         </label>
 
                         <div className="admin-gravetenant-form-actions">
                             <button type="submit" disabled={saving}>
-                                {saving ? "Mentés..." : (isEditing ? "Módosítások mentése" : "Hozzáadás")}
+                                {saving ? "Mentés..." : isEditing ? "Módosítások mentése" : "Hozzáadás"}
                             </button>
                             {isEditing && (
                                 <button
@@ -397,7 +415,7 @@ export default function AdminGraveTenant() {
                 <div className="admin-gravetenant-card">
                     <div className="admin-gravetenant-list-header">
                         <h3 className="admin-gravetenant-section-title">
-                            Sírbérlők listája ({Math.min(tenants.length, 10)}/{tenants.length})
+                            Sírbérlők listája ({pagedTenants.length}/{tenants.length})
                         </h3>
                         <button onClick={loadData} disabled={loading || saving}>
                             {loading ? "Betöltés..." : "🔄 Frissítés"}
@@ -421,7 +439,7 @@ export default function AdminGraveTenant() {
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    {tenants.length === 0 && (
+                                    {pagedTenants.length === 0 && (
                                         <tr>
                                             <td colSpan="7" className="empty">
                                                 Még nincs egyetlen sírbérlő sem.
@@ -429,11 +447,15 @@ export default function AdminGraveTenant() {
                                         </tr>
                                     )}
 
-                                    {tenants.slice(0, 10).map((t) => (
+                                    {pagedTenants.map((t) => (
                                         <tr key={t.id}>
                                             <td data-label="ID">{t.id}</td>
-                                            <td data-label="Név"><strong>{t.nev}</strong></td>
-                                            <td data-label="E-mail" className="admin-gravetenant-mono">{t.email_cim || "—"}</td>
+                                            <td data-label="Név">
+                                                <strong>{t.nev}</strong>
+                                            </td>
+                                            <td data-label="E-mail" className="admin-gravetenant-mono">
+                                                {t.email_cim || "—"}
+                                            </td>
 
                                             <td data-label="Telefon" className="admin-gravetenant-phone">
                                                 {t.telefonszam || "—"}
@@ -442,11 +464,7 @@ export default function AdminGraveTenant() {
                                             <td data-label="Cím">{formatCim(t)}</td>
                                             <td data-label="Település">{getTelepulesNev(t.telepules_id)}</td>
                                             <td data-label="Műveletek" className="admin-gravetenant-actions">
-                                                <button
-                                                    onClick={() => handleEdit(t)}
-                                                    disabled={saving}
-                                                    title="Szerkesztés"
-                                                >
+                                                <button onClick={() => handleEdit(t)} disabled={saving} title="Szerkesztés">
                                                     ✏️ Szerk.
                                                 </button>
                                                 <button
@@ -463,9 +481,34 @@ export default function AdminGraveTenant() {
                                 </tbody>
                             </table>
 
-                            {tenants.length > 5 && (
-                                <div className="admin-gravetenant-alert">
-                                    Csak az első 5 sírbérlő van megjelenítve. Összesen: {tenants.length}.
+                            {/* Lapozó */}
+                            {tenants.length > pageSize && (
+                                <div
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        gap: "12px",
+                                        marginTop: "12px",
+                                    }}
+                                >
+                                    <button
+                                        onClick={() => setPage((p) => Math.max(1, p - 1))}
+                                        disabled={currentPage === 1 || saving || loading}
+                                    >
+                                        ◀ Előző
+                                    </button>
+
+                                    <span>
+                                        Oldal <strong>{currentPage}</strong> / <strong>{totalPages}</strong>
+                                    </span>
+
+                                    <button
+                                        onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                                        disabled={currentPage === totalPages || saving || loading}
+                                    >
+                                        Következő ▶
+                                    </button>
                                 </div>
                             )}
                         </div>
