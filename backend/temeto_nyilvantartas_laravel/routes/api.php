@@ -84,7 +84,11 @@ Route::post('/telepulesek', [\App\Http\Controllers\TelepulesController::class, '
 Route::put('/telepulesek/{id}', [\App\Http\Controllers\TelepulesController::class, 'update']); // település frissítése id alapján
 Route::delete('/telepulesek/{id}', [\App\Http\Controllers\TelepulesController::class, 'destroy']); // település törlése idElhunytak alapján
 
+Route::get('/sirhely-foto/megnyit/{path}', [SirhelyController::class, 'openPhoto'])
+    ->where('path', '.*');
 
+Route::get('/sirhely-foto/letoltes/{path}', [SirhelyController::class, 'downloadPhoto'])
+    ->where('path', '.*');
 
 
 

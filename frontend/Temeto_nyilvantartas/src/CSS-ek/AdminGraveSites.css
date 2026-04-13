@@ -19,11 +19,77 @@
   --agr-mono-font: "SFMono-Regular", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
 }
 
-/* ===== MAIN PAGE ===== */
+
 .admin-gravesites-page {
   padding: 2rem 1rem;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.admin-gravesites-form input[type="file"] {
+  width: 100%;
+  margin-top: 8px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+  padding: 10px 12px;
+  background: #f8fafc;
+  color: #0f172a;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+  font-size: 0.95rem;
+}
+
+.admin-gravesites-form input[type="file"]:hover {
+  border-color: #94a3b8;
+  background: #f1f5f9;
+}
+
+.admin-gravesites-form input[type="file"]:focus {
+  outline: none;
+  border-color: #2563eb;
+  background: #eff6ff;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+}
+
+.admin-gravesites-form input[type="file"]:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  background: #f8fafc;
+}
+
+.admin-gravesites-form input[type="file"]::file-selector-button {
+  margin-right: 12px;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 12px;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.admin-gravesites-form input[type="file"]::file-selector-button:hover {
+  background: #1d4ed8;
+}
+
+.admin-gravesites-form input[type="file"]:disabled::file-selector-button {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.admin-gravesites-help-text {
+  margin-top: 6px;
+  font-size: 0.85rem;
+  color: #475569;
+  word-break: break-word;
+}
+
+.admin-gravesites-field-error {
+  margin-top: 6px;
+  color: #dc2626;
+  font-size: 0.85rem;
+  font-weight: 500;
 }
 
 .admin-gravesites-main-title {

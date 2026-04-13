@@ -25,6 +25,9 @@ export default function AdminGraveSites() {
   const [sirhelyTipusok, setSirhelyTipusok] = useState([]);
   const [form, setForm] = useState(emptyForm);
 
+  const [photoFile, setPhotoFile] = useState(null);
+  const photoInputRef = useRef(null);
+
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
 
@@ -60,8 +63,7 @@ export default function AdminGraveSites() {
   const normalizeFieldErrors = (errorsObj = {}) => {
     const normalized = {};
     Object.entries(errorsObj).forEach(([key, value]) => {
-      if (Array.isArray(value)) normalized[key] = value[0];
-      else normalized[key] = value;
+      normalized[key] = Array.isArray(value) ? value[0] : value;
     });
     return normalized;
   };
@@ -71,11 +73,11 @@ export default function AdminGraveSites() {
     setError("");
     try {
       const [grRes, parRes, sorRes, berRes, tipusRes] = await Promise.all([
-        fetch(`${API_BASE}/api/sirhelyek`),
-        fetch(`${API_BASE}/api/parcellak`),
-        fetch(`${API_BASE}/api/sorok`),
-        fetch(`${API_BASE}/api/sirberlok`),
-        fetch(`${API_BASE}/api/sirhelytipusok`),
+        fetch(`${API_BASE}/api/sirhelyek`, { headers: { Accept: "application/json" } }),
+        fetch(`${API_BASE}/api/parcellak`, { headers: { Accept: "application/json" } }),
+        fetch(`${API_BASE}/api/sorok`, { headers: { Accept: "application/json" } }),
+        fetch(`${API_BASE}/api/sirberlok`, { headers: { Accept: "application/json" } }),
+        fetch(`${API_BASE}/api/sirhelytipusok`, { headers: { Accept: "application/json" } }),
       ]);
 
       if (!grRes.ok) throw new Error("Sírhelyek betöltése sikertelen.");
@@ -128,6 +130,27 @@ export default function AdminGraveSites() {
     if (success) setSuccess("");
   };
 
+  const handlePhotoChange = (e) => {
+    const selected = e.target.files?.[0] || null;
+    setPhotoFile(selected);
+
+    if (fieldErrors.file) {
+      setFieldErrors((prev) => {
+        const next = { ...prev };
+        delete next.file;
+        return next;
+      });
+    }
+
+    if (error) setError("");
+    if (success) setSuccess("");
+  };
+
+  const clearPhotoInput = () => {
+    setPhotoFile(null);
+    if (photoInputRef.current) photoInputRef.current.value = "";
+  };
+
   const handleEdit = (item) => {
     const selectedSor = sorok.find((s) => Number(s.id) === Number(item.sor_id));
 
@@ -142,6 +165,7 @@ export default function AdminGraveSites() {
       sirberlo_id: item.sirberlo_id ? String(item.sirberlo_id) : "",
     });
 
+    clearPhotoInput();
     setFieldErrors({});
     setError("");
     setSuccess("");
@@ -155,9 +179,20 @@ export default function AdminGraveSites() {
     setSuccess("");
 
     try {
+      const token = localStorage.getItem("token");
+
       const res = await fetch(`${API_BASE}/api/sirhelyek/${id}`, {
         method: "DELETE",
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          Accept: "application/json",
+        },
       });
+
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        throw new Error("Nincs jogosultság vagy lejárt token (401).");
+      }
 
       if (!res.ok) {
         const body = await res.json().catch(() => ({}));
@@ -166,6 +201,12 @@ export default function AdminGraveSites() {
 
       await loadData();
       setCurrentPage(1);
+
+      if (form.id === id) {
+        setForm(emptyForm);
+        clearPhotoInput();
+      }
+
       setSuccess("Sikeres törlés.");
       scrollListToTopOnMobile();
     } catch (err) {
@@ -183,28 +224,52 @@ export default function AdminGraveSites() {
     setSuccess("");
     setFieldErrors({});
 
-    const method = form.id ? "PUT" : "POST";
-    const url = form.id
+    const isEdit = !!form.id;
+    const url = isEdit
       ? `${API_BASE}/api/sirhelyek/${form.id}`
       : `${API_BASE}/api/sirhelyek`;
 
-    const payload = {
-      sor_id: form.sor_id ? Number(form.sor_id) : null,
-      sorszam: form.sorszam ? Number(form.sorszam) : null,
-      sirhely_tipus_id: form.sirhely_tipus_id ? Number(form.sirhely_tipus_id) : null,
-      allapot: form.allapot?.trim() || null,
-      foto: form.foto?.trim() || null,
-      sirberlo_id: form.sirberlo_id ? Number(form.sirberlo_id) : null,
-    };
+    const localErrors = {};
+    if (!form.parcella_id) localErrors.parcella_id = "A parcella kiválasztása kötelező.";
+    if (!form.sor_id) localErrors.sor_id = "A sor kiválasztása kötelező.";
+    if (!form.sirhely_tipus_id) localErrors.sirhely_tipus_id = "A sírhely típus kötelező.";
+    if (!isEdit && !photoFile) localErrors.file = "Új sírhelynél a fotó feltöltése kötelező.";
+
+    if (Object.keys(localErrors).length > 0) {
+      setFieldErrors(localErrors);
+      setSaving(false);
+      return;
+    }
 
     try {
+      const formData = new FormData();
+
+      formData.append("sor_id", form.sor_id);
+      formData.append("sorszam", form.sorszam || "");
+      formData.append("sirhely_tipus_id", form.sirhely_tipus_id);
+      formData.append("allapot", form.allapot?.trim() || "");
+      formData.append("sirberlo_id", form.sirberlo_id || "");
+
+      if (photoFile) formData.append("file", photoFile);
+      if (isEdit) formData.append("_method", "PUT");
+
+      const token = localStorage.getItem("token");
+
       const res = await fetch(url, {
-        method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        method: "POST",
+        headers: {
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          Accept: "application/json",
+        },
+        body: formData,
       });
 
       const body = await res.json().catch(() => ({}));
+
+      if (res.status === 401) {
+        localStorage.removeItem("token");
+        throw new Error("Nincs jogosultság vagy lejárt token (401).");
+      }
 
       if (res.status === 422) {
         setFieldErrors(normalizeFieldErrors(body.errors || {}));
@@ -218,6 +283,7 @@ export default function AdminGraveSites() {
 
       await loadData();
       setForm(emptyForm);
+      clearPhotoInput();
       setCurrentPage(1);
       setSuccess("Sikeres mentés.");
       scrollListToTopOnMobile();
@@ -250,6 +316,16 @@ export default function AdminGraveSites() {
     if (!sirhely_tipus_id) return "—";
     const tipus = sirhelyTipusok.find((t) => Number(t.id) === Number(sirhely_tipus_id));
     return tipus?.tipus_nev ?? tipus?.nev ?? tipus?.megnevezes ?? "—";
+  };
+
+  const getPhotoUrls = (photoPath) => {
+    if (!photoPath) return { openUrl: "", downloadUrl: "" };
+
+    const encoded = encodeURIComponent(photoPath);
+    return {
+      openUrl: `${API_BASE}/api/sirhely-foto/megnyit/${encoded}`,
+      downloadUrl: `${API_BASE}/api/sirhely-foto/letoltes/${encoded}`,
+    };
   };
 
   const isEditing = !!form.id;
@@ -307,6 +383,9 @@ export default function AdminGraveSites() {
                   </option>
                 ))}
               </select>
+              {fieldErrors.parcella_id && (
+                <div className="admin-gravesites-field-error">{fieldErrors.parcella_id}</div>
+              )}
             </label>
 
             <label>
@@ -380,16 +459,23 @@ export default function AdminGraveSites() {
             </label>
 
             <label>
-              Fotó (URL vagy elérési út)
+              Fotó feltöltése {isEditing ? "(opcionális csere)" : "*"}
               <input
-                name="foto"
-                value={form.foto}
-                onChange={handleChange}
-                placeholder="pl. asd.jpg"
+                ref={photoInputRef}
+                type="file"
+                name="file"
+                onChange={handlePhotoChange}
+                accept=".jpg,.jpeg,.png,.webp"
                 disabled={saving}
               />
-              {fieldErrors.foto && (
-                <div className="admin-gravesites-field-error">{fieldErrors.foto}</div>
+              {photoFile && (
+                <div className="admin-gravesites-help-text">Kiválasztva: {photoFile.name}</div>
+              )}
+              {!photoFile && form.foto && (
+                <div className="admin-gravesites-help-text">Jelenlegi fotó: {form.foto}</div>
+              )}
+              {fieldErrors.file && (
+                <div className="admin-gravesites-field-error">{fieldErrors.file}</div>
               )}
             </label>
 
@@ -424,6 +510,7 @@ export default function AdminGraveSites() {
                   className="admin-gravesites-btn--ghost"
                   onClick={() => {
                     setForm(emptyForm);
+                    clearPhotoInput();
                     setFieldErrors({});
                     setError("");
                     setSuccess("");
@@ -472,27 +559,44 @@ export default function AdminGraveSites() {
                       </tr>
                     )}
 
-                    {paginatedGraves.map((g) => (
-                      <tr key={g.id}>
-                        <td>{getParcellaNameFromSorId(g.sor_id)}</td>
-                        <td>{g.sor_id ?? "—"}</td>
-                        <td>{g.sorszam ?? "—"}</td>
-                        <td>{getSirhelyTipusNev(g.sirhely_tipus_id)}</td>
-                        <td>{g.allapot ?? "—"}</td>
-                        <td className="mono">{g.foto ?? "—"}</td>
-                        <td>{getTenantName(g.sirberlo_id)}</td>
-                        <td className="admin-gravesites-actions">
-                          <button onClick={() => handleEdit(g)}>Szerk.</button>
-                          <button
-                            className="admin-gravesites-btn--danger"
-                            onClick={() => handleDelete(g.id)}
-                            disabled={saving}
-                          >
-                            Törlés
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
+                    {paginatedGraves.map((g) => {
+                      const { openUrl, downloadUrl } = getPhotoUrls(g.foto);
+
+                      return (
+                        <tr key={g.id}>
+                          <td>{getParcellaNameFromSorId(g.sor_id)}</td>
+                          <td>{g.sor_id ?? "—"}</td>
+                          <td>{g.sorszam ?? "—"}</td>
+                          <td>{getSirhelyTipusNev(g.sirhely_tipus_id)}</td>
+                          <td>{g.allapot ?? "—"}</td>
+                          <td className="mono">
+                            {g.foto ? (
+                              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                                <a href={openUrl} target="_blank" rel="noreferrer">
+                                  Megnyitás
+                                </a>
+                                <a href={downloadUrl}>
+                                  Letöltés
+                                </a>
+                              </div>
+                            ) : (
+                              "—"
+                            )}
+                          </td>
+                          <td>{getTenantName(g.sirberlo_id)}</td>
+                          <td className="admin-gravesites-actions">
+                            <button onClick={() => handleEdit(g)}>Szerk.</button>
+                            <button
+                              className="admin-gravesites-btn--danger"
+                              onClick={() => handleDelete(g.id)}
+                              disabled={saving}
+                            >
+                              Törlés
+                            </button>
+                          </td>
+                        </tr>
+                      );
+                    })}
                   </tbody>
                 </table>
 
@@ -501,28 +605,42 @@ export default function AdminGraveSites() {
                     <div className="admin-gravesites-mobile-empty">Nincs adat.</div>
                   )}
 
-                  {paginatedGraves.map((g) => (
-                    <div className="admin-gravesites-mobile-card" key={`m-${g.id}`}>
-                      <div><strong>Parcella:</strong> {getParcellaNameFromSorId(g.sor_id)}</div>
-                      <div><strong>Sor:</strong> {g.sor_id ?? "—"}</div>
-                      <div><strong>Sorszám:</strong> {g.sorszam ?? "—"}</div>
-                      <div><strong>Típus:</strong> {getSirhelyTipusNev(g.sirhely_tipus_id)}</div>
-                      <div><strong>Állapot:</strong> {g.allapot ?? "—"}</div>
-                      <div><strong>Fotó:</strong> <span className="mono">{g.foto ?? "—"}</span></div>
-                      <div><strong>Bérlő:</strong> {getTenantName(g.sirberlo_id)}</div>
+                  {paginatedGraves.map((g) => {
+                    const { openUrl, downloadUrl } = getPhotoUrls(g.foto);
 
-                      <div className="admin-gravesites-actions">
-                        <button onClick={() => handleEdit(g)}>Szerk.</button>
-                        <button
-                          className="admin-gravesites-btn--danger"
-                          onClick={() => handleDelete(g.id)}
-                          disabled={saving}
-                        >
-                          Törlés
-                        </button>
+                    return (
+                      <div className="admin-gravesites-mobile-card" key={`m-${g.id}`}>
+                        <div><strong>Parcella:</strong> {getParcellaNameFromSorId(g.sor_id)}</div>
+                        <div><strong>Sor:</strong> {g.sor_id ?? "—"}</div>
+                        <div><strong>Sorszám:</strong> {g.sorszam ?? "—"}</div>
+                        <div><strong>Típus:</strong> {getSirhelyTipusNev(g.sirhely_tipus_id)}</div>
+                        <div><strong>Állapot:</strong> {g.allapot ?? "—"}</div>
+                        <div>
+                          <strong>Fotó:</strong>{" "}
+                          {g.foto ? (
+                            <>
+                              <a href={openUrl} target="_blank" rel="noreferrer">Megnyitás</a>{" "}
+                              | <a href={downloadUrl}>Letöltés</a>
+                            </>
+                          ) : (
+                            <span className="mono">—</span>
+                          )}
+                        </div>
+                        <div><strong>Bérlő:</strong> {getTenantName(g.sirberlo_id)}</div>
+
+                        <div className="admin-gravesites-actions">
+                          <button onClick={() => handleEdit(g)}>Szerk.</button>
+                          <button
+                            className="admin-gravesites-btn--danger"
+                            onClick={() => handleDelete(g.id)}
+                            disabled={saving}
+                          >
+                            Törlés
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
 
