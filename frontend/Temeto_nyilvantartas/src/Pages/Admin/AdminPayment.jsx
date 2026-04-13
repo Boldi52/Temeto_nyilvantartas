@@ -392,6 +392,69 @@ export default function AdminPayment() {
                     ))}
                   </tbody>
                 </table>
+
+                {/* MOBILE CARD LIST */}
+                <div className="admin-payment-mobile-list">
+                  {paginatedPayments.length === 0 && (
+                    <div className="admin-payment-mobile-empty">Nincsenek befizetések.</div>
+                  )}
+
+                  {paginatedPayments.map((p) => (
+                    <div key={`m-${p.id}`} className="admin-payment-mobile-card">
+                      <div className="admin-payment-mobile-card-header">
+                        <div className="admin-payment-mobile-card-title">
+                          {getTenantName(p.sirberlo_id)}
+                        </div>
+                      </div>
+
+                      <div className="admin-payment-mobile-card-body">
+                        <div className="admin-payment-mobile-card-row">
+                          <span className="admin-payment-mobile-card-label">Elhunyt:</span>
+                          <span className="admin-payment-mobile-card-value">
+                            {p.elhunyt_id ? getDeceasedName(p.elhunyt_id) : "—"}
+                          </span>
+                        </div>
+
+                        <div className="admin-payment-mobile-card-row">
+                          <span className="admin-payment-mobile-card-label">Összeg:</span>
+                          <span className="admin-payment-mobile-card-value amount">
+                            {formatAmount(p.osszeg)}
+                          </span>
+                        </div>
+
+                        <div className="admin-payment-mobile-card-row">
+                          <span className="admin-payment-mobile-card-label">Dátum:</span>
+                          <span className="admin-payment-mobile-card-value">
+                            {formatDate(p.datum)}
+                          </span>
+                        </div>
+
+                        <div className="admin-payment-mobile-card-row">
+                          <span className="admin-payment-mobile-card-label">Hossz:</span>
+                          <span className="admin-payment-mobile-card-value">
+                            {p.hossza ?? "—"} hónap
+                          </span>
+                        </div>
+
+                        <div className="admin-payment-mobile-card-row">
+                          <span className="admin-payment-mobile-card-label">Lejárat:</span>
+                          <span className="admin-payment-mobile-card-value">
+                            {getExpiryDateText(p)}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="admin-payment-mobile-card-actions">
+                        <button className="admin-payment-mobile-btn admin-payment-mobile-btn--edit">
+                          Szerkesztés
+                        </button>
+                        <button className="admin-payment-mobile-btn admin-payment-mobile-btn--delete">
+                          Törlés
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
 
               <div className="admin-payment-pagination-container">

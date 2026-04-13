@@ -439,3 +439,189 @@
     flex-direction: column;
   }
 }
+/* ===== RESPONSIVE MEDIA QUERIES ===== */
+
+@media (max-width: 1200px) {
+  .admin-document-page {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 980px) {
+  .admin-document-container {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-document-page {
+    padding: 1.5rem 1rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-document-page {
+    padding: 1.5rem 1rem;
+  }
+
+  .admin-document-title {
+    font-size: 1.2rem;
+  }
+
+  .admin-document-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .admin-document-container {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-document-button-group {
+    flex-direction: column;
+  }
+
+  .admin-document-btn {
+    width: 100%;
+  }
+
+  .admin-document-filter-bar {
+    flex-direction: column;
+  }
+
+  .admin-document-search-input,
+  .admin-document-filter-select {
+    width: 100%;
+  }
+
+  .admin-document-form-group input[type="text"],
+  .admin-document-form-group input[type="date"],
+  .admin-document-form-group select,
+  .admin-document-form-group textarea {
+    font-size: 16px !important;
+  }
+
+  .admin-document-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-document-card {
+    padding: 0.875rem;
+  }
+
+  .admin-document-card-header {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .admin-document-card-actions {
+    flex-direction: column;
+  }
+
+  .admin-document-card-actions .admin-document-btn--small {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-document-page {
+    padding: 1rem 0.75rem !important;
+  }
+
+  .admin-document-title {
+    font-size: 1.1rem !important;
+    margin-bottom: 0.5rem;
+  }
+
+  .admin-document-subtitle {
+    font-size: 0.85rem !important;
+  }
+
+  .admin-document-section-title {
+    font-size: 0.95rem !important;
+  }
+
+  .admin-document-form-section,
+  .admin-document-list-section {
+    padding: 1rem !important;
+  }
+
+  .admin-document-form-group label {
+    font-size: 0.9rem !important;
+  }
+
+  .admin-document-form-group input[type="text"],
+  .admin-document-form-group input[type="date"],
+  .admin-document-form-group select,
+  .admin-document-form-group textarea {
+    padding: 0.65rem !important;
+    font-size: 16px !important;
+  }
+
+  .admin-document-btn {
+    padding: 0.65rem 0.875rem !important;
+    font-size: 0.9rem !important;
+  }
+
+  .admin-document-button-group {
+    gap: 0.5rem !important;
+  }
+
+  .admin-document-search-input,
+  .admin-document-filter-select {
+    font-size: 16px !important;
+    width: 100% !important;
+  }
+
+  .admin-document-grid {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  .admin-document-card {
+    padding: 0.75rem !important;
+    gap: 0.5rem !important;
+  }
+
+  .admin-document-card-title {
+    font-size: 0.95rem !important;
+  }
+
+  .admin-document-card-type {
+    font-size: 0.7rem !important;
+    padding: 0.2rem 0.6rem !important;
+  }
+
+  .admin-document-card-tenant,
+  .admin-document-card-description,
+  .admin-document-card-date {
+    font-size: 0.85rem !important;
+  }
+
+  .admin-document-file-wrapper {
+    padding: 0.75rem !important;
+  }
+
+  .admin-document-file-label {
+    font-size: 0.9rem !important;
+  }
+
+  .admin-document-filter-bar {
+    flex-direction: column !important;
+    gap: 0.75rem !important;
+  }
+
+  .admin-document-container {
+    grid-template-columns: 1fr !important;
+    gap: 0.75rem !important;
+  }
+
+  .admin-document-button-group {
+    flex-direction: column !important;
+  }
+
+  .admin-document-btn {
+    width: 100% !important;
+  }
+
+  .admin-document-card-actions .admin-document-btn--small {
+    width: 100% !important;
+  }
+}
