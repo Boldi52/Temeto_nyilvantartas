@@ -246,6 +246,20 @@ export default function AdminDeceades() {
         return parcella?.nev || `#${sor.parcella_id}` || "—";
     };
 
+    // Új: getSorszamFromSirhelyId - visszaadja a sirhely sorszámát (sorszam) ha van, különben sirkod vagy id fallback
+    const getSorszamFromSirhelyId = (sirhelyId) => {
+        const sirhely = sirhelyek.find((s) => Number(s.id) === Number(sirhelyId));
+        if (!sirhely) return "—";
+        // Ha az adatbázisban a mező neve 'sorszam', használjuk azt
+        if (sirhely.sorszam !== undefined && sirhely.sorszam !== null && String(sirhely.sorszam).trim() !== "") {
+            return String(sirhely.sorszam);
+        }
+        // fallback mezők
+        if (sirhely.sirkod) return sirhely.sirkod;
+        if (sirhely.id) return String(sirhely.id);
+        return "—";
+    };
+
     const sortedElhunytak = [...elhunytak].sort((a, b) => Number(b.id) - Number(a.id));
 
     const totalPages = Math.max(1, Math.ceil(sortedElhunytak.length / ITEMS_PER_PAGE));
@@ -321,7 +335,12 @@ export default function AdminDeceades() {
                             <select name="sirhely_id" value={form.sirhely_id} onChange={handleChange} disabled={!form.sor_id}>
                                 <option value="">Nincs megadva</option>
                                 {filteredSirhelyek.map((s) => (
-                                    <option key={s.id} value={s.id}>{s.sirkod || `Sírhely #${s.id}`}</option>
+                                    // Itt a sorszám (sorszam) jelenik meg elsődlegesen, ha van
+                                    <option key={s.id} value={s.id}>
+                                        {s.sorszam !== undefined && s.sorszam !== null && String(s.sorszam).trim() !== ""
+                                            ? String(s.sorszam)
+                                            : (s.sirkod || `Sírhely #${s.id}`)}
+                                    </option>
                                 ))}
                             </select>
                             {fieldErrors.sirhely_id && <div className="admin-deceades-error">{fieldErrors.sirhely_id}</div>}
@@ -422,7 +441,7 @@ export default function AdminDeceades() {
                                                 <td data-label="Anyja neve">{e.anyja_neve || "—"}</td>
                                                 <td data-label="Parcella">{e.sirhely_id ? getParcellaNameFromSirhelyId(e.sirhely_id) : "—"}</td>
                                                 <td data-label="Sor">{e.sirhely_id ? getSorNameFromSirhelyId(e.sirhely_id) : "—"}</td>
-                                                <td data-label="Sírhely">{e.sirhely_id || "—"}</td>
+                                                <td data-label="Sírhely">{e.sirhely_id ? getSorszamFromSirhelyId(e.sirhely_id) : "—"}</td>
 
                                                 <td data-label="Kivonat">
                                                     {e.halotti_anyakonyvi_kiv ? (
