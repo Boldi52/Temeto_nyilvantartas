@@ -32,10 +32,7 @@ export default function DeceasedPage() {
       setLoading(true);
       setError("");
       try {
-        const elhunytak = await safeFetch(
-          "Elhunytak",
-          "/api/elhunytMindenAdata",
-        );
+        const elhunytak = await safeFetch("Elhunytak", "/api/elhunytMindenAdata");
 
         let parcellak = [];
         let sorok = [];
@@ -77,8 +74,15 @@ export default function DeceasedPage() {
 
         const sirMap = {};
         (sirhelyek || []).forEach((s) => {
+          // >>> JAVÍTVA: ID helyett sorszám előnyben
           sirMap[s.id] =
-            s.sirkod || s.nev || s.name || s.sir || s.sir_azonosito || "";
+            (s.sorszam != null && String(s.sorszam).trim() !== "" ? String(s.sorszam) : "") ||
+            s.sirkod ||
+            s.nev ||
+            s.name ||
+            s.sir ||
+            s.sir_azonosito ||
+            "";
         });
 
         // gyors kereséshez id -> object map
@@ -98,37 +102,37 @@ export default function DeceasedPage() {
 
         const normalized = Array.isArray(elhunytak)
           ? elhunytak.map((item) => {
-            const sirhelyId = item.sirhely_id ?? item.sirhely?.id ?? "";
+              const sirhelyId = item.sirhely_id ?? item.sirhely?.id ?? "";
 
-            const sorId =
-              item.sor_id ??
-              item.sor?.id ??
-              sirhelyById[sirhelyId]?.sor_id ??
-              item.sirhely?.sor_id ??
-              item.sirhely?.sor?.id ??
-              "";
+              const sorId =
+                item.sor_id ??
+                item.sor?.id ??
+                sirhelyById[sirhelyId]?.sor_id ??
+                item.sirhely?.sor_id ??
+                item.sirhely?.sor?.id ??
+                "";
 
-            const parcellaId =
-              item.parcella_id ??
-              item.parcella?.id ??
-              item.sor?.parcella_id ??
-              sorById[sorId]?.parcella_id ??
-              item.sirhely?.sor?.parcella_id ??
-              "";
+              const parcellaId =
+                item.parcella_id ??
+                item.parcella?.id ??
+                item.sor?.parcella_id ??
+                sorById[sorId]?.parcella_id ??
+                item.sirhely?.sor?.parcella_id ??
+                "";
 
-            return {
-              id: item.id,
-              name: item.nev || "",
-              birthDate: item.szul_datum || "",
-              deathDate: item.halal_datuma || "",
-              parcellaId,
-              sorId,
-              sirhelyId,
-              parcella: item.parcella ?? null,
-              sor: item.sor ?? item.sirhely?.sor ?? null,
-              sirhely: item.sirhely ?? null,
-            };
-          })
+              return {
+                id: item.id,
+                name: item.nev || "",
+                birthDate: item.szul_datum || "",
+                deathDate: item.halal_datuma || "",
+                parcellaId,
+                sorId,
+                sirhelyId,
+                parcella: item.parcella ?? null,
+                sor: item.sor ?? item.sirhely?.sor ?? null,
+                sirhely: item.sirhely ?? null,
+              };
+            })
           : [];
         setDeceasedList(normalized);
       } catch (err) {
@@ -147,9 +151,7 @@ export default function DeceasedPage() {
 
   const filtered = useMemo(() => {
     return deceasedList.filter((item) => {
-      const nameMatch = item.name
-        .toLowerCase()
-        .includes(filters.name.toLowerCase());
+      const nameMatch = item.name.toLowerCase().includes(filters.name.toLowerCase());
 
       const parcellaLabel =
         parcellaMap[item.parcellaId] ||
@@ -164,8 +166,12 @@ export default function DeceasedPage() {
         String(item.sorId || "");
 
       const sirhelyLabel =
-        sirhelyMap[item.sirhelyId] ||
+        // >>> JAVÍTVA: sorszám előnyben
+        (item.sirhely?.sorszam != null && String(item.sirhely.sorszam).trim() !== ""
+          ? String(item.sirhely.sorszam)
+          : "") ||
         item.sirhely?.sirkod ||
+        sirhelyMap[item.sirhelyId] ||
         String(item.sirhelyId || "");
 
       const parcellaMatch =
@@ -197,9 +203,7 @@ export default function DeceasedPage() {
     <div className="deceasedpage-wrapper">
       <div className="deceasedpage-header">
         <h1 className="deceasedpage-header__title">Elhunytak</h1>
-        <p className="deceasedpage-header__subtitle">
-          Keresés az elhunytak között
-        </p>
+        <p className="deceasedpage-header__subtitle">Keresés az elhunytak között</p>
       </div>
 
       <div className="deceasedpage-search-bar">
@@ -256,22 +260,13 @@ export default function DeceasedPage() {
                   <td className="deceasedpage-col-name" data-label="Név">
                     {item.name}
                   </td>
-                  <td
-                    className="deceasedpage-col-birth"
-                    data-label="Születési dátum"
-                  >
+                  <td className="deceasedpage-col-birth" data-label="Születési dátum">
                     {item.birthDate}
                   </td>
-                  <td
-                    className="deceasedpage-col-death"
-                    data-label="Halál dátuma"
-                  >
+                  <td className="deceasedpage-col-death" data-label="Halál dátuma">
                     {item.deathDate}
                   </td>
-                  <td
-                    className="deceasedpage-col-parcella"
-                    data-label="Parcella"
-                  >
+                  <td className="deceasedpage-col-parcella" data-label="Parcella">
                     {parcellaMap[item.parcellaId] ||
                       item.parcella?.nev ||
                       item.parcella?.parcella_azonosito ||
@@ -286,9 +281,11 @@ export default function DeceasedPage() {
                       "—"}
                   </td>
                   <td className="deceasedpage-col-sirhely" data-label="Sírhely">
-                    {sirhelyMap[item.sirhelyId] ||
+                    {(item.sirhely?.sorszam != null && String(item.sirhely.sorszam).trim() !== ""
+                      ? String(item.sirhely.sorszam)
+                      : "") ||
                       item.sirhely?.sirkod ||
-                      item.sirhelyId ||
+                      sirhelyMap[item.sirhelyId] ||
                       "—"}
                   </td>
                 </tr>

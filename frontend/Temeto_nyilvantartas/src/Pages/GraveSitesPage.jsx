@@ -6,6 +6,9 @@ const API_BASE = "http://127.0.0.1:8000"; // Laravel backend címe
 const GraveSites = () => {
   const [elhunytak, setElhunytak] = useState([]);
   const [sirhelyek, setSirhelyek] = useState([]);
+  const [sorok, setSorok] = useState([]);
+  const [parcellak, setParcellak] = useState([]);
+  const [sirhelyTipusok, setSirhelyTipusok] = useState([]);
   const [loading, setLoading] = useState(true);
   const [hiba, setHiba] = useState("");
 
@@ -24,7 +27,7 @@ const GraveSites = () => {
       let json = null;
       try {
         json = text ? JSON.parse(text) : null;
-      } catch { }
+      } catch {}
 
       if (!resp.ok) {
         throw new Error(
@@ -55,16 +58,19 @@ const GraveSites = () => {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         };
 
-        const [elhunytBody, sirhelyBody] = await Promise.all([
+        const [elhunytBody, sirhelyBody, sorBody, parcellaBody, tipusBody] = await Promise.all([
           fetchJson(`${API_BASE}/api/elhunytMindenAdata`, headers),
           fetchJson(`${API_BASE}/api/sirhelyek`, headers),
+          fetchJson(`${API_BASE}/api/sorok`, headers),
+          fetchJson(`${API_BASE}/api/parcellak`, headers),
+          fetchJson(`${API_BASE}/api/sirhelytipusok`, headers),
         ]);
 
-        const elhunytLista = parseArray(elhunytBody, ["elhunytak", "elhunyt"]);
-        const sirhelyLista = parseArray(sirhelyBody, ["sirhelyek", "sirhely"]);
-
-        setElhunytak(elhunytLista);
-        setSirhelyek(sirhelyLista);
+        setElhunytak(parseArray(elhunytBody, ["elhunytak", "elhunyt"]));
+        setSirhelyek(parseArray(sirhelyBody, ["sirhelyek", "sirhely"]));
+        setSorok(parseArray(sorBody, ["sorok", "sor"]));
+        setParcellak(parseArray(parcellaBody, ["parcellak", "parcella"]));
+        setSirhelyTipusok(parseArray(tipusBody, ["sirhely_tipusok", "sirhely_tipus", "tipusok"]));
       } catch (err) {
         setHiba(err.message || "Nem sikerült betölteni az adatokat az API-ból.");
       } finally {
@@ -75,19 +81,15 @@ const GraveSites = () => {
     fetchAdatok();
   }, []);
 
-  // Esc bezárja a zoomot
   useEffect(() => {
     if (!zoomOpen) return;
-
     const onKeyDown = (e) => {
       if (e.key === "Escape") setZoomOpen(false);
     };
-
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [zoomOpen]);
 
-  // ha új kiválasztott lesz, zárjuk a zoomot (ne maradjon nyitva másik képre)
   useEffect(() => {
     setZoomOpen(false);
   }, [kivalasztott]);
@@ -110,7 +112,7 @@ const GraveSites = () => {
   const getNev = (e) => e?.nev ?? "";
   const getSzul = (e) => e?.szul_datum ?? null;
   const getHalal = (e) => e?.halal_datuma ?? null;
-  const getSirhelyId = (e) => e?.sirhely_id ?? null;
+  const getSirhelyId = (e) => e?.sirhely_id ?? e?.sirhelyId ?? e?.sirhely?.id ?? null;
   const getEntityId = (e, i) => e?.id ?? `${getNev(e)}-${i}`;
 
   const talalatok = useMemo(() => {
@@ -122,7 +124,11 @@ const GraveSites = () => {
   const kivalasztottSirhely = useMemo(() => {
     const sid = getSirhelyId(kivalasztott);
     if (!sid) return null;
-    return sirhelyek.find((s) => String(s?.id) === String(sid)) || null;
+    return (
+      sirhelyek.find((s) => String(s?.id) === String(sid)) ||
+      kivalasztott?.sirhely ||
+      null
+    );
   }, [kivalasztott, sirhelyek]);
 
   const azonosSirhelyenFekvok = useMemo(() => {
@@ -130,6 +136,65 @@ const GraveSites = () => {
     if (!sid) return [];
     return elhunytak.filter((e) => String(getSirhelyId(e)) === String(sid));
   }, [kivalasztott, elhunytak]);
+
+  const sorMap = useMemo(() => {
+    const m = {};
+    for (const s of sorok) m[String(s?.id)] = s;
+    return m;
+  }, [sorok]);
+
+  const parcellaMap = useMemo(() => {
+    const m = {};
+    for (const p of parcellak) m[String(p?.id)] = p;
+    return m;
+  }, [parcellak]);
+
+  const sirhelyTipusMap = useMemo(() => {
+    const m = {};
+    for (const t of sirhelyTipusok) m[String(t?.id)] = t?.nev ?? "";
+    return m;
+  }, [sirhelyTipusok]);
+
+  const sirhelyTipusNev = useMemo(() => {
+    const tipusId =
+      kivalasztottSirhely?.sirhely_tipus_id ??
+      kivalasztottSirhely?.tipus_id ??
+      kivalasztottSirhely?.sirhely_tipus?.id ??
+      null;
+
+    const fromMap = tipusId ? sirhelyTipusMap[String(tipusId)] : "";
+    const fromEmbedded =
+      kivalasztottSirhely?.sirhely_tipus?.nev ??
+      kivalasztottSirhely?.tipus?.nev ??
+      (typeof kivalasztottSirhely?.tipus === "string" ? kivalasztottSirhely.tipus : "");
+
+    return fromMap || fromEmbedded || "";
+  }, [kivalasztottSirhely, sirhelyTipusMap]);
+
+  const sirhelyReszletesLeiras = useMemo(() => {
+    if (!kivalasztottSirhely) return "Nincs hozzárendelve";
+
+    const sorId = kivalasztottSirhely?.sor_id ?? kivalasztottSirhely?.sor?.id ?? null;
+    const sorObj = sorId ? sorMap[String(sorId)] || kivalasztottSirhely?.sor || null : null;
+
+    const parcellaId = sorObj?.parcella_id ?? sorObj?.parcella?.id ?? null;
+    const parcellaObj = parcellaId
+      ? parcellaMap[String(parcellaId)] || sorObj?.parcella || null
+      : null;
+
+    const parcellaNev =
+      parcellaObj?.nev ?? parcellaObj?.parcella_azonosito ?? parcellaObj?.kod ?? null;
+    const sorNev = sorObj?.nev ?? sorObj?.sor_azonosito ?? null;
+    const sirhelySorszam =
+      kivalasztottSirhely?.sorszam ?? kivalasztottSirhely?.sirkod ?? kivalasztottSirhely?.id ?? null;
+
+    const parts = [];
+    if (parcellaNev) parts.push(`${parcellaNev} parcella`);
+    if (sorNev) parts.push(`${sorNev} sor`);
+    if (sirhelySorszam) parts.push(`${sirhelySorszam}. sírhely`);
+
+    return parts.length > 0 ? parts.join(", ") : "Nincs hozzárendelve";
+  }, [kivalasztottSirhely, sorMap, parcellaMap]);
 
   const getSirhelyFotoUrl = (sirhely) => {
     const raw = sirhely?.foto ? String(sirhely.foto).trim() : "";
@@ -162,9 +227,13 @@ const GraveSites = () => {
     );
   }
 
+  const sirhelyKod =
+    kivalasztottSirhely?.sirkod ||
+    kivalasztott?.sirhely?.sirkod ||
+    getSirhelyId(kivalasztott);
+
   const fotoSrc = getSirhelyFotoUrl(kivalasztottSirhely);
-  const fotoAlt =
-    kivalasztottSirhely?.sirkod ? `Sírhely: ${kivalasztottSirhely.sirkod}` : "Sírhely fotó";
+  const fotoAlt = sirhelyKod ? `Sírhely: ${sirhelyKod}` : "Sírhely fotó";
 
   return (
     <div className="gravesites-wrapper">
@@ -192,7 +261,6 @@ const GraveSites = () => {
         </div>
 
         <div className="gravesites-layout">
-          {/* BAL: Találatok */}
           <div className="gravesites-table-wrapper">
             <table className="gravesites-table">
               <thead>
@@ -243,7 +311,6 @@ const GraveSites = () => {
             </table>
           </div>
 
-          {/* JOBB: Részletek */}
           <div className="gravesites-panel">
             <div className="gravesites-panel__header">
               <h2>Részletek</h2>
@@ -279,12 +346,6 @@ const GraveSites = () => {
                   <div className={"gravesites-photo__missing" + (fotoSrc ? "" : " is-visible")}>
                     Nincs kép ehhez a sírhelyhez.
                   </div>
-
-                  <div className="gravesites-photo__meta">
-                    <strong>{kivalasztottSirhely?.sirkod ?? "Nincs sírkód"}</strong>
-                    {kivalasztottSirhely?.tipus ? ` • ${kivalasztottSirhely.tipus}` : ""}
-
-                  </div>
                 </div>
 
                 <div className="gravesites-detail-row">
@@ -304,8 +365,13 @@ const GraveSites = () => {
 
                 <div className="gravesites-detail-row">
                   <div className="gravesites-detail-label">Sírhely</div>
+                  <div className="gravesites-detail-value">{sirhelyReszletesLeiras}</div>
+                </div>
+
+                <div className="gravesites-detail-row">
+                  <div className="gravesites-detail-label">Sírhely típusa</div>
                   <div className="gravesites-detail-value">
-                    {kivalasztottSirhely?.sirkod ?? "Nincs hozzárendelve"}
+                    {sirhelyTipusNev || "Nincs megadva"}
                   </div>
                 </div>
 
@@ -329,7 +395,6 @@ const GraveSites = () => {
           </div>
         </div>
 
-        {/* ===== Zoom modal ===== */}
         {zoomOpen && (
           <div
             className="gravesites-zoom"
@@ -337,7 +402,6 @@ const GraveSites = () => {
             aria-modal="true"
             aria-label="Kép nagyítása"
             onMouseDown={(e) => {
-              // csak a háttérre kattintva zárjon
               if (e.target === e.currentTarget) setZoomOpen(false);
             }}
           >
