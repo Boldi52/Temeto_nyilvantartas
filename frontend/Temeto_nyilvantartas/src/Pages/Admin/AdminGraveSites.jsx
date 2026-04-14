@@ -26,6 +26,7 @@ export default function AdminGraveSites() {
   const [form, setForm] = useState(emptyForm);
 
   const [photoFile, setPhotoFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState(null);
   const photoInputRef = useRef(null);
 
   const [loading, setLoading] = useState(false);
@@ -114,6 +115,15 @@ export default function AdminGraveSites() {
     loadData();
   }, []);
 
+  // cleanup preview URL when unmount or when preview changes
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((f) => ({ ...f, [name]: value }));
@@ -134,6 +144,15 @@ export default function AdminGraveSites() {
     const selected = e.target.files?.[0] || null;
     setPhotoFile(selected);
 
+    // create local preview
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
+    if (selected) {
+      setPreviewUrl(URL.createObjectURL(selected));
+    }
+
     if (fieldErrors.file) {
       setFieldErrors((prev) => {
         const next = { ...prev };
@@ -149,6 +168,10 @@ export default function AdminGraveSites() {
   const clearPhotoInput = () => {
     setPhotoFile(null);
     if (photoInputRef.current) photoInputRef.current.value = "";
+    if (previewUrl) {
+      URL.revokeObjectURL(previewUrl);
+      setPreviewUrl(null);
+    }
   };
 
   const handleEdit = (item) => {
@@ -318,6 +341,7 @@ export default function AdminGraveSites() {
     return tipus?.tipus_nev ?? tipus?.nev ?? tipus?.megnevezes ?? "—";
   };
 
+  // Photo helpers
   const getPhotoUrls = (photoPath) => {
     if (!photoPath) return { openUrl: "", downloadUrl: "" };
 
@@ -326,6 +350,36 @@ export default function AdminGraveSites() {
       openUrl: `${API_BASE}/api/sirhely-foto/megnyit/${encoded}`,
       downloadUrl: `${API_BASE}/api/sirhely-foto/letoltes/${encoded}`,
     };
+  };
+
+  const buildPhotoSrc = (photoPath) => {
+    if (!photoPath) return "";
+    const raw = String(photoPath).trim();
+    if (!raw) return "";
+    if (/^https?:\/\//i.test(raw)) return raw;
+    if (raw.startsWith("/")) return `${API_BASE}${raw}`;
+    return `${API_BASE}/api/sirhely-foto/megnyit/${encodeURIComponent(raw)}`;
+  };
+
+  const tryAlternatePhotoSrc = (img, raw) => {
+    const triedStorage = img.dataset.triedStorage === "1";
+    const triedUploads = img.dataset.triedUploads === "1";
+    const s = raw ? String(raw).trim() : "";
+    if (!s) return false;
+
+    if (!triedStorage && !/^https?:\/\//i.test(s)) {
+      img.dataset.triedStorage = "1";
+      img.src = `${API_BASE}/storage/${encodeURIComponent(s)}`;
+      return true;
+    }
+
+    if (!triedUploads && !/^https?:\/\//i.test(s)) {
+      img.dataset.triedUploads = "1";
+      img.src = `${API_BASE}/uploads/${encodeURIComponent(s)}`;
+      return true;
+    }
+
+    return false;
   };
 
   const isEditing = !!form.id;
@@ -471,9 +525,37 @@ export default function AdminGraveSites() {
               {photoFile && (
                 <div className="admin-gravesites-help-text">Kiválasztva: {photoFile.name}</div>
               )}
-              {!photoFile && form.foto && (
-                <div className="admin-gravesites-help-text">Jelenlegi fotó: {form.foto}</div>
-              )}
+
+              {/* preview: ha új fájl lett kiválasztva, mutatjuk a lokális preview-t, különben a szerveren tárolt fotó URL-t */}
+              {previewUrl ? (
+                <div className="admin-gravesites-photo-preview">
+                  <img
+                    src={previewUrl}
+                    alt="Előnézet"
+                    style={{ maxWidth: 160, height: "auto", display: "block", marginTop: 8 }}
+                  />
+                </div>
+              ) : form.foto ? (
+                <div className="admin-gravesites-help-text" style={{ marginTop: 8 }}>
+                  Jelenlegi fotó:
+                  <div style={{ marginTop: 6 }}>
+                    <img
+                      src={buildPhotoSrc(form.foto)}
+                      alt={`Sírhely fotó ${form.sorszam || ""}`}
+                      style={{ maxWidth: 160, height: "auto", display: "block" }}
+                      onError={(ev) => {
+                        const img = ev.currentTarget;
+                        const raw = form.foto;
+                        const tried = tryAlternatePhotoSrc(img, raw);
+                        if (!tried) {
+                          img.style.display = "none";
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
+              ) : null}
+
               {fieldErrors.file && (
                 <div className="admin-gravesites-field-error">{fieldErrors.file}</div>
               )}
@@ -561,6 +643,7 @@ export default function AdminGraveSites() {
 
                     {paginatedGraves.map((g) => {
                       const { openUrl, downloadUrl } = getPhotoUrls(g.foto);
+                      const imgSrc = buildPhotoSrc(g.foto);
 
                       return (
                         <tr key={g.id}>
@@ -572,12 +655,24 @@ export default function AdminGraveSites() {
                           <td className="mono">
                             {g.foto ? (
                               <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                                <a href={openUrl} target="_blank" rel="noreferrer">
-                                  Megnyitás
-                                </a>
-                                <a href={downloadUrl}>
-                                  Letöltés
-                                </a>
+                                <img
+                                  src={imgSrc}
+                                  alt={`Sírhely ${g.sorszam ?? g.id}`}
+                                  style={{ maxWidth: 120, height: "auto", display: "block" }}
+                                  onError={(ev) => {
+                                    const img = ev.currentTarget;
+                                    const tried = tryAlternatePhotoSrc(img, g.foto);
+                                    if (!tried) {
+                                      img.style.display = "none";
+                                    }
+                                  }}
+                                />
+                                <div style={{ display: "flex", gap: 8 }}>
+                                  <a href={openUrl} target="_blank" rel="noreferrer">
+                                    Megnyitás
+                                  </a>
+                                  <a href={downloadUrl}>Letöltés</a>
+                                </div>
                               </div>
                             ) : (
                               "—"
@@ -607,6 +702,7 @@ export default function AdminGraveSites() {
 
                   {paginatedGraves.map((g) => {
                     const { openUrl, downloadUrl } = getPhotoUrls(g.foto);
+                    const imgSrc = buildPhotoSrc(g.foto);
 
                     return (
                       <div className="admin-gravesites-mobile-card" key={`m-${g.id}`}>
@@ -619,8 +715,22 @@ export default function AdminGraveSites() {
                           <strong>Fotó:</strong>{" "}
                           {g.foto ? (
                             <>
-                              <a href={openUrl} target="_blank" rel="noreferrer">Megnyitás</a>{" "}
-                              | <a href={downloadUrl}>Letöltés</a>
+                              <img
+                                src={imgSrc}
+                                alt={`Sírhely ${g.sorszam ?? g.id}`}
+                                style={{ maxWidth: 120, height: "auto", display: "block", marginBottom: 6 }}
+                                onError={(ev) => {
+                                  const img = ev.currentTarget;
+                                  const tried = tryAlternatePhotoSrc(img, g.foto);
+                                  if (!tried) {
+                                    img.style.display = "none";
+                                  }
+                                }}
+                              />
+                              <div>
+                                <a href={openUrl} target="_blank" rel="noreferrer">Megnyitás</a>{" "}
+                                | <a href={downloadUrl}>Letöltés</a>
+                              </div>
                             </>
                           ) : (
                             <span className="mono">—</span>

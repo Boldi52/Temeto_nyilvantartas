@@ -196,12 +196,42 @@ const GraveSites = () => {
     return parts.length > 0 ? parts.join(", ") : "Nincs hozzárendelve";
   }, [kivalasztottSirhely, sorMap, parcellaMap]);
 
+  // Új: stabil kép URL konstruktor + onError fallback logika
+  const buildSirhelyPhotoUrl = (raw) => {
+    if (!raw) return "";
+    const s = String(raw).trim();
+    if (!s) return "";
+    if (/^https?:\/\//i.test(s)) return s;
+    if (s.startsWith("/")) return `${API_BASE}${s}`;
+    // alapértelmezett: dedikált backend megnyitó endpoint
+    return `${API_BASE}/api/sirhely-foto/megnyit/${encodeURIComponent(s)}`;
+  };
+
+  const tryAlternateSrc = (img, raw) => {
+    // próbáljuk meg storage, majd uploads, végül false
+    const triedStorage = img.dataset.triedStorage === "1";
+    const triedUploads = img.dataset.triedUploads === "1";
+    const s = raw ? String(raw).trim() : "";
+    if (!s) return false;
+
+    if (!triedStorage && !/^https?:\/\//i.test(s)) {
+      img.dataset.triedStorage = "1";
+      img.src = `${API_BASE}/storage/${encodeURIComponent(s)}`;
+      return true;
+    }
+
+    if (!triedUploads && !/^https?:\/\//i.test(s)) {
+      img.dataset.triedUploads = "1";
+      img.src = `${API_BASE}/uploads/${encodeURIComponent(s)}`;
+      return true;
+    }
+
+    return false;
+  };
+
   const getSirhelyFotoUrl = (sirhely) => {
     const raw = sirhely?.foto ? String(sirhely.foto).trim() : "";
-    if (!raw) return "";
-    if (/^https?:\/\//i.test(raw)) return raw;
-    if (raw.startsWith("/")) return `${API_BASE}${raw}`;
-    return `${API_BASE}/${raw}`;
+    return buildSirhelyPhotoUrl(raw);
   };
 
   const isSelectedRow = (e) =>
@@ -334,9 +364,15 @@ const GraveSites = () => {
                         className="gravesites-photo__img"
                         loading="lazy"
                         onError={(e2) => {
-                          e2.currentTarget.style.display = "none";
-                          const parent = e2.currentTarget.parentElement;
-                          if (parent) parent.classList.add("is-missing");
+                          const img = e2.currentTarget;
+                          // próbáljuk alternatív helyeket (storage/uploads) mielőtt eltüntetjük
+                          const raw = kivalasztottSirhely?.foto ? String(kivalasztottSirhely.foto).trim() : "";
+                          const tried = tryAlternateSrc(img, raw);
+                          if (!tried) {
+                            img.style.display = "none";
+                            const parent = img.parentElement;
+                            if (parent) parent.classList.add("is-missing");
+                          }
                         }}
                       />
                       <span className="gravesites-photo__zoomhint">🔍 Kattints a nagyításhoz</span>
