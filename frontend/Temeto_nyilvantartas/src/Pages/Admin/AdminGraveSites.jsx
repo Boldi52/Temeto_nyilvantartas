@@ -653,7 +653,7 @@ export default function AdminGraveSites() {
                           <td>{getSirhelyTipusNev(g.sirhely_tipus_id)}</td>
                           <td>{g.allapot ?? "—"}</td>
 
-                          {/* TÁBLÁZAT: A kép előnézetét eltávolítottam; csak Megnyitás / Letöltés linkek láthatók */}
+                          {/* TÁBLÁZAT: kép ELTÁVOLÍTVA minden nézetben; csak Megnyitás / Letöltés linkek */}
                           <td className="mono">
                             {g.foto ? (
                               <div style={{ display: "flex", gap: 8 }}>
@@ -705,24 +705,10 @@ export default function AdminGraveSites() {
                         <div>
                           <strong>Fotó:</strong>{" "}
                           {g.foto ? (
-                            <>
-                              <img
-                                src={imgSrc}
-                                alt={`Sírhely ${g.sorszam ?? g.id}`}
-                                style={{ maxWidth: 120, height: "auto", display: "block", marginBottom: 6 }}
-                                onError={(ev) => {
-                                  const img = ev.currentTarget;
-                                  const tried = tryAlternatePhotoSrc(img, g.foto);
-                                  if (!tried) {
-                                    img.style.display = "none";
-                                  }
-                                }}
-                              />
-                              <div>
-                                <a href={openUrl} target="_blank" rel="noreferrer">Megnyitás</a>{" "}
-                                | <a href={downloadUrl} download>Letöltés</a>
-                              </div>
-                            </>
+                            <div>
+                              <a href={openUrl} target="_blank" rel="noreferrer">Megnyitás</a>{" "}
+                              | <a href={downloadUrl} download>Letöltés</a>
+                            </div>
                           ) : (
                             <span className="mono">—</span>
                           )}
