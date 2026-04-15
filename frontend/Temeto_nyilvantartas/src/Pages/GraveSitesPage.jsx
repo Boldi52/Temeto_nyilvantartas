@@ -189,7 +189,7 @@ const GraveSites = () => {
       kivalasztottSirhely?.sorszam ?? kivalasztottSirhely?.sirkod ?? kivalasztottSirhely?.id ?? null;
 
     const parts = [];
-    if (parcellaNev) parts.push(`${parcellaNev} parcella`);
+    if (parcellaNev) parts.push(`${parcellaNev} `);
     if (sorNev) parts.push(`${sorNev} sor`);
     if (sirhelySorszam) parts.push(`${sirhelySorszam}. sírhely`);
 

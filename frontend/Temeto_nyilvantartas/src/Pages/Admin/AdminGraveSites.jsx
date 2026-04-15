@@ -652,32 +652,23 @@ export default function AdminGraveSites() {
                           <td>{g.sorszam ?? "—"}</td>
                           <td>{getSirhelyTipusNev(g.sirhely_tipus_id)}</td>
                           <td>{g.allapot ?? "—"}</td>
+
+                          {/* TÁBLÁZAT: A kép előnézetét eltávolítottam; csak Megnyitás / Letöltés linkek láthatók */}
                           <td className="mono">
                             {g.foto ? (
-                              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                                <img
-                                  src={imgSrc}
-                                  alt={`Sírhely ${g.sorszam ?? g.id}`}
-                                  style={{ maxWidth: 120, height: "auto", display: "block" }}
-                                  onError={(ev) => {
-                                    const img = ev.currentTarget;
-                                    const tried = tryAlternatePhotoSrc(img, g.foto);
-                                    if (!tried) {
-                                      img.style.display = "none";
-                                    }
-                                  }}
-                                />
-                                <div style={{ display: "flex", gap: 8 }}>
-                                  <a href={openUrl} target="_blank" rel="noreferrer">
-                                    Megnyitás
-                                  </a>
-                                  <a href={downloadUrl}>Letöltés</a>
-                                </div>
+                              <div style={{ display: "flex", gap: 8 }}>
+                                <a href={openUrl} target="_blank" rel="noreferrer">
+                                  Megnyitás
+                                </a>
+                                <a href={downloadUrl} download>
+                                  Letöltés
+                                </a>
                               </div>
                             ) : (
                               "—"
                             )}
                           </td>
+
                           <td>{getTenantName(g.sirberlo_id)}</td>
                           <td className="admin-gravesites-actions">
                             <button onClick={() => handleEdit(g)}>Szerk.</button>
@@ -729,7 +720,7 @@ export default function AdminGraveSites() {
                               />
                               <div>
                                 <a href={openUrl} target="_blank" rel="noreferrer">Megnyitás</a>{" "}
-                                | <a href={downloadUrl}>Letöltés</a>
+                                | <a href={downloadUrl} download>Letöltés</a>
                               </div>
                             </>
                           ) : (
