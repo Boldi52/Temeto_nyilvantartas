@@ -74,7 +74,6 @@ export default function DeceasedPage() {
 
         const sirMap = {};
         (sirhelyek || []).forEach((s) => {
-          // >>> JAVÍTVA: ID helyett sorszám előnyben
           sirMap[s.id] =
             (s.sorszam != null && String(s.sorszam).trim() !== "" ? String(s.sorszam) : "") ||
             s.sirkod ||
@@ -85,7 +84,6 @@ export default function DeceasedPage() {
             "";
         });
 
-        // gyors kereséshez id -> object map
         const sorById = {};
         (sorok || []).forEach((s) => {
           sorById[s.id] = s;
@@ -166,7 +164,6 @@ export default function DeceasedPage() {
         String(item.sorId || "");
 
       const sirhelyLabel =
-        // >>> JAVÍTVA: sorszám előnyben
         (item.sirhely?.sorszam != null && String(item.sirhely.sorszam).trim() !== ""
           ? String(item.sirhely.sorszam)
           : "") ||
@@ -218,7 +215,7 @@ export default function DeceasedPage() {
         <input
           type="text"
           name="parcella"
-          placeholder="Parcella..."
+          placeholder="Parcella: pl.: Zalai"
           value={filters.parcella}
           onChange={handleFilterChange}
           className="deceasedpage-search-input"
@@ -226,7 +223,7 @@ export default function DeceasedPage() {
         <input
           type="text"
           name="sor"
-          placeholder="Sor..."
+          placeholder="Sor: pl.: I, II, V"
           value={filters.sor}
           onChange={handleFilterChange}
           className="deceasedpage-search-input"
